@@ -8,8 +8,14 @@
     <title>Wiki</title>
 </head>
 <body>
-<?php include 'php/add_user.php';
-//stand https://www.youtube.com/watch?v=R9W3TCGW2Fk&list=PLNmsVeXQZj7rZMP1lj32Qyp4bkarvzCGm&index=28
+<?php
+if (1/*!$_SERVER['valid'])*/){
+    echo "<a href='register.php'>Sign Up</a><br><a href='login.php'>Sign In</a>";
+} else {
+    echo "<a href='php/logout.php'>Log Out</a>";
+}
 ?>
+
+
 </body>
 </html>
