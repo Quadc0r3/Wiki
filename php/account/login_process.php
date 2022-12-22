@@ -1,4 +1,5 @@
 <?php
+session_start();
 include "user_handeling.php";
 
 function check_login_input(string $name, string $pwd): bool {
@@ -22,10 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     $answer = check_login_input($name,$pwd);
     if ($answer) {
-        setcookie("user", $name, time() + 86400, "/");
-//        $_SESSION['valid'] = true;
-//        $_SESSION['timeout'] = time() + 1200;
-//        $_SESSION['username'] = $name;
+//        setcookie("user", $name, time() + 86400, "/");
+        $_SESSION['valid'] = true;
+        $_SESSION['timeout'] = time() + 1200;
+        $_SESSION['username'] = $name;
         header("Location: ../index.php");
     }
 }

@@ -10,7 +10,7 @@
 <body>
 <div>
     <p>Login to the Wiki</p>
-    <form action="php/login_process.php" method='post'>
+    <form action="php/account/login_process.php" method='post'>
         <label>
             Name: <input type="text" maxlength="10" name="name">
         </label><br>

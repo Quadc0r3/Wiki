@@ -13,6 +13,11 @@ function get_user_by_name(string $name): array{
     }
     return $user;
 }
+
+function logged_in():void{
+    echo "<a href='account/logout.php'>Log Out</a></br>";
+    echo "<a href='article/new.php'>New Article</a>";
+}
 if (count($_GET) > 0) {
     switch ($_GET['access']) {
         case 'login':
