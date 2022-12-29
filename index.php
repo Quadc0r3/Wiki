@@ -1,3 +1,8 @@
+<?php
+session_start();
+include "php/user_handeling.php";
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,10 +14,10 @@
 </head>
 <body>
 <?php
-if (1/*!$_SERVER['valid'])*/){
+if (isset($_SESSION['valid']) and $_SESSION['valid']) {     //user is logged in
+        logged_in();
+    } else {                                                //user isn't logged in
     echo "<a href='register.php'>Sign Up</a><br><a href='login.php'>Sign In</a>";
-} else {
-    echo "<a href='php/logout.php'>Log Out</a>";
 }
 ?>
 
