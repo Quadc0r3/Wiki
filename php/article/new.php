@@ -1,4 +1,4 @@
-<?php session_start();
+<?php
 include "text/new_text.php";?>
 <!doctype html>
 <html lang="en">
@@ -10,17 +10,18 @@ include "text/new_text.php";?>
     <title>New Article</title>
 </head>
 <body>
- <form method="post">
+ <form method="post" action="text/new_text.php">
      <label>
-         <input type="text" placeholder="Title">
+         <?php
+         $placeholder = array_key_exists('article',$_SESSION) ? $_SESSION['article'] : 'Title';
+         echo "<input type='text' name='article' placeholder='".$placeholder."'>"
+         ?>
      </label>
-     <input type="submit" name="new_segment" value="execute" placeholder="New Text Segment">
-     <button type="submit">Submit</button>
+     <button type="submit" name="new_segment">New Text Segment</button>
+     <button type="submit" name="save_title">Save Title</button>
  </form>
 
- <?php
-if (array_key_exists('new_segment',$_POST)) new_test_segment();
- ?>
+ <?php if (array_key_exists('No_of_texts',$_SESSION)) new_test_segment(); ?>
 </body>
 </html>
 

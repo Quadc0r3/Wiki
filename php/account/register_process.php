@@ -1,5 +1,5 @@
 <?php
-include "user_handeling.php";
+include "../user_handeling.php";
 
 function add_user($name, $pwd): void
 {

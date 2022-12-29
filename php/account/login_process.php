@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "user_handeling.php";
+include "../user_handeling.php";
 
 function check_login_input(string $name, string $pwd): bool {
     $answer = True;
@@ -27,6 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $_SESSION['valid'] = true;
         $_SESSION['timeout'] = time() + 1200;
         $_SESSION['username'] = $name;
-        header("Location: ../index.php");
+        header("Location: ../../index.php");
     }
 }
