@@ -23,7 +23,7 @@ if (isset($_SESSION['valid']) and $_SESSION['valid']) {     //user is logged in
 <hr>
 <form action="php/input_check.php" method="post">
     <label>
-        <input name="searchbar" maxlength="20" placeholder="Search Article" type="text">
+        <input name="searchbar" maxlength="20" placeholder="Search Article" type="search">
     </label>
 </form>
 

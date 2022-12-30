@@ -14,7 +14,7 @@ include "text/new_text.php";?>
      <label>
          <?php
          $placeholder = array_key_exists('article',$_SESSION) ? $_SESSION['article'] : 'Title';
-         echo "<input type='text' name='article' placeholder='".$placeholder."'>"
+         echo "<input type='text' name='article' placeholder='".$placeholder."' required>"
          ?>
      </label>
      <button type="submit" name="new_segment">New Text Segment</button>

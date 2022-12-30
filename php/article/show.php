@@ -5,8 +5,8 @@ $aID = (array_key_exists("article",$_GET)) ? (int)$_GET['article'] : 0;
 $aTitle = access_db("SELECT Titel FROM artikel WHERE ArtikelID =".$aID)->fetch_array();
 if ($aTitle != null) $aTitle = $aTitle[0];
 else{
-    echo "Article doesn't exist";
-    echo "<br><a href='../../index.php'>Back to main page</a>";
+    $_SESSION['error'] = "Article doesn't exist";
+    header("Location: ../../error.php");;
 }
 
 function show_text($texts):void {
@@ -25,12 +25,16 @@ function show_text($texts):void {
 }
 
 function show_article():void {
-    echo "<h1>".$GLOBALS['aTitle']."</h1>";
+    echo "<h1>".$GLOBALS['article']."</h1>";
     echo "<a href='../../index.php'>Back</a>";
     echo "<hr>";
 
     $texts = access_db("SELECT * FROM text where ArtikelID = ".$GLOBALS['aID']);
     show_text($texts);
+
+    echo "<hr>";
+    echo "<a href='edit.php?article=".$GLOBALS['aID']."'>Edit</a>";
+
 }
 ?>
 <!doctype html>

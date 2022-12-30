@@ -11,11 +11,10 @@
 <div>
     <p>Login to the Wiki</p>
     <form action="php/account/login_process.php" method='post'>
-        <label>
-            Name: <input type="text" maxlength="10" name="name">
-        </label><br>
-        <label>
-            Passwort: <input type="password" maxlength="32" name="password">
+        <label for="name">Name:
+            <input type="text" maxlength="10" name="name" required><br></label>
+        <label for="password">
+            Passwort: <input type="password" maxlength="32" name="password" required>
         </label><br>
         <button type="submit">Login</button>
     </form>
