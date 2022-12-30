@@ -20,6 +20,12 @@ if (isset($_SESSION['valid']) and $_SESSION['valid']) {     //user is logged in
     echo "<a href='register.php'>Sign Up</a><br><a href='login.php'>Sign In</a>";
 }
 ?>
+<hr>
+<form action="php/input_check.php" method="post">
+    <label>
+        <input name="searchbar" maxlength="20" placeholder="Search Article" type="text">
+    </label>
+</form>
 
 
 </body>

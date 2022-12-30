@@ -24,17 +24,9 @@ function get_user_id(string $name): string{
 
 function logged_in():void{
     echo "<a href='php/account/logout.php'>Log Out</a></br>";
+    echo "<a href='php/account/user.php'>My Profile</a></br>";
     echo "<a href='php/article/new.php'>New Article</a>";
 }
-if (count($_GET) > 0) {
-    switch ($_GET['access']) {
-        case 'login':
-            echo 'login';
-            break;
-        case 'register':
-            echo 'register';
-            break;
-    }
-}
+
 
 
