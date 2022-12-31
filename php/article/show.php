@@ -25,7 +25,7 @@ function show_text($texts):void {
 }
 
 function show_article():void {
-    echo "<h1>".$GLOBALS['article']."</h1>";
+    echo "<h1>".$GLOBALS['aTitle']."</h1>";
     echo "<a href='../../index.php'>Back</a>";
     echo "<hr>";
 
@@ -33,7 +33,7 @@ function show_article():void {
     show_text($texts);
 
     echo "<hr>";
-    echo "<a href='edit.php?article=".$GLOBALS['aID']."'>Edit</a>";
+    if (isset($_SESSION['valid'])) echo "<a href='edit.php?article=".$GLOBALS['aID']."'>Edit</a>";
 
 }
 ?>
@@ -50,4 +50,4 @@ function show_article():void {
 <?php show_article() ?>
 </body>
 </html>
-<?php
+
