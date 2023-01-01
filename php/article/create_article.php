@@ -22,13 +22,13 @@ function add_article(): void {
         $text = $_REQUEST['text_text_' . $i];
 
         access_db("INSERT INTO `autor-text hilfstabelle` values ($maxHID, $maxTID, $id)");
-        access_db("INSERT into text values ($maxTID, $maxHID, $maxAID, '$text', '$title')");
+        access_db("INSERT into text values ($maxTID, $maxHID, $maxAID, '$title', '$text')");
         $maxHID++;
         $maxTID++;
     }
     access_db("INSERT INTO artikel (Titel) VALUES ('".$article."')");
 
-    $_SESSION['No_of_texts'] = 0;
+    $_SESSION['no_of_texts'] = 0;
     $_SESSION['article'] = null;
     header("Location: ../../index.php");
 }

@@ -25,7 +25,10 @@ function load_article(): void {
             echo "<input type='text' name='text_text_".$i."' placeholder='Text' value='".$entry['Inhalt']."'>";
             $i++;
         }
+
+        $_SESSION['no_of_texts'] = $i;
     }
+    echo "<button type='submit' name='new_segment'>New Text Segment</button>";
     echo "<button type='submit'>Save Changes</button></form>";
     echo "</form>";
 }
