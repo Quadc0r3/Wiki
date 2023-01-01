@@ -32,7 +32,23 @@ function add_article(): void {
     $_SESSION['article'] = null;
     header("Location: ../../index.php");
 }
-add_article();
+//saves the input while creating a new article so that the progress isn't lost by the creation of a new Text Segment
+function save_text():void {
+    $minTextID = access_db("SELECT MIN(TextID) FROM text")->fetch_array()[0];
+    $minTextID = min($minTextID, 0);
+    $_SESSION['start_of_save'] = $minTextID - 1;
+
+    for ($i = 0; $i < $_SESSION['no_of_texts']; $i++){
+        $minTextID -= 1;
+        $title = $_POST['text_title_' . $i];
+        $text = $_POST['text_text_' . $i];
+
+        access_db("INSERT INTO text (TextID, Title, Inhalt) values ($minTextID, '$title', '$text')");
+    }
+    header("Location: ../article/new.php");
+}
+if (array_key_exists("submit",$_POST)) add_article();
+elseif (array_key_exists("new_segment",$_POST)) save_text();
 
 
 
