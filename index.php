@@ -14,6 +14,7 @@ $_SESSION['no_of_texts'] = 0;
     <title>Wiki</title>
 </head>
 <body>
+<div id="user_function">
 <?php
 if (isset($_SESSION['valid']) and $_SESSION['valid']) {     //user is logged in
         logged_in();
@@ -21,6 +22,8 @@ if (isset($_SESSION['valid']) and $_SESSION['valid']) {     //user is logged in
     echo "<a href='register.php'>Sign Up</a><br><a href='login.php'>Sign In</a>";
 }
 ?>
+</div>
+<h1>Wiki</h1>
 <hr>
 <form action="php/input_check.php" method="post">
     <label>
@@ -28,6 +31,34 @@ if (isset($_SESSION['valid']) and $_SESSION['valid']) {     //user is logged in
     </label>
 </form>
 
+<table title="Recent Articles" >
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Edit Date</th>
+    </tr>
+
+<?php
+$articles = access_db("
+    SELECT a2.ArtikelID, a2.Titel, a2.`Edit Time`, a.AutorID
+    FROM `autor-text hilfstabelle` AS a
+        INNER JOIN text t ON a.TextID = t.TextID
+        INNER JOIN artikel a2 ON t.ArtikelID = a2.ArtikelID
+    GROUP BY a2.ArtikelID, `Edit Time`
+    ORDER BY `Edit Time` DESC
+    ");
+if ($articles->num_rows > 0){
+    while ($entry = $articles->fetch_assoc()){
+        $name = access_db("SELECT Name from autor where AutorID=".$entry['AutorID'])->fetch_array()[0];
+        echo "<tr>";
+        echo "<td><a href='php/article/show.php?article=".$entry['ArtikelID']."'>".$entry['Titel']."</a></td>";
+        echo "<td>$name</td>";
+        echo "<td>".$entry['Edit Time']."</td>";
+        echo "</tr>";
+    }
+}
+
+?>
 
 </body>
 </html>

@@ -31,13 +31,15 @@ function add_text(int $start):void {
     }
 
     for ($i = $start; $i < (count($_REQUEST) - 2) / 2 ;$i++) {
-        $title = $_REQUEST['text_title_' . $i];
-        $text = $_REQUEST['text_text_' . $i];
+        $title = addslashes($_REQUEST['text_title_' . $i]);
+        $text = addslashes($_REQUEST['text_text_' . $i]);
 
-        access_db("INSERT INTO `autor-text hilfstabelle` values ($maxHID, $maxTID, $id)");
-        access_db("INSERT into text values ($maxTID, $maxHID, $maxAID, '$title', '$text')");
-        $maxHID++;
-        $maxTID++;
+        if ($text != '' || $title != '') {
+            access_db("INSERT INTO `autor-text hilfstabelle` values ($maxHID, $maxTID, $id)");
+            access_db("INSERT into text values ($maxTID, $maxHID, $maxAID, '$title', '$text')");
+            $maxHID++;
+            $maxTID++;
+        }
     }
 }
 //saves the input while creating a new article so that the progress isn't lost by the creation of a new Text Segment

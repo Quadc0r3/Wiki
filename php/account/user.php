@@ -20,7 +20,8 @@
         </tr>
     <?php
         include "../connect_to_db.php";
-        $articles = access_db("SELECT a2.ArtikelID, a2.Titel, a2.`Edit Time`, a2.`Creation Time` FROM `autor-text hilfstabelle` AS a INNER JOIN text t ON a.TextID = t.TextID INNER JOIN artikel a2 ON t.ArtikelID = a2.ArtikelID WHERE a.AutorID = 12 GROUP BY a2.ArtikelID");
+        $autorID = access_db("SELECT AutorID FROM autor WHERE Name ='".$_SESSION['username']."'")->fetch_array()[0];
+        $articles = access_db("SELECT a2.ArtikelID, a2.Titel, a2.`Edit Time`, a2.`Creation Time` FROM `autor-text hilfstabelle` AS a INNER JOIN text t ON a.TextID = t.TextID INNER JOIN artikel a2 ON t.ArtikelID = a2.ArtikelID WHERE a.AutorID = $autorID GROUP BY a2.ArtikelID");
         if ($articles->num_rows > 0){
             while ($entry = $articles->fetch_assoc()){
                 echo "<tr>";

@@ -11,8 +11,11 @@ function update_tables():void
 
     if ($textIDs->num_rows > 0) {
         while ($entry = $textIDs->fetch_assoc()) {
-            $HIDs = access_db("SELECT HID, TextID FROM `autor-text hilfstabelle` WHERE TextID = '" . $entry['TextID'] . "'")->fetch_assoc();
-            access_db("UPDATE text SET Inhalt = '" . $_POST['text_text_' . $i] . "', Title = '" . $_POST['text_title_' . $i] . "' WHERE ArtikelID = $articleID and TextID = " . $entry['TextID']);
+            $text = addslashes($_POST['text_text_' . $i]);
+            $title = addslashes($_POST['text_title_' . $i]);
+
+//            $HIDs = access_db("SELECT HID, TextID FROM `autor-text hilfstabelle` WHERE TextID = '" . $entry['TextID'] . "'")->fetch_assoc();
+            access_db("UPDATE text SET Inhalt = '" . $text . "', Title = '" . $title . "' WHERE ArtikelID = $articleID and TextID = " . $entry['TextID']);
             access_db("UPDATE `autor-text hilfstabelle` SET AutorID = $authorID WHERE TextID = " . $entry['TextID']);
             $i++;
         }

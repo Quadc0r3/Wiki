@@ -1,19 +1,6 @@
 <?php
+session_start();
 include "../user_handeling.php";
-
-function add_user($name, $pwd): void
-{
-    $conn = connect_to_server();
-    $sql = "INSERT INTO autor (Name, Passwort) VALUES ('" . $name . "','" . $pwd . "')";
-
-    if ($conn->query($sql) === True) {
-        echo "Registration successful!</br> Wilkommen " . $name;
-    } else {
-        echo $conn->error;
-    }
-
-    $conn->close();
-}
 function check_registration_input(string $name, string $pwd): bool {
     $answer = True;
     $inputStates[0] = (strlen($name) <= 0 ? 'Username is missing':'');
@@ -35,6 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     $answer = check_registration_input($name,$pwd);
     if ($answer) {
-        add_user($name, $pwd);
+        access_db("INSERT INTO autor (Name, Passwort) VALUES ('" . $name . "','" . $pwd . "')");
+        $_SESSION['valid'] = true;
+        $_SESSION['timeout'] = time() + 1200;
+        $_SESSION['username'] = $name;
+        header("Location: ../../index.php");
     }
 }
