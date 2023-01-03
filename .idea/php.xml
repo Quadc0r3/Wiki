@@ -18,12 +18,6 @@
   <component name="PhpStanOptionsConfiguration">
     <option name="transferred" value="true" />
   </component>
-  <component name="PhpStepFilterConfiguration">
-    <skipped_functions>
-      <skipped_function name="check_registration_input" />
-      <skipped_function name="get_user_id" />
-    </skipped_functions>
-  </component>
   <component name="PsalmOptionsConfiguration">
     <option name="transferred" value="true" />
   </component>

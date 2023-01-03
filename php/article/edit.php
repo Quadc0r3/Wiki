@@ -3,6 +3,7 @@ session_start();
 include "../connect_to_db.php";
 $aID = (array_key_exists("article",$_GET)) ? (int)$_GET['article'] : 0;
 $article = access_db("SELECT Titel FROM artikel WHERE ArtikelID =".$aID)->fetch_array();
+$_SESSION['mode'] = 'edit';
 if ($article != null) $article = $article[0];
 
 if (!isset($_SESSION['valid']) /*or !$_SESSION['valid']*/) {
@@ -15,21 +16,8 @@ function load_article(): void {
     echo "<form action='save_changes.php' method='post'>";
     echo "<input type='text' name='article' placeholder='".$GLOBALS['article']."' value='".$GLOBALS['article']."' required>";
     echo "<hr>";
-    $texts = access_db("SELECT * FROM text WHERE ArtikelID = ".$GLOBALS['aID']);
-
-    if ($texts->num_rows > 0) {
-        $i = 0;
-        while ($entry = $texts->fetch_assoc()) {
-            echo "<p>Edit ".$entry['Title']."</p><hr>";
-            echo "<input type='text' name='text_title_".$i."' placeholder='Text Title' value='".$entry['Title']."'><br>";
-            echo "<input type='text' name='text_text_".$i."' placeholder='Text' value='".$entry['Inhalt']."'>";
-            $i++;
-        }
-
-        $_SESSION['no_of_texts'] = $i;
-    }
-    echo "<button type='submit' name='new_segment'>New Text Segment</button>";
-    echo "<button type='submit'>Save Changes</button></form>";
+include "text/new_text.php";
+    if (array_key_exists('no_of_texts', $_SESSION)) new_text_segment();
     echo "</form>";
 }
 ?>

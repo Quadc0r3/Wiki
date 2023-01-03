@@ -2,22 +2,30 @@
 session_start();
 include "../connect_to_db.php";
 
-$authorID = access_db("SELECT * FROM autor WHERE Name = '" . $_SESSION['username'] . "'")->fetch_array()[0];
-$articleID = $_SESSION["aID"];
-$textIDs = access_db("SELECT TextID FROM text WHERE ArtikelID = '$articleID'");
-
-if ($textIDs->num_rows > 0) {
+function update_tables():void
+{
+    $authorID = access_db("SELECT * FROM autor WHERE Name = '" . $_SESSION['username'] . "'")->fetch_array()[0];
+    $articleID = $_SESSION["aID"];
+    $textIDs = access_db("SELECT TextID FROM text WHERE ArtikelID = '$articleID'");
     $i = 0;
-    while ($entry = $textIDs->fetch_assoc()) {
-        $HIDs = access_db("SELECT HID, TextID FROM `autor-text hilfstabelle` WHERE TextID = '" . $entry['TextID'] . "'")->fetch_assoc();
-        access_db("UPDATE text SET Inhalt = '" . $_POST['text_text_' . $i] . "', Title = '" . $_POST['text_title_' . $i] . "' WHERE ArtikelID = $articleID and TextID = " . $entry['TextID']);
-        access_db("UPDATE `autor-text hilfstabelle` SET AutorID = $authorID WHERE TextID = " . $entry['TextID']);
-        $i++;
-    }
-    access_db("UPDATE artikel SET `Edit Time` = '" . date("Y-m-d H:i:s") . "', Titel = '".$_POST['article']."'  WHERE ArtikelID = $articleID");
-}
-header("Location: show.php?article=$articleID");
-//$HID =
-/*$HID;
 
-$textID;*/
+    if ($textIDs->num_rows > 0) {
+        while ($entry = $textIDs->fetch_assoc()) {
+            $HIDs = access_db("SELECT HID, TextID FROM `autor-text hilfstabelle` WHERE TextID = '" . $entry['TextID'] . "'")->fetch_assoc();
+            access_db("UPDATE text SET Inhalt = '" . $_POST['text_text_' . $i] . "', Title = '" . $_POST['text_title_' . $i] . "' WHERE ArtikelID = $articleID and TextID = " . $entry['TextID']);
+            access_db("UPDATE `autor-text hilfstabelle` SET AutorID = $authorID WHERE TextID = " . $entry['TextID']);
+            $i++;
+        }
+        access_db("UPDATE artikel SET `Edit Time` = '" . date("Y-m-d H:i:s") . "', Titel = '" . $_POST['article'] . "'  WHERE ArtikelID = $articleID");
+    }
+
+    include "create_article.php";
+    add_text($i);
+    header("Location: show.php?article=$articleID");
+}
+if (array_key_exists('submit_edit',$_POST)) update_tables();
+elseif (array_key_exists('new_segment_edit',$_POST)) {
+//    include "text/new_text.php";
+//    new_text_segment('edit');
+    header("Location: edit.php?article=".$_SESSION['aID']);
+}

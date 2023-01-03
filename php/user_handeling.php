@@ -15,14 +15,8 @@ function get_user_by_name(string $name): array{
     return $user;
 }
 
-function get_user_id(string $name): string{
-    $conn = connect_to_server();
-    $sql = "SELECT AutorID FROM autor WHERE Name = '$name';";
-    $response = $conn->query($sql);
-    return (int)$response->fetch_assoc()["AutorID"];
-}
-
 function logged_in():void{
+
     echo "<a href='php/account/logout.php'>Log Out</a></br>";
     echo "<a href='php/account/user.php'>My Profile</a></br>";
     echo "<a href='php/article/new.php'>New Article</a>";

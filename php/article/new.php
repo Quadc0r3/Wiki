@@ -1,6 +1,7 @@
 <?php
 include "text/new_text.php";
-include "../connect_to_db.php";?>
+include "../connect_to_db.php";
+$_SESSION['mode'] = 'new'?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -11,7 +12,7 @@ include "../connect_to_db.php";?>
     <title>New Article</title>
 </head>
 <body>
- <form method="post" action="text/new_text.php">
+<form action='create_article.php' method='post'>
      <label>
          <?php
          $_SESSION['no_of_texts'] = isset($_SESSION['no_of_texts']) ? max(0, $_SESSION['no_of_texts']) : 0;
@@ -20,9 +21,9 @@ include "../connect_to_db.php";?>
          echo "<input type='text' name='article' value='".$value."' placeholder='Title' required>";
          ?>
      </label>
- </form>
 
- <?php if (array_key_exists('no_of_texts',$_SESSION)) new_test_segment(); ?>
+ <?php if (array_key_exists('no_of_texts',$_SESSION)) new_text_segment('new'); ?>
+</form>
 </body>
 </html>
 

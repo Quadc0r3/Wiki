@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "php/user_handeling.php";
+$_SESSION['no_of_texts'] = 0;
 ?>
 
 <!doctype html>
