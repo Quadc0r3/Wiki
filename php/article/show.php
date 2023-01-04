@@ -13,10 +13,11 @@ function show_text($texts):void {
     if ($texts->num_rows > 0) {
         $i = 0;
         while ($entry = $texts->fetch_assoc()) {
+            $text = nl2br($entry['Inhalt']);
             echo "<div id='text_$i' class='text'>";
             echo "<h2>{$entry['Title']}</h2>";
             echo "<br>";
-            echo "<p>{$entry['Inhalt']}</p>";
+            echo "<p>$text</p>";
             echo "</div>";
             echo "<hr>";
             $i++;
