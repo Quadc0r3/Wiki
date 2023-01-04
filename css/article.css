@@ -1,0 +1,58 @@
+h1 {
+    font-size: 2em;
+    margin: 0;
+    padding: 1em;
+    text-align: center;
+    align-self: center;
+    text-decoration: underline 3px black;
+}
+
+
+/*Buttons*/
+
+
+.back {
+    float:left;
+}
+
+.edit {
+    float: right;
+}
+
+
+a {
+    color: #0000ff;
+    text-decoration: none;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #999999;
+    margin: 1px;
+}
+
+.content_container {
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.text {
+    margin: 1em;
+    padding: 1em;
+    width: 60%;
+    align-self: center;
+    background-color: #d3c8ba;
+    border-radius: 5px;
+    box-shadow: #00000008 10px 10px 10px 10px;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}

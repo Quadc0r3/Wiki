@@ -14,9 +14,9 @@ function get_user_by_name(string $name): array{
 
 function logged_in():void{
 
-    echo "<a href='php/account/logout.php'>Log Out</a></br>";
-    echo "<a href='php/account/user.php'>My Profile</a></br>";
-    echo "<a href='php/article/new.php'>New Article</a>";
+    echo "<a href='php/account/logout.php'  class='button'>Log Out</a></br>";
+    echo "<a href='php/account/user.php' class='button'>My Profile</a></br>";
+    echo "<a href='php/article/new.php' class='button'>New Article</a>";
 }
 
 

@@ -14,10 +14,12 @@ if (!isset($_SESSION['valid']) /*or !$_SESSION['valid']*/) {
 function load_article(): void {
     $_SESSION["aID"] = $GLOBALS["aID"];
     echo "<form action='save_changes.php' method='post'>";
-    echo "<input type='text' name='article' placeholder='".$GLOBALS['article']."' value='".$GLOBALS['article']."' required>";
+    echo "<input type='text' name='article' placeholder='{$GLOBALS['article']}' value='{$GLOBALS['article']}' required autocomplete='off'>";
+    echo "<button type='submit' name='delete_article' value='{$_SESSION["aID"]}'>Delete</button>";
     echo "<hr>";
-include "text/new_text.php";
-    if (array_key_exists('no_of_texts', $_SESSION)) new_text_segment();
+    $_SESSION['no_of_texts'] = access_db("SELECT count(*) FROM text where ArtikelID =".$_SESSION["aID"])->fetch_array()[0];
+    include "text/new_text.php";
+    new_text_segment();
     echo "</form>";
 }
 ?>
@@ -29,6 +31,8 @@ include "text/new_text.php";
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Edit | <?php echo $article ?></title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/edit.css">
 </head>
 <body>
 <?php load_article() ?>

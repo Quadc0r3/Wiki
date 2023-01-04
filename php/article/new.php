@@ -18,11 +18,11 @@ $_SESSION['mode'] = 'new'?>
          $_SESSION['no_of_texts'] = isset($_SESSION['no_of_texts']) ? max(0, $_SESSION['no_of_texts']) : 0;
          $_SESSION['start_of_save'] = $_SESSION['start_of_save'] ?? '';
          $value = array_key_exists('article',$_SESSION) ? $_SESSION['article'] : '';
-         echo "<input type='text' name='article' value='".$value."' placeholder='Title' required>";
+         echo "<input type='text' name='article' value='$value' placeholder='Title' required autocomplete='off'>";
          ?>
      </label>
 
- <?php if (array_key_exists('no_of_texts',$_SESSION)) new_text_segment('new'); ?>
+ <?php if (array_key_exists('no_of_texts',$_SESSION)) new_text_segment(); ?>
 </form>
 </body>
 </html>

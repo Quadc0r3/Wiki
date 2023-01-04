@@ -13,10 +13,10 @@ function show_text($texts):void {
     if ($texts->num_rows > 0) {
         $i = 0;
         while ($entry = $texts->fetch_assoc()) {
-            echo "<div id='text_".$i."'>";
-            echo "<h2>".$entry['Title']."</h2>";
+            echo "<div id='text_$i' class='text'>";
+            echo "<h2>{$entry['Title']}</h2>";
             echo "<br>";
-            echo "<p>".$entry['Inhalt']."</p>";
+            echo "<p>{$entry['Inhalt']}</p>";
             echo "</div>";
             echo "<hr>";
             $i++;
@@ -25,15 +25,17 @@ function show_text($texts):void {
 }
 
 function show_article():void {
-    echo "<h1>".$GLOBALS['aTitle']."</h1>";
-    echo "<a href='../../index.php'>Back</a>";
+    echo "<div id='content_container'><h1>{$GLOBALS['aTitle']}</h1></div>";
     echo "<hr>";
 
     $texts = access_db("SELECT * FROM text where ArtikelID = ".$GLOBALS['aID']);
+    echo "<div class='content_container'>";
     show_text($texts);
+    echo "</div>";
 
     echo "<hr>";
-    if (isset($_SESSION['valid'])) echo "<a href='edit.php?article=".$GLOBALS['aID']."'>Edit</a>";
+    echo "<a href='../../index.php' class='back button'>Back</a>";
+    if (isset($_SESSION['valid'])) echo "<a href='edit.php?article={$GLOBALS['aID']}' class='edit button'>Edit</a>";
 
 }
 ?>
@@ -44,6 +46,8 @@ function show_article():void {
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/article.css">
     <title>Wiki | <?php echo $aTitle ?></title>
 </head>
 <body>

@@ -1,6 +1,5 @@
 <?php
-function connect_to_server()
-{
+function connect_to_server() {
     $servername = "localhost";
     $username = "root";
     $passwort = "";
@@ -14,8 +13,7 @@ function connect_to_server()
     return $conn;
 }
 
-function access_db(string $query): mysqli_result|bool
-{
+function access_db(string $query): mysqli_result|bool {
     $con = connect_to_server();
     $response = $con->query($query);
     $con->close();

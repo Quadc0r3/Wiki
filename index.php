@@ -11,6 +11,8 @@ $_SESSION['no_of_texts'] = 0;
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/index.css">
     <title>Wiki</title>
 </head>
 <body>
@@ -19,7 +21,7 @@ $_SESSION['no_of_texts'] = 0;
 if (isset($_SESSION['valid']) and $_SESSION['valid']) {     //user is logged in
         logged_in();
     } else {                                                //user isn't logged in
-    echo "<a href='register.php'>Sign Up</a><br><a href='login.php'>Sign In</a>";
+    echo "<a href='register.php' class='button'>Sign Up</a><br><a href='login.php'  class='button'>Sign In</a>";
 }
 ?>
 </div>
@@ -49,11 +51,11 @@ $articles = access_db("
     ");
 if ($articles->num_rows > 0){
     while ($entry = $articles->fetch_assoc()){
-        $name = access_db("SELECT Name from autor where AutorID=".$entry['AutorID'])->fetch_array()[0];
+        $name = access_db("SELECT Name from autor where AutorID={$entry['AutorID']}")->fetch_array()[0];
         echo "<tr>";
-        echo "<td><a href='php/article/show.php?article=".$entry['ArtikelID']."'>".$entry['Titel']."</a></td>";
+        echo "<td><a href='php/article/show.php?article={$entry['ArtikelID']}'  class='table_link'>{$entry['Titel']}</a></td>";
         echo "<td>$name</td>";
-        echo "<td>".$entry['Edit Time']."</td>";
+        echo "<td>{$entry['Edit Time']}</td>";
         echo "</tr>";
     }
 }
