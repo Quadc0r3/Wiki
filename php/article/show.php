@@ -10,10 +10,11 @@ else{
 }
 
 function show_text($texts):void {
+    include_once "../text_processing.php";
     if ($texts->num_rows > 0) {
         $i = 0;
         while ($entry = $texts->fetch_assoc()) {
-            $text = nl2br($entry['Inhalt']);
+            $text = db_to_show($entry['Inhalt']);
             echo "<div id='text_$i' class='text'>";
             echo "<h2>{$entry['Title']}</h2>";
             echo "<br>";
@@ -36,7 +37,11 @@ function show_article():void {
 
     echo "<hr>";
     echo "<a href='../../index.php' class='back button'>Back</a>";
-    if (isset($_SESSION['valid'])) echo "<a href='edit.php?article={$GLOBALS['aID']}' class='edit button'>Edit</a>";
+    $article = access_db("SELECT is_editable, accessed FROM artikel WHERE ArtikelID = ".$GLOBALS['aID'])->fetch_assoc();
+    $is_editable = $article['is_editable'];
+    $accessed = $article['accessed'] + 1;
+    access_db("UPDATE artikel SET accessed = $accessed WHERE ArtikelID = ".$GLOBALS['aID']);
+    if ($is_editable && isset($_SESSION['valid'])) echo "<a href='edit.php?article={$GLOBALS['aID']}' class='edit button'>Edit</a>";
 
 }
 ?>

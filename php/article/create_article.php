@@ -5,7 +5,7 @@ function add_article(): void {
     $article = $_SESSION['article'];
 
 
-    access_db("INSERT INTO artikel (Titel) VALUES ('".$article."')");
+    access_db("INSERT INTO artikel (Titel) VALUES ('{$article}')");
     add_text(0);
 
     $_SESSION['no_of_texts'] = 0;

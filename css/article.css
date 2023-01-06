@@ -6,7 +6,26 @@ h1 {
     align-self: center;
     text-decoration: underline 3px black;
 }
+a {
+    color: #00d;
+    text-decoration: none;
+}
 
+a.non-existant {
+    color: red;
+}
+
+.existant {
+
+}
+
+.existant:visited {
+    color: #0000dd;
+}
+
+.non-existant:visited {
+    color: #b90b4e;
+}
 
 /*Buttons*/
 
@@ -20,10 +39,7 @@ h1 {
 }
 
 
-a {
-    color: #0000ff;
-    text-decoration: none;
-}
+
 
 hr {
     border: 0;
@@ -56,3 +72,4 @@ p {
     margin: 0;
     padding: 0;
 }
+
