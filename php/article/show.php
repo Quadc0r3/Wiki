@@ -52,7 +52,7 @@ function show_cites():void {
     from cite
     inner join text t on cite.TextID = t.TextID
     inner join artikel a on t.ArtikelID = a.ArtikelID
-    where a.ArtikelID = 23
+    where a.ArtikelID = {$GLOBALS['aID']}
     ");
     if ($texts->num_rows > 0) {
         $i = 1;

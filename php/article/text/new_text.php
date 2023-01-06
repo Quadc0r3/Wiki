@@ -33,7 +33,7 @@ function new_text_segment():void {
     echo "<div class='text_segment' >";
     echo "<p>New Text</p><hr>";
     echo "<input type='text' name='text_title_".($_SESSION['no_of_texts'] - 1)."' placeholder='Text Title' autocomplete='off'><br>";
-    echo "<input type='text' name='text_text_".($_SESSION['no_of_texts'] - 1)."' placeholder='Text' autocomplete='off'><br>";
+    echo "<textarea name='text_text_".($_SESSION['no_of_texts'] - 1)."' class='input_text' placeholder='Text' autocomplete='off'></textarea><br>";
     echo "</div>";
     echo "<br><button type='submit' name='submit_{$_SESSION['mode']}'>Submit</button><br>";
 //    echo "<button type='submit' name='new_segment_{$_SESSION['mode']}'>New Text Segment</button>";
