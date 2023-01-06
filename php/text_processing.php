@@ -1,18 +1,23 @@
 <?php
 include_once "connect_to_db.php";
-function db_to_show(string $text):string {
+$textID = 0;
+global $citeID;
+global $mapping;
+$mapping = [];
+function db_to_show(string $text, int $tID):string {
+    $GLOBALS['textID'] = $tID;
     //links
-    $text = insert_cite($text, "link");
+    $text = create_insert($text, "link");
 
     //cites
-    $text = insert_cite($text, "cite");
+    $text = create_insert($text, "cite");
     //formatting
     //line breaks
     $text = str_replace("\r\n", "</br>", $text);
     return $text;
 }
 
-function insert_cite(string $text,string $type): string
+function create_insert(string $text, string $type, bool $get = false): string|array
 {
     $type = strtolower($type);
     $types = [
@@ -22,6 +27,7 @@ function insert_cite(string $text,string $type): string
     if (!array_key_exists($type,$types)) return "Wrong edit type";
 
     $occurances = substr_count($text,$types[$type]['open']);
+
 
     while ($occurances > 0) {
         $link_start_pos = strpos($text, $types[$type]['open']) + 2;
@@ -44,6 +50,8 @@ function insert_cite(string $text,string $type): string
         }
         $reference = $reference == "" ? $name : $reference;
 
+        if ($get) return ["reference" => $reference, "name" => $name];
+
         $insert = match ($type) {
             "link" => create_link($reference, $name),
             "cite" => create_cite($reference, $name),
@@ -58,8 +66,14 @@ function insert_cite(string $text,string $type): string
     return $text;
 }
 
-function create_cite(): string {
-    return "Cite";
+function create_cite(string $ref, string $name): string {
+    $GLOBALS['citeID']++;
+    $cite = access_db("SELECT citeID FROM cite WHERE Reference = '$ref' or CiteID = '$ref'")->fetch_array()[0];
+    $number = array_key_exists($cite,$GLOBALS['mapping']) ? $GLOBALS['mapping'][$cite] : $GLOBALS['citeID'];
+    $GLOBALS['mapping'] += [$cite => $number];
+
+    $insert = "<sup>[<a href='#cite_$cite'>{$number}</a>]</sup>";
+    return $insert;
 }
 
 function create_link(string $reference, string $name): string|array {

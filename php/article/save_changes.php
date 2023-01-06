@@ -4,7 +4,7 @@ include_once "../connect_to_db.php";
 
 function update_tables():void
 {
-    $authorID = access_db("SELECT * FROM autor WHERE Name = '" . $_SESSION['username'] . "'")->fetch_array()[0];
+    $authorID = access_db("SELECT * FROM autor WHERE Name = '{$_SESSION['username']}'")->fetch_array()[0];
     $articleID = $_SESSION["aID"];
     $textIDs = access_db("SELECT TextID FROM text WHERE ArtikelID = '$articleID'");
     $i = 0;
@@ -14,9 +14,36 @@ function update_tables():void
             $text = addslashes($_POST['text_text_' . $i]);
             $title = addslashes($_POST['text_title_' . $i]);
 
-//            $HIDs = access_db("SELECT HID, TextID FROM `autor-text hilfstabelle` WHERE TextID = '" . $entry['TextID'] . "'")->fetch_assoc();
+            //Cites
+            include_once "../text_processing.php";
+            $cite = create_insert($text, "cite",true);
+            if ($cite != $text) {
+                $exist = access_db("SELECT count(*) FROM cite where (Reference = '{$cite['reference']}' or CiteID = '{$cite['reference']}')  and TextID = " . $entry['TextID'])->fetch_array()[0];
+                if ($exist <= 0) access_db("INSERT INTO cite (TextID, Reference) VALUES ({$entry['TextID']}, '{$cite['reference']}')");
+                $citeID = access_db("SELECT CiteID, Reference FROM cite where (Reference = '{$cite['reference']}' or CiteID = '{$cite['reference']}') and TextID = " . $entry['TextID'])->fetch_array()[0];
+
+                //es gibt bestimmt dafür eine viel bessere Lösung
+                $end = 0;
+                $end2 = 0;
+                $occurances = substr_count($text,"[[");
+                for ($k = 0; $k < $occurances; $k++) {
+                    $start = strpos($text, "[[", $end);
+                    $end = strpos($text, "]]", $end);
+                    $name = "";
+                    for ($j = $start + 2; $j < $end; $j++) $name = $name.$text[$j];
+                    $citeID = access_db("SELECT CiteID, Reference FROM cite where (Reference = '$name' or CiteID = '$name') and TextID = " . $entry['TextID'])->fetch_array()[0];
+                    $text = substr_replace($text, "__{$citeID};;", $start, ($end - $start) + 2);
+                    $end = strpos($text, ";;", $end2);
+                    $end2 = $end;
+                }
+                $text = str_replace("__","[[",$text,$occurances);
+                $text = str_replace(";;","]]",$text,$occurances);
+            }
+
+            //update text
             access_db("UPDATE text SET Inhalt = '$text', Title = '$title' WHERE ArtikelID = $articleID and TextID = " . $entry['TextID']);
             access_db("UPDATE `autor-text hilfstabelle` SET AutorID = $authorID WHERE TextID = " . $entry['TextID']);
+
             $i++;
         }
         access_db("UPDATE artikel SET `Edit Time` = '" . date("Y-m-d H:i:s") . "', Titel = '{$_POST['article']}'  WHERE ArtikelID = $articleID");

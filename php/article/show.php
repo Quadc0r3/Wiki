@@ -14,7 +14,7 @@ function show_text($texts):void {
     if ($texts->num_rows > 0) {
         $i = 0;
         while ($entry = $texts->fetch_assoc()) {
-            $text = db_to_show($entry['Inhalt']);
+            $text = db_to_show($entry['Inhalt'], $entry['TextID']);
             echo "<div id='text_$i' class='text'>";
             echo "<h2>{$entry['Title']}</h2>";
             echo "<br>";
@@ -33,6 +33,7 @@ function show_article():void {
     $texts = access_db("SELECT * FROM text where ArtikelID = ".$GLOBALS['aID']);
     echo "<div class='content_container'>";
     show_text($texts);
+    show_cites();
     echo "</div>";
 
     echo "<hr>";
@@ -44,6 +45,30 @@ function show_article():void {
     if ($is_editable && isset($_SESSION['valid'])) echo "<a href='edit.php?article={$GLOBALS['aID']}' class='edit button'>Edit</a>";
 
 }
+
+function show_cites():void {
+    $texts =  access_db("
+    SELECT CiteID, Reference
+    from cite
+    inner join text t on cite.TextID = t.TextID
+    inner join artikel a on t.ArtikelID = a.ArtikelID
+    where a.ArtikelID = 23
+    ");
+    if ($texts->num_rows > 0) {
+        $i = 1;
+        echo "<div id='text_references' class='text'>";
+        echo "<h2>References</h2>";
+        echo "<br>";
+
+        while ($entry = $texts->fetch_assoc()) {
+            echo "<p id='cite_{$entry['CiteID']}'>[$i] - {$entry['Reference']}</p>";
+                        $i++;
+        }
+        echo "</div>";
+        echo "<hr>";
+    }
+}
+
 ?>
 <!doctype html>
 <html lang="en">
