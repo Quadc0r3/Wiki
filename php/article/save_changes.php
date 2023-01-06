@@ -18,10 +18,6 @@ function update_tables():void
             include_once "../text_processing.php";
             $cite = create_insert($text, "cite",true);
             if ($cite != $text) {
-                $exist = access_db("SELECT count(*) FROM cite where (Reference = '{$cite['reference']}' or CiteID = '{$cite['reference']}')  and TextID = " . $entry['TextID'])->fetch_array()[0];
-                if ($exist <= 0) access_db("INSERT INTO cite (TextID, Reference) VALUES ({$entry['TextID']}, '{$cite['reference']}')");
-                $citeID = access_db("SELECT CiteID, Reference FROM cite where (Reference = '{$cite['reference']}' or CiteID = '{$cite['reference']}') and TextID = " . $entry['TextID'])->fetch_array()[0];
-
                 //es gibt bestimmt dafür eine viel bessere Lösung
                 $end = 0;
                 $end2 = 0;
@@ -31,7 +27,15 @@ function update_tables():void
                     $end = strpos($text, "]]", $end);
                     $name = "";
                     for ($j = $start + 2; $j < $end; $j++) $name = $name.$text[$j];
-                    $citeID = access_db("SELECT CiteID, Reference FROM cite where (Reference = '$name' or CiteID = '$name') and TextID = " . $entry['TextID'])->fetch_array()[0];
+                    $id = -1;
+                    $name = (int)$name == 0 ? $name : $id = (int)$name;
+
+                    $exist = access_db("SELECT count(*) FROM cite where (Reference = '$name' or CiteID = $id)  and ArtikelID = " . $articleID)->fetch_array()[0];
+                    if ($exist <= 0) access_db("INSERT INTO cite (ArtikelID, Reference) VALUES ($articleID, '$name')");
+                    $citeID = access_db("SELECT CiteID, Reference FROM cite where (Reference = '$name' or CiteID = $id) and ArtikelID = " . $articleID)->fetch_array()[0];
+
+
+                    $citeID = access_db("SELECT CiteID, Reference FROM cite where (Reference = '$name' or CiteID = $id) and ArtikelID = " . $articleID)->fetch_array()[0];
                     $text = substr_replace($text, "__{$citeID};;", $start, ($end - $start) + 2);
                     $end = strpos($text, ";;", $end2);
                     $end2 = $end;

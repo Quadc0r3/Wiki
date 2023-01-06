@@ -1,8 +1,8 @@
 <?php
 include_once "connect_to_db.php";
-$textID = 0;
 global $citeID;
 global $mapping;
+$citeID = 1;
 $mapping = [];
 function db_to_show(string $text, int $tID):string {
     $GLOBALS['textID'] = $tID;
@@ -67,9 +67,13 @@ function create_insert(string $text, string $type, bool $get = false): string|ar
 }
 
 function create_cite(string $ref, string $name): string {
-    $GLOBALS['citeID']++;
     $cite = access_db("SELECT citeID FROM cite WHERE Reference = '$ref' or CiteID = '$ref'")->fetch_array()[0];
-    $number = array_key_exists($cite,$GLOBALS['mapping']) ? $GLOBALS['mapping'][$cite] : $GLOBALS['citeID'];
+    if (array_key_exists($cite, $GLOBALS['mapping'])) {
+        $number = $GLOBALS['mapping'][$cite];
+    } else {
+        $number = $GLOBALS['citeID'];
+        $GLOBALS['citeID']++;
+    }
     $GLOBALS['mapping'] += [$cite => $number];
 
     $insert = "<sup>[<a href='#cite_$cite'>{$number}</a>]</sup>";
@@ -77,7 +81,7 @@ function create_cite(string $ref, string $name): string {
 }
 
 function create_link(string $reference, string $name): string|array {
-    if ((int)$reference == 0) $aID = access_db("SELECT ArtikelID FROM artikel WHERE Titel = ltrim('$reference')")->fetch_array();
+    if ((int)$reference == 0) $aID = access_db("SELECT ArtikelID FROM artikel WHERE Titel = ltrim('".addslashes($reference)."')")->fetch_array();
     else $aID = access_db("SELECT ArtikelID FROM artikel where ArtikelID = $reference")->fetch_array();
 
     $aID = isset($aID) ? $aID[0] : 0;

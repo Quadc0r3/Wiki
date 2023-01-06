@@ -49,9 +49,8 @@ function show_article():void {
 function show_cites():void {
     $texts =  access_db("
     SELECT CiteID, Reference
-    from cite
-    inner join text t on cite.TextID = t.TextID
-    inner join artikel a on t.ArtikelID = a.ArtikelID
+    from cite as c
+    inner join artikel a on c.ArtikelID = a.ArtikelID
     where a.ArtikelID = {$GLOBALS['aID']}
     ");
     if ($texts->num_rows > 0) {
