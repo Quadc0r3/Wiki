@@ -15,20 +15,18 @@ function show_text($texts):void {
         $i = 0;
         while ($entry = $texts->fetch_assoc()) {
             if ($entry['type'] == 'text') {
-            $text = db_to_show($entry['Inhalt'], $entry['TextID']);
-            echo "<div id='text_$i' class='text'>";
-            echo "<h2>{$entry['Title']}</h2>";
-            echo "<br>";
-            echo "<p>$text</p>";
-            echo "</div>";
+                $text = db_to_show($entry['Inhalt'], $entry['TextID']);
+                echo "<div id='text_$i' class='text'>";
+                echo "<h2>{$entry['Title']}</h2>";
+                echo "<br>";
+                echo "<p>$text</p>";
+                echo "</div>";
             } elseif($entry['type'] == 'image') {
                 //display image
                 echo "<div class='text' id='image_{$entry['TextID']}'>";
                 echo "<img src='../../display.php?id={$entry['TextID']}' alt='Image from database'>";
                 echo "</div>";
-//                $i--;
             }
-//            echo "<hr>";
             $i++;
         }
     }
@@ -42,9 +40,7 @@ function show_article():void {
     echo "<div class='content_container'>";
     show_text($texts);
     show_cites();
-//    echo "<div class='content_container'>";
-//    echo "<img src='../../display.php?id={$GLOBALS['aID']}' alt='Image from database'>";
-//    echo "</div>";
+
     echo "</div>";
 
     echo "<hr>";

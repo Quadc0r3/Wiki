@@ -2,12 +2,12 @@
 if (!isset($_SESSION)) session_start();
 include_once "../connect_to_db.php";
 function add_article(): void {
-    access_db("INSERT INTO artikel (Titel) VALUES ('{$_POST['article']}')");
+    access_db("INSERT INTO artikel (Titel) VALUES ('".addslashes($_POST['article'])."')");
     add_text(0);
 
     $_SESSION['no_of_texts'] = 0;
     $_SESSION['article'] = null;
-    header("Location: ../../index.php");
+    header("Location: show.php?article=".access_db("SELECT max(artikelID) from artikel")->fetch_array()[0]);
 }
 
 function add_text(int $start):void {
@@ -35,6 +35,7 @@ function add_text(int $start):void {
             $text = addslashes($_REQUEST['text_text_' . $i]);
 
             if ($text != '' || $title != '') {
+                if (access_db("SELECT count(*) FROM text WHERE ArtikelID = $maxAID and Title = '$title' and Inhalt = '$text'")->fetch_array()[0] > 0) continue;
                 access_db("INSERT into text (TextID, ArtikelID, Title, Inhalt, position) values ($maxTID, $maxAID, '$title', '$text',$i+$offset)");
                 access_db("INSERT INTO `autor-text hilfstabelle` values ($maxHID, $maxTID, $id)");
                 $maxHID++;
@@ -68,7 +69,7 @@ function save_text():void {
         $title = $_POST['text_title_' . $i];
         $text = $_POST['text_text_' . $i];
 
-        access_db("INSERT INTO text values ($minTextID,0, '$title', '$text',$i,'del')");
+        access_db("INSERT INTO text (TextID, ArtikelID, Title, Inhalt, position) values ($minTextID,0, '$title', '$text',$i)");
     }
     header("Location: ../article/new.php");
 }

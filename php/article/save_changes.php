@@ -11,10 +11,12 @@ function update_tables():void
 
     if ($textIDs->num_rows > 0) {
         while ($entry = $textIDs->fetch_assoc()) {
+            if (!array_key_exists('text_text_' . $i,$_POST)) continue;
                 //add texts
                 $text = addslashes($_POST['text_text_' . $i]);
                 $title = addslashes($_POST['text_title_' . $i]);
 
+                if ($text =="" and $title =="") continue;
                 //Cites
                 include_once "../text_processing.php";
                 $cite = create_insert($text, "cite", true);
@@ -51,7 +53,7 @@ function update_tables():void
 
                 $i++;
         }
-        access_db("UPDATE artikel SET `Edit Time` = '" . date("Y-m-d H:i:s") . "', Titel = '{$_POST['article']}'  WHERE ArtikelID = $articleID");
+        access_db("UPDATE artikel SET `Edit Time` = '" . date("Y-m-d H:i:s") . "', Titel = '".addslashes($_POST['article'])."'  WHERE ArtikelID = $articleID");
     }
 
     include_once "create_article.php";
@@ -74,6 +76,7 @@ function delete_img_segment():void {
 function delete_article(): void {
     access_db("DELETE FROM `autor-text hilfstabelle` WHERE TextID IN (SELECT TextID FROM text where ArtikelID = {$_SESSION['aID']})");
     access_db("DELETE FROM text WHERE ArtikelID = {$_SESSION['aID']}");
+    access_db("DELETE FROM `autor-image hilfstabelle` WHERE ImageID = (SELECT ImageID FROM image where ArtikelID = {$_SESSION['aID']})");
     access_db("DELETE FROM image WHERE ArtikelID = {$_SESSION['aID']}");
     access_db("DELETE FROM artikel WHERE ArtikelID = {$_SESSION['aID']} LIMIT 1");
     header("Location: ../../index.php");

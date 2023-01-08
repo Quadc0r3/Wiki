@@ -1,6 +1,8 @@
 <?php
 if (!isset($_SESSION)) session_start();
 function new_text_segment():void {
+    if (!array_key_exists('aID',$_SESSION)) $_SESSION['aID'] = access_db("SELECT max(ArtikelID) from artikel")->fetch_array()[0] + 1;
+    if ($_SESSION['start_of_save'] == "") $_SESSION['start_of_save'] = 0;
     $no_of_img = access_db("SELECT count(*) from image where ArtikelID = ".$_SESSION['aID'])->fetch_array()[0];
     if ($_SESSION['no_of_texts'] > 0 or $no_of_img > 0) {
         //get previously saved Data
