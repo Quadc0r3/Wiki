@@ -4,7 +4,7 @@ include_once "php/connect_to_db.php";
 $id = $_GET['id'];
 
 // Retrieve the image data from the database
-$image = access_db("SELECT image FROM images WHERE ImageID = $id")->fetch_assoc();
+$image = access_db("SELECT image FROM image WHERE ImageID = $id")->fetch_assoc();
 
 // Set the content type header - in this case image/jpeg
 header('Content-Type: image/jpeg');

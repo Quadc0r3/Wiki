@@ -50,7 +50,7 @@ INNER JOIN autor a3 on a.AutorID = a3.AutorID
 union
 SELECT a2.Titel,`Edit Time`, a4.Name,a4.AutorID,i.ArtikelID
 FROM `autor-image hilfstabelle` AS a
-         INNER JOIN images i on a.ImageID = i.ImageID
+         INNER JOIN image i on a.ImageID = i.ImageID
          INNER JOIN artikel a2 ON i.ArtikelID = a2.ArtikelID
 INNER JOIN autor a4 on a.AutorID = a4.AutorID
 

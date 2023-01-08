@@ -26,7 +26,7 @@ function show_text($texts):void {
                 echo "<div class='text' id='image_{$entry['TextID']}'>";
                 echo "<img src='../../display.php?id={$entry['TextID']}' alt='Image from database'>";
                 echo "</div>";
-                $i--;
+//                $i--;
             }
 //            echo "<hr>";
             $i++;
@@ -38,7 +38,7 @@ function show_article():void {
     echo "<div id='content_container'><h1>{$GLOBALS['aTitle']}</h1></div>";
     echo "<hr>";
 
-    $texts = access_db("SELECT * FROM text where ArtikelID = {$GLOBALS['aID']} UNION SELECT * from images where ArtikelID ={$GLOBALS['aID']} order by  position");
+    $texts = access_db("SELECT * FROM text where ArtikelID = {$GLOBALS['aID']} UNION SELECT * from image where ArtikelID ={$GLOBALS['aID']} order by  position");
     echo "<div class='content_container'>";
     show_text($texts);
     show_cites();

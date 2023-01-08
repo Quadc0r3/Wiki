@@ -27,27 +27,31 @@ function add_text(int $start):void {
     } elseif ($_SESSION['mode'] == 'edit'){
         $maxAID = $_SESSION['aID'];
     }
-
-    for ($i = $start; $i < ((count($_REQUEST) - 2) / 2) + count($_FILES) ;$i++) {
+    $offset = 0;
+    for ($i = $start; $i <= ((count($_REQUEST) - 2) / 2) + count($_FILES) ;$i++) {
         if (array_key_exists('text_title_' . $i,$_REQUEST)) {
             //add text
             $title = addslashes($_REQUEST['text_title_' . $i]);
             $text = addslashes($_REQUEST['text_text_' . $i]);
 
             if ($text != '' || $title != '') {
-                access_db("INSERT into text (TextID, ArtikelID, Title, Inhalt, position) values ($maxTID, $maxAID, '$title', '$text',$i)");
+                access_db("INSERT into text (TextID, ArtikelID, Title, Inhalt, position) values ($maxTID, $maxAID, '$title', '$text',$i+$offset)");
                 access_db("INSERT INTO `autor-text hilfstabelle` values ($maxHID, $maxTID, $id)");
                 $maxHID++;
                 $maxTID++;
-            }
+
+            } else $offset--;
         } elseif (array_key_exists('image_'.$i,$_FILES)) {
             $file = $_FILES['image_' . $i]['tmp_name'];
             if ($file != "") {
                 $image = addslashes(file_get_contents($file));
                 $image_name = addslashes($_FILES['image_' . $i]['name']);
 
-                access_db("INSERT INTO images (Artikelid, name, image,position) VALUES ($maxAID,'$image_name', '$image',$i)");
-                access_db("INSERT INTO `autor-image hilfstabelle` (imageid, autorid)values ((SELECT (max(ImageID) - 1) from images limit 1), $id)");
+                $position = array_key_exists('text_title_' . ($i-1),$_REQUEST) ? $i : $i - 1;
+                $position += $offset;
+
+                access_db("INSERT INTO image (Artikelid, name, image,position) VALUES ($maxAID,'$image_name', '$image',$position)");
+                access_db("INSERT INTO `autor-image hilfstabelle` (imageid, autorid) values ((SELECT (max(ImageID)) from image limit 1), $id)");
             }
         }
     }

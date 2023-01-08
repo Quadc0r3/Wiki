@@ -60,27 +60,49 @@ function update_tables():void
 }
 
 function delete_txt_segment():void {
-    access_db("DELETE FROM `autor-text hilfstabelle` WHERE TextID = {$_POST['txt_delete']} LIMIT 1");
-    access_db("DELETE FROM text WHERE TextID = {$_POST['txt_delete']} LIMIT 1");
+    access_db("DELETE FROM `autor-text hilfstabelle` WHERE TextID = {$_POST['text_delete']} LIMIT 1");
+    access_db("DELETE FROM text WHERE TextID = {$_POST['text_delete']} LIMIT 1");
     header("Location: edit.php?article=".$_SESSION['aID']);
 }
 
 function delete_img_segment():void {
-    access_db("DELETE FROM images WHERE ImageID = {$_POST['img_delete']} LIMIT 1");
+    access_db("DELETE FROM `autor-image hilfstabelle` WHERE ImageID = {$_POST['image_delete']} LIMIT 1");
+    access_db("DELETE FROM image WHERE ImageID = {$_POST['image_delete']} LIMIT 1");
     header("Location: edit.php?article=".$_SESSION['aID']);
 }
 
 function delete_article(): void {
     access_db("DELETE FROM `autor-text hilfstabelle` WHERE TextID IN (SELECT TextID FROM text where ArtikelID = {$_SESSION['aID']})");
     access_db("DELETE FROM text WHERE ArtikelID = {$_SESSION['aID']}");
-    access_db("DELETE FROM images WHERE ArtikelID = {$_SESSION['aID']}");
+    access_db("DELETE FROM image WHERE ArtikelID = {$_SESSION['aID']}");
     access_db("DELETE FROM artikel WHERE ArtikelID = {$_SESSION['aID']} LIMIT 1");
     header("Location: ../../index.php");
 }
 
 //input check from edit page
+function move(string $direction = 'up'):void {
+    $to_move = access_db("SELECT *
+ FROM (SELECT * from text where ArtikelID = {$_SESSION['aID']}
+       union
+       SELECT * from image where ArtikelID = {$_SESSION['aID']}) as `table`
+ where TextID = {$_POST[$direction]}")->fetch_assoc();
+
+    $qurey = "SELECT * FROM (SELECT * from text where ArtikelID = {$_SESSION['aID']} union SELECT * from image where ArtikelID = {$_SESSION['aID']}) as `table`
+              where position = ".($to_move['position']." - 1");
+
+    if ($direction == 'down') $qurey .= "+2";
+        $get_moved = access_db($qurey)->fetch_assoc();
+
+    access_db("UPDATE {$get_moved['type']} set position = {$to_move['position']} where {$get_moved['type']}ID = {$get_moved['TextID']}");
+
+    access_db("UPDATE {$to_move['type']} set position = {$get_moved['position']} where {$to_move['type']}ID = {$to_move['TextID']}");
+    header("Location: edit.php?article=".$_SESSION['aID']);
+}
+
 if (array_key_exists('submit_edit',$_POST)) update_tables();
 elseif (array_key_exists('new_segment_edit',$_POST)) header("Location: edit.php?article=".$_SESSION['aID']);
-elseif (array_key_exists('txt_delete',$_POST)) delete_txt_segment();
-elseif (array_key_exists('img_delete',$_POST)) delete_img_segment();
+elseif (array_key_exists('text_delete',$_POST)) delete_txt_segment();
+elseif (array_key_exists('image_delete',$_POST)) delete_img_segment();
 elseif (array_key_exists('delete_article',$_POST)) delete_article();
+elseif (array_key_exists('up',$_POST)) move();
+elseif (array_key_exists('down',$_POST)) move('down');

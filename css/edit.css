@@ -29,7 +29,7 @@ textarea.input_text {
 }
 
 button[type="submit"] {
-    background-color: #f40000; /*original: 4CAF50FF*/
+    background-color: #409243; /*original: 4CAF50FF*/
     color: white;
     padding: 12px 20px;
     border: none;
@@ -64,4 +64,18 @@ hr {
     border: none;
     border-bottom: 1px solid gray;
     margin: 0.5em 0;
+}
+
+input[type="file"] {
+    display: inline-block;
+    background: #fdf3e5;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px 20px;
+    margin: 12px;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 12px;
 }
