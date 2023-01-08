@@ -13,7 +13,7 @@ if (!isset($_SESSION['valid']) /*or !$_SESSION['valid']*/) {
 
 function load_article(): void {
     $_SESSION["aID"] = $GLOBALS["aID"];
-    echo "<form action='save_changes.php' method='post'>";
+    echo "<form action='save_changes.php' method='post' enctype='multipart/form-data'>";
     echo "<input type='text' name='article' placeholder='{$GLOBALS['article']}' value='{$GLOBALS['article']}' required autocomplete='off'>";
     echo "<button type='submit' name='delete_article' value='{$_SESSION["aID"]}'>Delete</button>";
     echo "<hr>";

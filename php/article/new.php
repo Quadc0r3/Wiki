@@ -14,7 +14,7 @@ $_SESSION['mode'] = 'new'?>
     <title>New Article</title>
 </head>
 <body>
-<form action='create_article.php' method='post'>
+<form action='create_article.php' method='post' enctype="multipart/form-data">
      <label>
          <?php
          $_SESSION['no_of_texts'] = isset($_SESSION['no_of_texts']) ? max(0, $_SESSION['no_of_texts']) : 0;

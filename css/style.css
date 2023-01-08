@@ -40,7 +40,7 @@ table {
 }
 
 table, th, td {
-    border: 1px solid #bc1d1d;
+    border: 1px solid #686868;
     text-align: left;
     padding: 8px;
 }
@@ -51,10 +51,10 @@ table th {
 }
 
 table tr:nth-child(even) {
-    background-color: #25a073;
+    background-color: #fdf3e5;
 }
 table tr:nth-child(odd) {
-    background-color: #d12f2f;
+    background-color: #d3c8ba;
 }
 
 table tr:hover {
@@ -67,4 +67,8 @@ table tr:hover {
     height: 100%;
 
     padding: 0;
+}
+
+img {
+    width: 100%;
 }

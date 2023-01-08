@@ -42,12 +42,22 @@ if (isset($_SESSION['valid']) and $_SESSION['valid']) {     //user is logged in
 
 <?php
 $articles = access_db("
-    SELECT a2.ArtikelID, a2.Titel, a2.`Edit Time`, a.AutorID
-    FROM `autor-text hilfstabelle` AS a
-        INNER JOIN text t ON a.TextID = t.TextID
-        INNER JOIN artikel a2 ON t.ArtikelID = a2.ArtikelID
-    GROUP BY a2.ArtikelID, `Edit Time`
-    ORDER BY `Edit Time` DESC
+SELECT a2.Titel,`Edit Time`, Name,a3.AutorID,t.ArtikelID
+FROM `autor-text hilfstabelle` AS a
+         INNER JOIN text t ON a.TextID = t.TextID
+         INNER JOIN artikel a2 ON t.ArtikelID = a2.ArtikelID
+INNER JOIN autor a3 on a.AutorID = a3.AutorID
+union
+SELECT a2.Titel,`Edit Time`, a4.Name,a4.AutorID,i.ArtikelID
+FROM `autor-image hilfstabelle` AS a
+         INNER JOIN images i on a.ImageID = i.ImageID
+         INNER JOIN artikel a2 ON i.ArtikelID = a2.ArtikelID
+INNER JOIN autor a4 on a.AutorID = a4.AutorID
+
+where a2.ArtikelID > 0
+
+GROUP BY i.ArtikelID
+order by `Edit Time` desc
     ");
 if ($articles->num_rows > 0){
     while ($entry = $articles->fetch_assoc()){
@@ -61,6 +71,5 @@ if ($articles->num_rows > 0){
 }
 
 ?>
-
 </body>
 </html>
