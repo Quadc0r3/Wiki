@@ -6,14 +6,31 @@ $citeID = 1;
 $mapping = [];
 function db_to_show(string $text, int $tID):string {
     $GLOBALS['textID'] = $tID;
-    //links
+    //links (adds the right link if {{}} are to the input string)
     $text = create_insert($text, "link");
 
-    //cites
+    //cites (adds the corret cites)
     $text = create_insert($text, "cite");
-    //formatting
+    //formatting (missing implementation)
+    //* to bulletpoint
+    $text = format($text);
     //line breaks
     $text = str_replace("\r\n", "</br>", $text);
+    return $text;
+}
+
+function format(array|string $text):string {
+    //bulletpoints
+    $pattern = "/\\r\\n\s*\*/"; //search for a line breake and an * with any amount of whitespaces in between
+    $text = preg_replace($pattern,"<br> •", $text);
+
+    //arrow : pattern = search for arrow with a space in front of it and behind
+    $text = preg_replace("/\s->\s/"," ➝ ", $text);
+    $text = preg_replace("/\s<-\s/"," 🠔 ", $text);
+    $text = preg_replace("/\s<->\s/"," ⟷ ", $text);
+    $text = preg_replace("/\s=>\s/"," ⇒ ", $text);
+    $text = preg_replace("/\s<=\s/"," ⇐ ", $text);
+    $text = preg_replace("/\s<=>\s/"," ⇔ ", $text);
     return $text;
 }
 
@@ -26,8 +43,7 @@ function create_insert(string $text, string $type, bool $get = false): string|ar
     ];
     if (!array_key_exists($type,$types)) return "Wrong edit type";
 
-    $occurances = substr_count($text,$types[$type]['open']);
-
+    $occurances = substr_count($text,$types[$type]['open']); //counts how often the indicating marks are in the text
 
     while ($occurances > 0) {
         $link_start_pos = strpos($text, $types[$type]['open']) + 2;
@@ -66,7 +82,7 @@ function create_insert(string $text, string $type, bool $get = false): string|ar
     return $text;
 }
 
-function create_cite(string $ref, string $name): string {
+function create_cite(string $ref): string { //takes a reference and creates an entry for the dedicated area and gives it a number
     $cite = access_db("SELECT citeID FROM cite WHERE Reference = '$ref' or CiteID = '$ref'")->fetch_array()[0];
     if (array_key_exists($cite, $GLOBALS['mapping'])) {
         $number = $GLOBALS['mapping'][$cite];
@@ -76,8 +92,7 @@ function create_cite(string $ref, string $name): string {
     }
     $GLOBALS['mapping'] += [$cite => $number];
 
-    $insert = "<sup>[<a href='#cite_$cite'>{$number}</a>]</sup>";
-    return $insert;
+    return "<sup>[<a href='#cite_$cite'>$number</a>]</sup>";
 }
 
 function create_link(string $reference, string $name): string|array {
@@ -89,7 +104,5 @@ function create_link(string $reference, string $name): string|array {
 
     $insert = "<a class='$exist link'";
     $insert = min(1, $aID) == 0 ? $insert : $insert."href='show.php?article=$aID'";
-    $insert = $insert.">$name</a>";
-
-    return  $insert;
+    return $insert.">$name</a>";
 }

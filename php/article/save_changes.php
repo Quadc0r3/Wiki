@@ -2,7 +2,7 @@
 session_start();
 include_once "../connect_to_db.php";
 
-function update_tables():void
+function update_tables():void //method to add the changes from editing to the database
 {
     $authorID = access_db("SELECT * FROM autor WHERE Name = '{$_SESSION['username']}'")->fetch_array()[0];
     $articleID = $_SESSION["aID"];
@@ -21,7 +21,7 @@ function update_tables():void
                 include_once "../text_processing.php";
                 $cite = create_insert($text, "cite", true);
                 if ($cite != $text) {
-                    //es gibt bestimmt dafür eine viel bessere Lösung
+                    //es gibt bestimmt dafür eine viel bessere Lösung (ist dafür da die Referenz aus den Klammern auszulesen, diese der DB hinzuzufügen und den String anzupassen)
                     $end = 0;
                     $end2 = 0;
                     $occurances = substr_count($text, "[[");
@@ -39,11 +39,11 @@ function update_tables():void
 
 
                         $citeID = access_db("SELECT CiteID, Reference FROM cite where (Reference = '$name' or CiteID = $id) and ArtikelID = " . $articleID)->fetch_array()[0];
-                        $text = substr_replace($text, "__{$citeID};;", $start, ($end - $start) + 2);
+                        $text = substr_replace($text, "__{$citeID};;", $start, ($end - $start) + 2); //Platzhalter einfügen, da es sonst im dauerloop wäre
                         $end = strpos($text, ";;", $end2);
                         $end2 = $end;
                     }
-                    $text = str_replace("__", "[[", $text, $occurances);
+                    $text = str_replace("__", "[[", $text, $occurances); //Platzhalter ersetzen. da es ansonsten
                     $text = str_replace(";;", "]]", $text, $occurances);
                 }
 

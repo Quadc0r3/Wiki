@@ -1,8 +1,8 @@
-<?php
+<?php //file that creates/inserts entered data into the database
 if (!isset($_SESSION)) session_start();
 include_once "../connect_to_db.php";
 function add_article(): void {
-    access_db("INSERT INTO artikel (Titel) VALUES ('".addslashes($_POST['article'])."')");
+    access_db("INSERT INTO artikel (Titel) VALUES ('".addslashes($_POST['article'])."')"); //addslashes, for ultra basic sql-injection protection and support for ' and " in input
     add_text(0);
 
     $_SESSION['no_of_texts'] = 0;
@@ -10,7 +10,7 @@ function add_article(): void {
     header("Location: show.php?article=".access_db("SELECT max(artikelID) from artikel")->fetch_array()[0]);
 }
 
-function add_text(int $start):void {
+function add_text(int $start):void { //start: where to start checking if data already exists and if not saving it
     $name = $_SESSION['username'];
     $id = (int)access_db("SELECT AutorID FROM autor WHERE Name = '$name';")->fetch_assoc()["AutorID"];
 
@@ -27,15 +27,16 @@ function add_text(int $start):void {
     } elseif ($_SESSION['mode'] == 'edit'){
         $maxAID = $_SESSION['aID'];
     }
-    $offset = 0;
-    for ($i = $start; $i <= ((count($_REQUEST) - 2) / 2) + count($_FILES) ;$i++) {
+
+    $offset = 0; //needed, because of display-order. In the saving of Data, it helps to have a continuous position order (gap between text and images)
+    for ($i = $start; $i <= ((count($_REQUEST) - 2) / 2) + count($_FILES) ;$i++) { //loop from defined start point through all elements on an article and saves it, if it doesn't exist already
         if (array_key_exists('text_title_' . $i,$_REQUEST)) {
             //add text
             $title = addslashes($_REQUEST['text_title_' . $i]);
             $text = addslashes($_REQUEST['text_text_' . $i]);
 
-            if ($text != '' || $title != '') {
-                if (access_db("SELECT count(*) FROM text WHERE ArtikelID = $maxAID and Title = '$title' and Inhalt = '$text'")->fetch_array()[0] > 0) continue;
+            if ($text != '' || $title != '') { //check if input is empty
+                if (access_db("SELECT count(*) FROM text WHERE ArtikelID = $maxAID and Title = '$title' and Inhalt = '$text'")->fetch_array()[0] > 0) continue; //check if data already exist
                 access_db("INSERT into text (TextID, ArtikelID, Title, Inhalt, position) values ($maxTID, $maxAID, '$title', '$text',$i+$offset)");
                 access_db("INSERT INTO `autor-text hilfstabelle` values ($maxHID, $maxTID, $id)");
                 $maxHID++;
@@ -44,11 +45,11 @@ function add_text(int $start):void {
             } else $offset--;
         } elseif (array_key_exists('image_'.$i,$_FILES)) {
             $file = $_FILES['image_' . $i]['tmp_name'];
-            if ($file != "") {
+            if ($file != "") { //check if a file was correctly uploaded
                 $image = addslashes(file_get_contents($file));
                 $image_name = addslashes($_FILES['image_' . $i]['name']);
 
-                $position = array_key_exists('text_title_' . ($i-1),$_REQUEST) ? $i : $i - 1;
+                $position = array_key_exists('text_title_' . ($i-1),$_REQUEST) ? $i : $i - 1; //I'm not entirely certain, if it is 100% needed, but it works how I want it to
                 $position += $offset;
 
                 access_db("INSERT INTO image (Artikelid, name, image,position) VALUES ($maxAID,'$image_name', '$image',$position)");
@@ -73,6 +74,8 @@ function save_text():void {
     }
     header("Location: ../article/new.php");
 }
+
+//button handler (new segment isn't supported yet)
 if (array_key_exists("submit_new",$_POST)) add_article();
 elseif (array_key_exists("new_segment_new",$_POST)) save_text();
 
