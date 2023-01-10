@@ -20,9 +20,8 @@ function db_to_show(string $text, int $tID):string {
 }
 
 function format(array|string $text):string {
-    //bulletpoints
-    $pattern = "/\\r\\n\s*\*/"; //search for a line breake and an * with any amount of whitespaces in between
-    $text = preg_replace($pattern,"<br> •", $text);
+    //bulletpoints: pattern = search for a line breake and an * with any amount of whitespaces in between
+    $text = preg_replace("/\\r\\n\s*\*/","<br> •", $text);
 
     //arrow : pattern = search for arrow with a space in front of it and behind
     $text = preg_replace("/\s->\s/"," ➝ ", $text);
@@ -31,7 +30,29 @@ function format(array|string $text):string {
     $text = preg_replace("/\s=>\s/"," ⇒ ", $text);
     $text = preg_replace("/\s<=\s/"," ⇐ ", $text);
     $text = preg_replace("/\s<=>\s/"," ⇔ ", $text);
+
+    //bold text
+    $text = regex_replace("\*\*","","<b>","</b>",$text);
+
+    //crossed out
+    $text = regex_replace("--*","","<del>","</del>",$text);
+
+    //underline
+    $text = regex_replace("__","","<u>","</u>",$text);
     return $text;
+}
+
+function regex_replace(string $start_symbol, string $end_symbol = "", string $start_replace, string $end_replace = "", string $subject):string {
+    $end_symbol = $end_symbol == "" ? $start_symbol : $end_symbol;
+    $end_replace = $end_replace == "" ? $start_replace : $end_replace;
+
+    preg_match_all("/$start_symbol.+?.$end_symbol/",$subject,$matches, 2);
+    foreach ($matches as $match){
+        $name = ltrim($match[0],$start_symbol);
+        $name = rtrim($name,$end_symbol);
+        $subject = preg_replace("/$start_symbol.+?.$end_symbol/","$start_replace$name$end_replace", $subject,1);
+    }
+    return $subject;
 }
 
 function create_insert(string $text, string $type, bool $get = false): string|array

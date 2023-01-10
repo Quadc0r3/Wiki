@@ -11,49 +11,41 @@ function add_article(): void {
 }
 
 function add_text(int $start):void { //start: where to start checking if data already exists and if not saving it
-    $name = $_SESSION['username'];
-    $id = (int)access_db("SELECT AutorID FROM autor WHERE Name = '$name';")->fetch_assoc()["AutorID"];
+    include_once "save_changes.php";
+    $authorID = (int)access_db("SELECT AutorID FROM autor WHERE Name = '{$_SESSION['username']}';")->fetch_array()[0];
 
-    //get Hilfstabellen ID max
-    $maxHID = (int)access_db("Select max(HID) from `autor-text hilfstabelle`")->fetch_array()[0];
-    $maxHID = $maxHID == null ? 1 : $maxHID + 1;
-    //get textID max
-    $maxTID = (int)access_db("Select max(TextID) from text")->fetch_array()[0];
-    $maxTID = $maxTID == null ? 1 : $maxTID + 1;
     //get articleID
-    if ($_SESSION['mode'] == 'new') {
-        $maxAID = (int)access_db("Select max(ArtikelID) from artikel")->fetch_array()[0];
-        $maxAID = $maxAID == null ? 1 : $maxAID;
-    } elseif ($_SESSION['mode'] == 'edit'){
-        $maxAID = $_SESSION['aID'];
+    if ($_SESSION['mode'] == 'edit') {
+        $articleID = $_SESSION['aID'];
+    } else{
+        $articleID = (int)access_db("Select max(ArtikelID) from artikel")->fetch_array()[0];
+        $articleID = $articleID == null ? 1 : $articleID;
     }
 
-    $offset = 0; //needed, because of display-order. In the saving of Data, it helps to have a continuous position order (gap between text and images)
     for ($i = $start; $i <= ((count($_REQUEST) - 2) / 2) + count($_FILES) ;$i++) { //loop from defined start point through all elements on an article and saves it, if it doesn't exist already
-        if (array_key_exists('text_title_' . $i,$_REQUEST)) {
+        $position = access_db("SELECT max(position) FROM 
+                         (SELECT * from text where ArtikelID = $articleID union SELECT * from image where artikelID = $articleID) as t")->fetch_array()[0] + 1;
+        if (array_key_exists("text_title_$i",$_REQUEST)) {
             //add text
-            $title = addslashes($_REQUEST['text_title_' . $i]);
-            $text = addslashes($_REQUEST['text_text_' . $i]);
+            $inhalt = addslashes($_POST["text_text_$i"]);
+            $title = addslashes($_POST["text_title_$i"]);
 
-            if ($text != '' || $title != '') { //check if input is empty
-                if (access_db("SELECT count(*) FROM text WHERE ArtikelID = $maxAID and Title = '$title' and Inhalt = '$text'")->fetch_array()[0] > 0) continue; //check if data already exist
-                access_db("INSERT into text (TextID, ArtikelID, Title, Inhalt, position) values ($maxTID, $maxAID, '$title', '$text',$i+$offset)");
-                access_db("INSERT INTO `autor-text hilfstabelle` values ($maxHID, $maxTID, $id)");
-                $maxHID++;
-                $maxTID++;
+            if ($inhalt != "" or $title != "") {
+                $inhalt = cites($inhalt, $articleID);
+                $textID = access_db("SELECT max(TextID) FROM text")->fetch_array()[0] + 1;
+                $HID = access_db("SELECT max(HID) FROM `autor-text hilfstabelle`")->fetch_array()[0] + 1;
 
-            } else $offset--;
-        } elseif (array_key_exists('image_'.$i,$_FILES)) {
-            $file = $_FILES['image_' . $i]['tmp_name'];
+                access_db("INSERT INTO text (TextID, ArtikelID, Title, Inhalt, position) values ($textID,$articleID,'$title','$inhalt',$position)");
+                access_db("INSERT INTO `autor-text hilfstabelle` values ($HID,$textID,$authorID)");
+            }
+        } elseif (array_key_exists("image_$i",$_FILES)) {
+            $file = $_FILES["image_$i"]['tmp_name'];
             if ($file != "") { //check if a file was correctly uploaded
                 $image = addslashes(file_get_contents($file));
-                $image_name = addslashes($_FILES['image_' . $i]['name']);
+                $image_name = addslashes($_FILES["image_$i"]['name']);
 
-                $position = array_key_exists('text_title_' . ($i-1),$_REQUEST) ? $i : $i - 1; //I'm not entirely certain, if it is 100% needed, but it works how I want it to
-                $position += $offset;
-
-                access_db("INSERT INTO image (Artikelid, name, image,position) VALUES ($maxAID,'$image_name', '$image',$position)");
-                access_db("INSERT INTO `autor-image hilfstabelle` (imageid, autorid) values ((SELECT (max(ImageID)) from image limit 1), $id)");
+                access_db("INSERT INTO image (Artikelid, name, image,position) VALUES ($articleID,'$image_name', '$image',$position)");
+                access_db("INSERT INTO `autor-image hilfstabelle` (imageid, autorid) values ((SELECT (max(ImageID)) from image limit 1), $authorID)");
             }
         }
     }
@@ -77,7 +69,7 @@ function save_text():void {
 
 //button handler (new segment isn't supported yet)
 if (array_key_exists("submit_new",$_POST)) add_article();
-elseif (array_key_exists("new_segment_new",$_POST)) save_text();
+elseif (array_key_exists("new_segment_new",$_POST)) /*//save_text()*/;
 
 
 

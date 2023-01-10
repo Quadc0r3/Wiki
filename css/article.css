@@ -1,5 +1,5 @@
 h1 {
-    font-size: 2em;
+    font-size: 3em;
     margin: 0;
     padding: 1em;
     text-align: center;
@@ -61,11 +61,12 @@ hr {
     background-color: #d3c8ba;
     border-radius: 5px;
     box-shadow: #00000008 10px 10px 10px 10px;
+    font-size: larger;
 }
 
 
 h2 {
-    font-size: 1.5em;
+    font-size: 2em;
     margin: 0;
 }
 

@@ -2,67 +2,51 @@
 session_start();
 include_once "../connect_to_db.php";
 
-function update_tables():void //method to add the changes from editing to the database
+function update_table():void //method to add the changes from editing to the database
 {
     $authorID = access_db("SELECT * FROM autor WHERE Name = '{$_SESSION['username']}'")->fetch_array()[0];
     $articleID = $_SESSION["aID"];
-    $textIDs = access_db("SELECT TextID FROM text WHERE ArtikelID = '$articleID'");
+//    $articleElements = access_db("SELECT TextID FROM text WHERE ArtikelID = '$articleID' union select ImageID from image where ArtikelID = '$articleID'");
+    $articleElements = access_db("Select TextID
+    From (SELECT * FROM text WHERE ArtikelID = $articleID union select * from image where ArtikelID = $articleID) as t
+order by position");
     $i = 0;
 
-    if ($textIDs->num_rows > 0) {
-        while ($entry = $textIDs->fetch_assoc()) {
-            if (!array_key_exists('text_text_' . $i,$_POST)) continue;
-                //add texts
-                $text = addslashes($_POST['text_text_' . $i]);
-                $title = addslashes($_POST['text_title_' . $i]);
+    if ($articleElements->num_rows > 0) {
+        while ($element = $articleElements->fetch_assoc()) {
+            if (!array_key_exists('text_text_' . $i,$_POST)) {$i++; continue;}
+            //add texts
+            $text = addslashes($_POST['text_text_' . $i]);
+            $title = addslashes($_POST['text_title_' . $i]);
 
-                if ($text =="" and $title =="") continue;
-                //Cites
-                include_once "../text_processing.php";
-                $cite = create_insert($text, "cite", true);
-                if ($cite != $text) {
-                    //es gibt bestimmt dafür eine viel bessere Lösung (ist dafür da die Referenz aus den Klammern auszulesen, diese der DB hinzuzufügen und den String anzupassen)
-                    $end = 0;
-                    $end2 = 0;
-                    $occurances = substr_count($text, "[[");
-                    for ($k = 0; $k < $occurances; $k++) {
-                        $start = strpos($text, "[[", $end);
-                        $end = strpos($text, "]]", $end);
-                        $name = "";
-                        for ($j = $start + 2; $j < $end; $j++) $name = $name . $text[$j];
-                        $id = -1;
-                        $name = (int)$name == 0 ? $name : $id = (int)$name;
+            if ($text =="" and $title =="") {$i++; continue;}
+            //Cites
+            $text = cites($text, $articleID);
 
-                        $exist = access_db("SELECT count(*) FROM cite where (Reference = '$name' or CiteID = $id)  and ArtikelID = " . $articleID)->fetch_array()[0];
-                        if ($exist <= 0) access_db("INSERT INTO cite (ArtikelID, Reference) VALUES ($articleID, '$name')");
-                        $citeID = access_db("SELECT CiteID, Reference FROM cite where (Reference = '$name' or CiteID = $id) and ArtikelID = " . $articleID)->fetch_array()[0];
+            //update text
+            access_db("UPDATE text SET Inhalt = '$text', Title = '$title', position = '$i' WHERE ArtikelID = $articleID and TextID = " . $element['TextID']);
+            access_db("UPDATE `autor-text hilfstabelle` SET AutorID = $authorID WHERE TextID = " . $element['TextID']);
 
-
-                        $citeID = access_db("SELECT CiteID, Reference FROM cite where (Reference = '$name' or CiteID = $id) and ArtikelID = " . $articleID)->fetch_array()[0];
-                        $text = substr_replace($text, "__{$citeID};;", $start, ($end - $start) + 2); //Platzhalter einfügen, da es sonst im dauerloop wäre
-                        $end = strpos($text, ";;", $end2);
-                        $end2 = $end;
-                    }
-                    $text = str_replace("__", "[[", $text, $occurances); //Platzhalter ersetzen. da es ansonsten
-                    $text = str_replace(";;", "]]", $text, $occurances);
-                }
-
-                //update text
-                access_db("UPDATE text SET Inhalt = '$text', Title = '$title', position = '$i' WHERE ArtikelID = $articleID and TextID = " . $entry['TextID']);
-                access_db("UPDATE `autor-text hilfstabelle` SET AutorID = $authorID WHERE TextID = " . $entry['TextID']);
-
-                $i++;
+            $i++;
         }
         access_db("UPDATE artikel SET `Edit Time` = '" . date("Y-m-d H:i:s") . "', Titel = '".addslashes($_POST['article'])."'  WHERE ArtikelID = $articleID");
     }
-
+    //add new text to db
     include_once "create_article.php";
     add_text($i);
+
     header("Location: show.php?article=$articleID");
 }
 
 function delete_txt_segment():void {
     access_db("DELETE FROM `autor-text hilfstabelle` WHERE TextID = {$_POST['text_delete']} LIMIT 1");
+    $text = access_db("SELECT Inhalt From text where TextID = {$_POST['text_delete']}")->fetch_array()[0];
+    preg_match_all("/\[\[.+?]]/",$text,$matches,PREG_SET_ORDER,0);
+    foreach ($matches as $match){
+        $match = ltrim($match[0], "[");
+        $match = rtrim($match, "]");
+        access_db("DELETE FROM cite where CiteID = $match LIMIT 1");
+    }
     access_db("DELETE FROM text WHERE TextID = {$_POST['text_delete']} LIMIT 1");
     header("Location: edit.php?article=".$_SESSION['aID']);
 }
@@ -102,10 +86,33 @@ function move(string $direction = 'up'):void {
     header("Location: edit.php?article=".$_SESSION['aID']);
 }
 
-if (array_key_exists('submit_edit',$_POST)) update_tables();
+if (array_key_exists('submit_edit',$_POST)) update_table();
 elseif (array_key_exists('new_segment_edit',$_POST)) header("Location: edit.php?article=".$_SESSION['aID']);
 elseif (array_key_exists('text_delete',$_POST)) delete_txt_segment();
 elseif (array_key_exists('image_delete',$_POST)) delete_img_segment();
 elseif (array_key_exists('delete_article',$_POST)) delete_article();
 elseif (array_key_exists('up',$_POST)) move();
 elseif (array_key_exists('down',$_POST)) move('down');
+
+
+function cites(string $text, mixed $articleID): string
+{
+    include_once "../text_processing.php";
+    $cite = create_insert($text, "cite", true);
+    if ($cite != $text) {
+        preg_match_all("/\[\[.+?]]/",$text,$matches,PREG_SET_ORDER); //suche nach allem was in [[]] steht und speichere es in $matches
+        foreach ($matches as $match){
+            $name = ltrim($match[0], "[");
+            $name = rtrim($name, "]"); //entferne Klammern
+            $id = -1;
+            $name = (int)$name == 0 ? $name : $id = (int)$name;
+
+            $exist = access_db("SELECT count(*) FROM cite where (Reference = '$name' or CiteID = $id)  and ArtikelID = " . $articleID)->fetch_array()[0];
+            if ($exist <= 0) access_db("INSERT INTO cite (ArtikelID, Reference) VALUES ($articleID, '$name')");
+            $citeID = access_db("SELECT CiteID, Reference FROM cite where (Reference = '$name' or CiteID = $id) and ArtikelID = " . $articleID)->fetch_array()[0];
+
+            $text = preg_replace("/\[\[".$name."]]/","[[$citeID]]", $text);
+        }
+    }
+    return $text;
+}

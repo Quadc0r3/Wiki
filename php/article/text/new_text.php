@@ -17,9 +17,9 @@ function new_text_segment():void {
             $saved_entries = []; // so that in every case saved_entries is defined
         }
 
-        $no_of_entries = access_db("SELECT MAX(position) FROM (SELECT position FROM text WHERE ArtikelID = 23 
+        $no_of_entries = access_db("SELECT MAX(position) FROM (SELECT position FROM text WHERE ArtikelID = {$_SESSION['aID']} 
                            UNION
-                           SELECT position FROM image WHERE ArtikelID = 23) AS t;")->fetch_array()[0]; //number of entris (all elements on each article page)
+                           SELECT position FROM image WHERE ArtikelID = {$_SESSION['aID']}) AS t;")->fetch_array()[0]; //number of entris (all elements on each article page)
 
         //Display input fields with previous values
         if ($saved_entries->num_rows > 0) {
