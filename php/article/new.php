@@ -11,6 +11,7 @@ $_SESSION['mode'] = 'new'?>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/edit.css">
+    <link rel="icon" type="image/svg" href="../../images/logo.svg">
     <title>New Article</title>
 </head>
 <body>

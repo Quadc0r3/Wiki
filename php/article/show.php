@@ -24,7 +24,7 @@ function show_text($texts):void {
             } elseif($entry['type'] == 'image') {
                 //display image
                 echo "<div class='text' id='image_{$entry['TextID']}'>";
-                echo "<img src='../../display.php?id={$entry['TextID']}' alt='Image from database'>";
+                echo "<img src='../display.php?id={$entry['TextID']}' alt='Image from database'>";
                 echo "</div>";
             }
             $i++;
@@ -36,7 +36,7 @@ function show_article():void {
     echo "<div id='content_container'><h1>{$GLOBALS['aTitle']}</h1></div>";
     echo "<hr>";
 
-    $texts = access_db("SELECT * FROM text where ArtikelID = {$GLOBALS['aID']} UNION SELECT * from image where ArtikelID ={$GLOBALS['aID']} order by  position");
+    $texts = access_db("SELECT * FROM text where ArtikelID = {$GLOBALS['aID']} UNION SELECT * from image where ArtikelID ={$GLOBALS['aID']} order by position");
     echo "<div class='content_container'>";
     show_text($texts);
     show_cites();
@@ -50,7 +50,6 @@ function show_article():void {
     $accessed = $article['accessed'] + 1;
     access_db("UPDATE artikel SET accessed = $accessed WHERE ArtikelID = ".$GLOBALS['aID']);
     if ($is_editable && isset($_SESSION['valid'])) echo "<a href='edit.php?article={$GLOBALS['aID']}' class='edit button'>Edit</a>";
-
 }
 
 function show_cites():void {
@@ -58,8 +57,7 @@ function show_cites():void {
     SELECT CiteID, Reference
     from cite as c
     inner join artikel a on c.ArtikelID = a.ArtikelID
-    where a.ArtikelID = {$GLOBALS['aID']}
-    ");
+    where a.ArtikelID = {$GLOBALS['aID']}");
     if ($texts->num_rows > 0) {
         $i = 1;
         echo "<div id='text_references' class='text'>";
@@ -68,12 +66,11 @@ function show_cites():void {
 
         while ($entry = $texts->fetch_assoc()) {
             echo "<p id='cite_{$entry['CiteID']}'>[$i] - {$entry['Reference']}</p>";
-                        $i++;
+            $i++;
         }
         echo "</div>";
         echo "<hr>";
     }
-
 }
 
 ?>
@@ -86,11 +83,11 @@ function show_cites():void {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/article.css">
+    <link rel="icon" type="image/svg" href="../../images/logo.svg">
     <title>Wiki | <?php echo $aTitle ?></title>
 </head>
 <body>
 <?php show_article() ?>
-
 </body>
 </html>
 

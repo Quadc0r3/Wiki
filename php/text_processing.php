@@ -35,7 +35,7 @@ function format(array|string $text):string {
     $text = regex_replace("\*\*","","<b>","</b>",$text);
 
     //crossed out
-    $text = regex_replace("--*","","<del>","</del>",$text);
+    $text = regex_replace("--","","<del>","</del>",$text);
 
     //underline
     $text = regex_replace("__","","<u>","</u>",$text);

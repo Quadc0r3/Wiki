@@ -13,6 +13,7 @@ $_SESSION['no_of_texts'] = 0;
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="icon" type="image/svg" href="images/logo.svg">
     <title>Wiki</title>
 </head>
 <body>

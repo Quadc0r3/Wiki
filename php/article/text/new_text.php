@@ -35,7 +35,7 @@ function new_text_segment():void {
                 } elseif($entry['type'] == 'image') {
                     //display image
                     echo "<div class='image_segment' id='image_{$entry['TextID']}'>";
-                    echo "<img src='../../display.php?id={$entry['TextID']}' alt='Image from database'>";
+                    echo "<img src='../display.php?id={$entry['TextID']}' alt='Image from database'>";
                 }
                 if ($entry['position'] != 0) echo "<button type='submit' name='up' value='{$entry['TextID']}'>up</button>";
                 if ($entry['position'] != $no_of_entries)echo "<button type='submit' name='down' value='{$entry['TextID']}'>down</button>";

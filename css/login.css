@@ -1,0 +1,53 @@
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#login-screen {
+    text-align: center;
+    background-color: var(--text-box);
+    padding: 20px;
+    border-radius: 15px;
+    width: 40%;
+}
+
+p{
+    font-size: 2em;
+    color: #000008;
+    margin-bottom: 30px;
+}
+
+form{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+label{
+    width: 100%;
+    margin-bottom: 10px;
+    color: #000008;
+}
+
+input{
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+}
+
+button{
+    background-color: var(--button);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: white;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--button-hover);
+}

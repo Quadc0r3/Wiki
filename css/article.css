@@ -7,12 +7,12 @@ h1 {
     text-decoration: underline 3px black;
 }
 a {
-    color: #00d;
+    color: var(--existant);
     text-decoration: none;
 }
 
 a.non-existant {
-    color: red;
+    color: var(--nonexistant);
 }
 
 .existant {
@@ -20,16 +20,10 @@ a.non-existant {
 }
 
 .existant:visited {
-    color: #0000dd;
-}
-
-.non-existant:visited {
-    color: #b90b4e;
+    color: var(--existant);
 }
 
 /*Buttons*/
-
-
 .back {
     float:left;
 }
@@ -38,12 +32,9 @@ a.non-existant {
     float: right;
 }
 
-
-
-
 hr {
     border: 0;
-    border-top: 1px solid #999999;
+    border-top: 1px solid var(--border-light);
     margin: 1px;
 }
 
@@ -58,7 +49,7 @@ hr {
     padding: 1em;
     width: 60%;
     align-self: center;
-    background-color: #d3c8ba;
+    background-color: var(--text-box);
     border-radius: 5px;
     box-shadow: #00000008 10px 10px 10px 10px;
     font-size: larger;
@@ -75,3 +66,6 @@ p {
     padding: 0;
 }
 
+img {
+    border-radius: 5px;
+}

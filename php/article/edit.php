@@ -33,6 +33,7 @@ function load_article(): void {
     <title>Edit | <?php echo $article ?></title>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/edit.css">
+    <link rel="icon" type="image/svg" href="../../images/logo.svg">
 </head>
 <body>
 <?php load_article() ?>

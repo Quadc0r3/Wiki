@@ -6,17 +6,20 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="icon" type="image/svg" href="images/logo.svg">
     <title>Wiki</title>
 </head>
 <body>
-<div>
+<div id="login-screen">
     <p>Login to the Wiki</p>
     <form action="php/account/login_process.php" method='post'>
-        <label for="name">Name:
-            <input type="text" maxlength="10" name="name" required><br></label>
-        <label for="password">
-            Passwort: <input type="password" maxlength="32" name="password" required>
-        </label><br>
+        <label>
+            <input type="text" maxlength="10" placeholder="Name" name="name" required>
+        </label>
+        <label>
+            <input type="password" placeholder="Password" maxlength="32" name="password" required>
+        </label>
         <button type="submit">Login</button>
     </form>
 </div>
