@@ -1,4 +1,26 @@
 #user_function {
     display: flex;
     flex-direction: row;
+    float: right;
+}
+
+#user_function a {
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+#text {
+    margin-left: 2em;
+    display: flex;
+    flex-direction: column;
+}
+
+#text h1 {
+    margin: 0;
+}
+
+#header {
+    display: flex;
+    align-content: center;
+    flex-direction: row;
 }

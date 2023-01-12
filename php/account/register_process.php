@@ -10,22 +10,28 @@ function check_registration_input(string $name, string $pwd): bool {
     foreach($inputStates as $state){
         $len = strlen($state);
         $answer = ($len <= 0 and $answer);
-        if ($len > 0) echo "<p>".$state."</br></p>";
+        if ($len > 0) {
+            $_SESSION['error'] = $state;
+            header("Location: ../../error.php");
+        }
     }
-
     return $answer;
 }
-//after form is filled out
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $name = $_REQUEST['name'];
-    $pwd = $_REQUEST['password'];
 
-    $answer = check_registration_input($name,$pwd);
-    if ($answer) {
-        access_db("INSERT INTO autor (Name, Passwort) VALUES ('" . $name . "','" . $pwd . "')");
-        $_SESSION['valid'] = true;
-        $_SESSION['timeout'] = time() + 1200;
-        $_SESSION['username'] = $name;
-        header("Location: ../../index.php");
+if (array_key_exists('back',$_POST)) header("Location: ../../index.php");
+else {
+//after form is filled out
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+        $name = $_REQUEST['name'];
+        $pwd = $_REQUEST['password'];
+
+        $answer = check_registration_input($name, $pwd);
+        if ($answer) {
+            access_db("INSERT INTO autor (Name, Passwort) VALUES ('" . $name . "','" . $pwd . "')");
+            $_SESSION['valid'] = true;
+            $_SESSION['timeout'] = time() + 1200;
+            $_SESSION['username'] = $name;
+            header("Location: ../../index.php");
+        }
     }
 }

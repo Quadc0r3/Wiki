@@ -1,7 +1,7 @@
 <?php
 include "connect_to_db.php";
 function get_user_by_name(string $name): array{
-    $response = access_db("SELECT Name FROM autor where Name like '".$name."'");
+    $response = access_db("SELECT Name FROM autor where Name = '$name'");
     $user = [];
 
     if ($response->num_rows > 0){

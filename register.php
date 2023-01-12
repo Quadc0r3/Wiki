@@ -21,6 +21,7 @@
             <input type="password" placeholder="Password" maxlength="32" name="password">
         </label><br>
         <button type="submit">Register</button>
+        <button type="submit" name="back">Back</button>
     </form>
 </div>
 </body>

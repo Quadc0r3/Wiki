@@ -25,12 +25,12 @@ input[type="text"].input_title {
 textarea.input_text {
     height: 200px;
     resize: vertical;
-    background-color: #fdf3e5;
+    background-color: var(--textarea);
 }
 
 button[type="submit"] {
-    background-color: #409243; /*original: 4CAF50FF*/
-    color: white;
+    background-color: var(--button); /*original: 4CAF50FF*/
+    color: var(--button-text);
     padding: 12px 20px;
     border: none;
     border-radius: 4px;
@@ -40,7 +40,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #45a049;
+    background-color: var(--button-hover);
 }
 
 div.text_segment {
@@ -68,7 +68,7 @@ hr {
 
 input[type="file"] {
     display: inline-block;
-    background: #fdf3e5;
+    background: var(--textarea);
     border: 1px solid #ccc;
     border-radius: 3px;
     padding: 5px 20px;

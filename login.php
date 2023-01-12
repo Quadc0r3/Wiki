@@ -15,12 +15,13 @@
     <p>Login to the Wiki</p>
     <form action="php/account/login_process.php" method='post'>
         <label>
-            <input type="text" maxlength="10" placeholder="Name" name="name" required>
+            <input type="text" maxlength="10" placeholder="Name" name="name">
         </label>
         <label>
-            <input type="password" placeholder="Password" maxlength="32" name="password" required>
+            <input type="password" placeholder="Password" maxlength="32" name="password">
         </label>
         <button type="submit">Login</button>
+        <button type="submit" name="back">Back</button>
     </form>
 </div>
 </body>

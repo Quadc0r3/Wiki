@@ -1,0 +1,9 @@
+#header {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+}
+
+#header p:first-letter{
+   text-transform: capitalize;
+}

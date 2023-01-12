@@ -4,7 +4,7 @@ h1 {
     padding: 1em;
     text-align: center;
     align-self: center;
-    text-decoration: underline 3px black;
+    text-decoration: underline 3px var(--text-color);
 }
 a {
     color: var(--existant);
@@ -13,10 +13,6 @@ a {
 
 a.non-existant {
     color: var(--nonexistant);
-}
-
-.existant {
-
 }
 
 .existant:visited {
@@ -54,7 +50,6 @@ hr {
     box-shadow: #00000008 10px 10px 10px 10px;
     font-size: larger;
 }
-
 
 h2 {
     font-size: 2em;

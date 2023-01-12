@@ -7,11 +7,14 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/user.css">
     <title><?php echo $_SESSION['username']?></title>
 </head>
 <body>
-    <a href="../../index.php">Back</a>
+<div id="header">
+    <a class="button" href="../../index.php">Back</a>
     <p><?php echo $_SESSION['username']?></p>
+</div>
     <hr><br>
     <table title="My Articles" >
         <tr>

@@ -1,7 +1,7 @@
 <?php
 include_once "connect_to_db.php";
 global $citeID;
-global $mapping;
+global $mapping; //speichert die CiteID und die dazugehörige Artikelinterne laufvariable
 $citeID = 1;
 $mapping = [];
 function db_to_show(string $text, int $tID):string {
@@ -12,7 +12,6 @@ function db_to_show(string $text, int $tID):string {
     //cites (adds the corret cites)
     $text = create_insert($text, "cite");
     //formatting (missing implementation)
-    //* to bulletpoint
     $text = format($text);
     //line breaks
     $text = str_replace("\r\n", "</br>", $text);
@@ -55,20 +54,20 @@ function regex_replace(string $start_symbol, string $end_symbol = "", string $st
     return $subject;
 }
 
-function create_insert(string $text, string $type, bool $get = false): string|array
+function create_insert(string $text, string $type, bool $get = false): string|array //ohne RegEx, da ich es zum Zeitpunkt noch nicht kannte.
 {
     $type = strtolower($type);
     $types = [
         "cite" => ["open" => "[[", "close" => "]"],
         "link" => ["open" => "{{", "close" => "}"],
     ];
-    if (!array_key_exists($type,$types)) return "Wrong edit type";
+    if (!array_key_exists($type,$types)) return "Wrong edit type"; //funktionsaufruf mit nicht unterstütztem key
 
     $occurances = substr_count($text,$types[$type]['open']); //counts how often the indicating marks are in the text
 
     while ($occurances > 0) {
-        $link_start_pos = strpos($text, $types[$type]['open']) + 2;
-        $link_end_pos = -1;
+        $link_start_pos = strpos($text, $types[$type]['open']) + 2; //start des Indikators ({{ oder [[)
+        $link_end_pos = -1;                                         //default value, so that I know while debugging it hasn't read properly. Can't be negative
         $name_area = -1;
 
         for ($i = $link_start_pos; $i < strlen($text); $i++) {
@@ -91,11 +90,11 @@ function create_insert(string $text, string $type, bool $get = false): string|ar
 
         $insert = match ($type) {
             "link" => create_link($reference, $name),
-            "cite" => create_cite($reference, $name),
-            default => "default",
+            "cite" => create_cite($reference),
+            default => "default", //dürfte nicht ausgeführt werden können
         };
 
-        $text = substr_replace($text, "", $link_start_pos, ($link_end_pos - $link_start_pos));
+        $text = substr_replace($text, "", $link_start_pos, ($link_end_pos - $link_start_pos));  //delete inbetween indicators
         $text = str_replace($types[$type]['open'].$types[$type]['close'], $insert, $text);
 
         $occurances--;
@@ -118,9 +117,9 @@ function create_cite(string $ref): string { //takes a reference and creates an e
 
 function create_link(string $reference, string $name): string|array {
     if ((int)$reference == 0) $aID = access_db("SELECT ArtikelID FROM artikel WHERE Titel = ltrim('".addslashes($reference)."')")->fetch_array();
-    else $aID = access_db("SELECT ArtikelID FROM artikel where ArtikelID = $reference")->fetch_array();
+    else $aID = access_db("SELECT ArtikelID FROM artikel where ArtikelID = '".addslashes($reference)."'")->fetch_array(); //wenn die CiteID angegeben wurde
 
-    $aID = isset($aID) ? $aID[0] : 0;
+    $aID = isset($aID) ? $aID[0] : 0;           //wurde Artikel gefunden?
     $exist = min(1, $aID) == 0 ? "non-existant" : "existant";
 
     $insert = "<a class='$exist link'";

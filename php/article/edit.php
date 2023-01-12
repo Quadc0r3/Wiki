@@ -15,7 +15,7 @@ function load_article(): void {
     $_SESSION["aID"] = $GLOBALS["aID"];
     echo "<form action='save_changes.php' method='post' enctype='multipart/form-data'>";
     echo "<input type='text' name='article' placeholder='{$GLOBALS['article']}' value='{$GLOBALS['article']}' required autocomplete='off'>";
-    echo "<button type='submit' name='delete_article' value='{$_SESSION["aID"]}'>Delete</button>";
+    echo "<button type='submit' name='delete_article' style='background-color: red ' value='{$_SESSION["aID"]}'>Delete</button>";
     echo "<hr>";
     $_SESSION['no_of_texts'] = access_db("SELECT count(*) FROM text where ArtikelID =".$_SESSION["aID"])->fetch_array()[0];
     include "text/new_text.php";
