@@ -37,9 +37,9 @@ function new_text_segment():void {
                     echo "<div class='image_segment' id='image_{$entry['TextID']}'>";
                     echo "<img src='../display.php?id={$entry['TextID']}' alt='Image from database'>";
                 }
-                if ($entry['position'] != 0) echo "<button type='submit' name='up' value='{$entry['TextID']}'>up</button>";
-                if ($entry['position'] != $no_of_entries)echo "<button type='submit' name='down' value='{$entry['TextID']}'>down</button>";
-                if ($_SESSION['mode'] = 'edit') echo "<button type='submit' name='{$entry['type']}_delete' value='{$entry['TextID']}' style='background-color: red '>Delete</button>";
+                if ($entry['position'] != 0) echo "<button class='button' type='submit' name='up' value='{$entry['TextID']}'>up</button>";
+                if ($entry['position'] != $no_of_entries)echo "<button class='button' type='submit' name='down' value='{$entry['TextID']}'>down</button>";
+                if ($_SESSION['mode'] = 'edit') echo "<button class='button delete_btn' type='submit' name='{$entry['type']}_delete' value='{$entry['TextID']}' style='background-color: var(--nonexistant)'>Delete</button>";
                 echo "</div>";
 
                 $i++;
@@ -58,7 +58,7 @@ function new_text_segment():void {
 
      //display a file upload field
     echo "<input id='browse_btn' class='file_input' type='file' name='image_{$_SESSION['no_of_texts']}'>";
-    echo "<br><button type='submit' name='submit_{$_SESSION['mode']}'>Submit</button><br>";
+    echo "<br><button class='button' type='submit' name='submit_{$_SESSION['mode']}'>Submit</button><br>";
 //    echo "<button type='submit' name='new_segment_{$_SESSION['mode']}'>New Text Segment</button>";
 }
 

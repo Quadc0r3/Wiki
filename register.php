@@ -15,10 +15,10 @@
     <p>Register to the Wiki</p>
     <form action="php/account/register_process.php" method='post'>
         <label>
-            <input type="text" placeholder="Name" maxlength="10" name="name">
+            <input type="text" placeholder="Name" maxlength="10" name="name" autocomplete='off'>
         </label><br>
         <label>
-            <input type="password" placeholder="Password" maxlength="32" name="password">
+            <input type="password" placeholder="Password" maxlength="32" name="password" autocomplete='off'>
         </label><br>
         <button type="submit">Register</button>
         <button type="submit" name="back">Back</button>

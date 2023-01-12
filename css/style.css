@@ -3,14 +3,14 @@
 :root {
     /*main*/
     --background: antiquewhite;
-    --button:#4CAF50;
-    --button-hover: #409243;
-    --button-text: white;
+    --button:#A097C7; /*green: #4caf50*/
+    --button-hover: hsl(251, 30%, 50%); /*#409243*/
+    --button-text: white; /*white*/
     --nonexistant: #b90b4e;
     --existant: #00d;
     --text-color:  rgba(0, 0, 0, 0.8);
     /*article*/
-    --border-light: #999999;
+    --border-light: #999;
     --text-box: #d3c8ba;
     --textarea: #fdf3e5;
 }
@@ -30,9 +30,9 @@ button {
     margin: 0 1vw 0 1vw;
 }
 
-a.button {
+.button {
     background-color: var(--button);
-    color: var(--button-text);
+    color: var(--background);
     padding: 12px 20px;
     border: none;
     border-radius: 4px;
@@ -41,10 +41,16 @@ a.button {
     font-weight: bold;
     margin: 0.5em 0.5em;
     text-decoration: none;
+    transition: background-color 200ms, color 200ms;
 }
 
 .button:hover {
     background-color: var(--button-hover);
+    color: var(--button-text);
+}
+
+.delete_btn {
+    background-color: var(--nonexistant);
 }
 
 table {
@@ -73,6 +79,11 @@ table tr:nth-child(odd) {
 
 table tr:hover {
     background-color: #f5f5f5;
+}
+
+tr td a, tr td a:visited {
+    text-decoration: none;
+    color: var(--existant);
 }
 
 .table_link{
