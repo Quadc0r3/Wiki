@@ -65,7 +65,8 @@ function show_cites():void {
         echo "<br>";
 
         while ($entry = $texts->fetch_assoc()) {
-            echo "<p id='cite_{$entry['CiteID']}'>[$i] - {$entry['Reference']}</p>";
+            $text = db_to_show($entry['Reference'], $entry['CiteID']);
+            echo "<p id='cite_{$entry['CiteID']}'>[$i] - $text</p>";
             $i++;
         }
         echo "</div>";

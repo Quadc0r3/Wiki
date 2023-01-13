@@ -6,11 +6,12 @@ $citeID = 1;
 $mapping = [];
 function db_to_show(string $text, int $tID):string {
     $GLOBALS['textID'] = $tID;
-    //links (adds the right link if {{}} are to the input string)
-    $text = create_insert($text, "link");
 
     //cites (adds the corret cites)
     $text = create_insert($text, "cite");
+    //links (adds the right link if {{}} are to the input string)
+    $text = create_insert($text, "link");
+
     //formatting (missing implementation)
     $text = format($text);
     //line breaks
@@ -103,6 +104,7 @@ function create_insert(string $text, string $type, bool $get = false): string|ar
 }
 
 function create_cite(string $ref): string { //takes a reference and creates an entry for the dedicated area and gives it a number
+    $ref = addslashes($ref);
     $cite = access_db("SELECT citeID FROM cite WHERE Reference = '$ref' or CiteID = '$ref'")->fetch_array()[0];
     if (array_key_exists($cite, $GLOBALS['mapping'])) {
         $number = $GLOBALS['mapping'][$cite];

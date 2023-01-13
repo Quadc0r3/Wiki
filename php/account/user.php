@@ -30,7 +30,8 @@
                                       INNER JOIN text t ON a.TextID = t.TextID 
                                       INNER JOIN artikel a2 ON t.ArtikelID = a2.ArtikelID 
                                       WHERE a.AutorID = $autorID 
-                                      GROUP BY a2.ArtikelID");
+                                      GROUP BY a2.ArtikelID, a2.`Creation Time`
+                                      ORDER BY a2.`Creation Time` desc ");
         if ($articles->num_rows > 0){
             while ($entry = $articles->fetch_assoc()){
                 echo "<tr>";

@@ -24,6 +24,7 @@ order by position");
             $text = cites($text, $articleID);
 
             //update text
+            //TODO: on text changed, redefine cites with delete_cite();
             access_db("UPDATE text SET Inhalt = '$text', Title = '$title', position = '$i' WHERE ArtikelID = $articleID and TextID = " . $element['TextID']);
             access_db("UPDATE `autor-text hilfstabelle` SET AutorID = $authorID WHERE TextID = " . $element['TextID']);
 
@@ -40,15 +41,19 @@ order by position");
 
 function delete_txt_segment():void {
     access_db("DELETE FROM `autor-text hilfstabelle` WHERE TextID = {$_POST['text_delete']} LIMIT 1");
+    delete_cite();
+    access_db("DELETE FROM text WHERE TextID = {$_POST['text_delete']} LIMIT 1");
+    header("Location: edit.php?article=".$_SESSION['aID']);
+}
+
+function delete_cite(): void {
     $text = access_db("SELECT Inhalt From text where TextID = {$_POST['text_delete']}")->fetch_array()[0];
-    preg_match_all("/\[\[.+?]]/",$text,$matches,PREG_SET_ORDER,0);
-    foreach ($matches as $match){
+    preg_match_all("/\[\[.+?]]/", $text, $matches, PREG_SET_ORDER, 0);
+    foreach ($matches as $match) {
         $match = ltrim($match[0], "[");
         $match = rtrim($match, "]");
         access_db("DELETE FROM cite where CiteID = $match LIMIT 1");
     }
-    access_db("DELETE FROM text WHERE TextID = {$_POST['text_delete']} LIMIT 1");
-    header("Location: edit.php?article=".$_SESSION['aID']);
 }
 
 function delete_img_segment():void {
@@ -62,6 +67,7 @@ function delete_article(): void {
     access_db("DELETE FROM text WHERE ArtikelID = {$_SESSION['aID']}");
     access_db("DELETE FROM `autor-image hilfstabelle` WHERE ImageID = (SELECT ImageID FROM image where ArtikelID = {$_SESSION['aID']})");
     access_db("DELETE FROM image WHERE ArtikelID = {$_SESSION['aID']}");
+    access_db("DELETE FROM cite WHERE ArtikelID = {$_SESSION['aID']}");
     access_db("DELETE FROM artikel WHERE ArtikelID = {$_SESSION['aID']} LIMIT 1");
     header("Location: ../../index.php");
 }
@@ -111,6 +117,7 @@ function cites(string $text, mixed $articleID): string
             if ($exist <= 0) access_db("INSERT INTO cite (ArtikelID, Reference) VALUES ($articleID, '$name')");
             $citeID = access_db("SELECT CiteID, Reference FROM cite where (Reference = '$name' or CiteID = $id) and ArtikelID = " . $articleID)->fetch_array()[0];
 
+            $name = str_replace("/","\/", $name);
             $text = preg_replace("/\[\[".$name."]]/","[[$citeID]]", $text);
         }
     }
