@@ -6,6 +6,7 @@ h1 {
     align-self: center;
     text-decoration: underline 3px var(--text-color);
 }
+
 a {
     color: var(--existant);
     text-decoration: none;
@@ -21,7 +22,7 @@ a.non-existant {
 
 /*Buttons*/
 .back {
-    float:left;
+    float: left;
 }
 
 .edit {

@@ -1,27 +1,28 @@
 <?php
 session_start();
 include "../connect_to_db.php";
-$aID = (array_key_exists("article",$_GET)) ? (int)$_GET['article'] : 0;
-$aTitle = access_db("SELECT Titel FROM artikel WHERE ArtikelID =".$aID)->fetch_array();
+$aID = (array_key_exists("article", $_GET)) ? (int)$_GET['article'] : 0;
+$aTitle = access_db("SELECT Title FROM article WHERE ArticleID =" . $aID)->fetch_array();
 if ($aTitle != null) $aTitle = $aTitle[0];
-else{
+else {
     $_SESSION['error'] = "Article doesn't exist";
     header("Location: ../../error.php");;
 }
 
-function show_text($texts):void {
+function show_text($texts): void
+{
     include_once "../text_processing.php";
     if ($texts->num_rows > 0) {
         $i = 0;
         while ($entry = $texts->fetch_assoc()) {
-            if ($entry['type'] == 'text') {
-                $text = db_to_show($entry['Inhalt'], $entry['TextID']);
+            if ($entry['Type'] == 'text') {
+                $text = db_to_show($entry['Content'], $entry['TextID']);
                 echo "<div id='text_$i' class='text'>";
                 echo "<h2>{$entry['Title']}</h2>";
                 echo "<br>";
                 echo "<p>$text</p>";
                 echo "</div>";
-            } elseif($entry['type'] == 'image') {
+            } elseif ($entry['Type'] == 'image') {
                 //display image
                 echo "<div class='text' id='image_{$entry['TextID']}'>";
                 echo "<img src='../display.php?id={$entry['TextID']}' alt='Image from database'>";
@@ -32,11 +33,12 @@ function show_text($texts):void {
     }
 }
 
-function show_article():void {
+function show_article(): void
+{
     echo "<div id='content_container'><h1>{$GLOBALS['aTitle']}</h1></div>";
     echo "<hr>";
 
-    $texts = access_db("SELECT * FROM text where ArtikelID = {$GLOBALS['aID']} UNION SELECT * from image where ArtikelID ={$GLOBALS['aID']} order by position");
+    $texts = access_db("SELECT * FROM text where ArticleID = {$GLOBALS['aID']} UNION SELECT * from image where ArticleID ={$GLOBALS['aID']} order by position");
     echo "<div class='content_container'>";
     show_text($texts);
     show_cites();
@@ -45,19 +47,20 @@ function show_article():void {
 
     echo "<hr>";
     echo "<a href='../../index.php' class='back button'>Back</a>";
-    $article = access_db("SELECT is_editable, accessed FROM artikel WHERE ArtikelID = ".$GLOBALS['aID'])->fetch_assoc();
+    $article = access_db("SELECT is_editable, accessed FROM article WHERE ArticleID = " . $GLOBALS['aID'])->fetch_assoc();
     $is_editable = $article['is_editable'];
     $accessed = $article['accessed'] + 1;
-    access_db("UPDATE artikel SET accessed = $accessed WHERE ArtikelID = ".$GLOBALS['aID']);
+    access_db("UPDATE article SET accessed = $accessed WHERE ArticleID = " . $GLOBALS['aID']);
     if ($is_editable && isset($_SESSION['valid'])) echo "<a href='edit.php?article={$GLOBALS['aID']}' class='edit button'>Edit</a>";
 }
 
-function show_cites():void {
-    $texts =  access_db("
+function show_cites(): void
+{
+    $texts = access_db("
     SELECT CiteID, Reference
     from cite as c
-    inner join artikel a on c.ArtikelID = a.ArtikelID
-    where a.ArtikelID = {$GLOBALS['aID']}");
+    inner join article a on c.ArticleID = a.ArticleID
+    where a.ArticleID = {$GLOBALS['aID']}");
     if ($texts->num_rows > 0) {
         $i = 1;
         echo "<div id='text_references' class='text'>";
@@ -87,7 +90,7 @@ function show_cites():void {
     <link rel="icon" type="image/svg" href="../../images/logo.svg">
     <title>Wiki | <?php echo $aTitle ?></title>
 </head>
-<body>
+<body id="parchment">
 <?php show_article() ?>
 </body>
 </html>

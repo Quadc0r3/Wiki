@@ -14,7 +14,7 @@
     justify-content: center;
 }
 
-#err_msg a, #err_msg p, #err_msg h1{
+#err_msg a, #err_msg p, #err_msg h1 {
     align-self: center;
     justify-content: center;
     width: auto;

@@ -13,14 +13,14 @@
 <body>
 <div id="login-screen">
     <p>Register to the Wiki</p>
-    <form action="php/account/register_process.php" method='post'>
+    <form action="php/account/user_handeling.php" method='post'>
         <label>
             <input type="text" placeholder="Name" maxlength="10" name="name" autocomplete='off'>
         </label><br>
         <label>
             <input type="password" placeholder="Password" maxlength="32" name="password" autocomplete='off'>
         </label><br>
-        <button type="submit">Register</button>
+        <button type="submit" name="register">Register</button>
         <button type="submit" name="back">Back</button>
     </form>
 </div>

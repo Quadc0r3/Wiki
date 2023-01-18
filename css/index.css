@@ -23,4 +23,33 @@
     display: flex;
     align-content: center;
     flex-direction: row;
+
+}
+
+input[type=search] {
+    width: 0;
+    box-sizing: border-box;
+    border: 2px solid var(--text-box);
+    border-radius: 5px;
+    font-size: 16px;
+    color: var(--text-color);
+    background-color: var(--text-box);
+    background-image: url("../images/search.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    padding: 12px 0 12px 43px;
+    transition: width 500ms ease-in-out, background-color 500ms ease-in-out;
+}
+
+input[type=search]:focus {
+    width: 250px;
+    border: 2px solid var(--border-light);
+    background-color: var(--textarea);
+    outline: none;
+}
+
+.search {
+    width: auto;
+    float: right;
+    margin-bottom: 8px;
 }
