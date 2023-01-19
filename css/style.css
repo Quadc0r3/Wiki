@@ -28,9 +28,7 @@ body {
     background-color: var(--background);
     background-image: url("https://www.transparenttextures.com/patterns/cartographer.png");
     background-blend-mode: difference;
-    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
-    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
-}
+   }
 
 button {
     border-radius: 0;
@@ -112,7 +110,8 @@ img {
 }
 
 .logo {
-    width: 7%;
+    display: block;
+    width: 122px;
     color: red;
     filter: invert();
 }

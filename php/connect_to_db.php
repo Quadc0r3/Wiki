@@ -14,8 +14,7 @@ function connect_to_server()
     return $conn;
 }
 
-function access_db(string $query): mysqli_result|bool
-{
+function access_db(string $query): mysqli_result|bool {
     $query = sanitizeInput($query, true, true);
     $con = connect_to_server();
     $response = $con->query($query);

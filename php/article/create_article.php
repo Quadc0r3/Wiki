@@ -3,7 +3,7 @@ if (!isset($_SESSION)) session_start();
 include_once "../connect_to_db.php";
 function add_article(): void
 {
-    access_db("INSERT INTO article (Title,Creator) VALUES ('{$_POST['article']}',{$_SESSION['authorID']})"); //addslashes, for ultra basic sql-injection protection and support for ' and " in input
+    access_db("INSERT INTO article (Title,Creator) VALUES ('{$_POST['article']}',{$_SESSION['authorId']})"); //addslashes, for ultra basic sql-injection protection and support for ' and " in input
     add_text(0);
 
     $_SESSION['no_of_texts'] = 0;
@@ -36,7 +36,7 @@ function add_text(int $start): void
                 $HID = access_db("SELECT max(HID) FROM `autor-text hilfstabelle`")->fetch_array()[0] + 1;
 
                 access_db("INSERT INTO text (TextID, ArticleID, Title, Content, Position) values ($textID,$articleID,'$title','$inhalt',$position)");
-                access_db("INSERT INTO `autor-text hilfstabelle` values ($HID,$textID,{$_SESSION['authorID']})");
+                access_db("INSERT INTO `autor-text hilfstabelle` values ($HID,$textID,{$_SESSION['authorId']})");
             }
         } elseif (array_key_exists("image_$i", $_FILES)) {
             $file = $_FILES["image_$i"]['tmp_name'];

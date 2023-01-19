@@ -1,5 +1,5 @@
 <?php
-session_start();
+if (!isset($_SESSION)) session_start();
 include_once "../connect_to_db.php";
 
 function update_table(): void //method to add the changes from editing to the database
@@ -92,14 +92,14 @@ function move(string $direction = 'up'): void
  where TextID = {$_POST[$direction]}")->fetch_assoc();
 
     $qurey = "SELECT * FROM (SELECT * from text where ArticleID = {$_SESSION['aID']} union SELECT * from image where ArticleID = {$_SESSION['aID']}) as `table`
-              where Position = " . ($to_move['position'] . " - 1");
+              where Position = " . ($to_move['Position'] . " - 1");
 
     if ($direction == 'down') $qurey .= "+2";
     $get_moved = access_db($qurey)->fetch_assoc();
 
-    access_db("UPDATE {$get_moved['type']} set Position = {$to_move['position']} where {$get_moved['type']}ID = {$get_moved['TextID']}");
+    access_db("UPDATE {$get_moved['Type']} set Position = {$to_move['Position']} where {$get_moved['Type']}ID = {$get_moved['TextID']}");
 
-    access_db("UPDATE {$to_move['type']} set Position = {$get_moved['position']} where {$to_move['type']}ID = {$to_move['TextID']}");
+    access_db("UPDATE {$to_move['Type']} set Position = {$get_moved['Position']} where {$to_move['Type']}ID = {$to_move['TextID']}");
     header("Location: edit.php?article=" . $_SESSION['aID']);
 }
 

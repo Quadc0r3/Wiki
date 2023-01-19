@@ -22,6 +22,9 @@ $_SESSION['no_of_texts'] = 0;
 <div id="header">
     <img src="images/logo.svg" alt="logo" class="logo">
     <div id="text">
+        <h1>Wiki</h1>
+    </div>
+    <div id="function">
         <div id="user_function">
             <?php
             if (isset($_SESSION['valid']) and $_SESSION['valid']) {     //user is logged in
@@ -33,15 +36,17 @@ $_SESSION['no_of_texts'] = 0;
             }
             ?>
         </div>
-        <h1>Wiki</h1>
+        <div class="search">
+            <form action="php/input_check.php" method="post">
+                <label>
+                    <input name="searchbar" maxlength="20" placeholder="Search Article" type="search">
+                </label>
+            </form>
+        </div>
     </div>
+
 </div>
-<hr>
-<form action="php/input_check.php" method="post" class="search">
-    <label>
-        <input name="searchbar" maxlength="20" placeholder="Search Article" type="search">
-    </label>
-</form>
+
 
 <table title="Recent Articles">
     <tr>
