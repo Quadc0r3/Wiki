@@ -37,7 +37,7 @@
     padding: 12px;
     border-radius: 5px;
     background-color: var(--background);
-    box-shadow: rgba(0, 0, 0, 0.5) 5px 10px 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 5px 10px 10px;
     justify-content: space-between;
 }
 

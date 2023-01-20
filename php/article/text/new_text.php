@@ -1,7 +1,6 @@
 <?php
 if (!isset($_SESSION)) session_start();
-function new_text_segment(): void
-{
+function new_text_segment(): void {
     if (!array_key_exists('aID', $_SESSION)) $_SESSION['aID'] = access_db("SELECT max(ArticleID) from article")->fetch_array()[0] + 1;
     if (!isset($_SESSION['start_of_save'])) $_SESSION['start_of_save'] = 0;
     $_SESSION['start_of_save'] = $_SESSION['start_of_save'] == "" ? 0 : $_SESSION['start_of_save'];
