@@ -3,7 +3,7 @@ if (!isset($_SESSION)) session_start();
 include_once "../connect_to_db.php";
 function add_article(): void
 {
-    access_db("INSERT INTO article (Title,Creator) VALUES ('{$_POST['article']}',{$_SESSION['authorId']})"); //addslashes, for ultra basic sql-injection protection and support for ' and " in input
+    access_db("INSERT INTO article (Title,Creator, Keywords) VALUES ('{$_POST['article']}',{$_SESSION['authorId']}, 'comming')"); //addslashes, for ultra basic sql-injection protection and support for ' and " in input
     add_text(0);
 
     $_SESSION['no_of_texts'] = 0;
@@ -22,7 +22,9 @@ function add_text(int $start): void
         $articleID = $articleID == null ? 1 : $articleID;
     }
 
-    for ($i = $start; $i <= ((count($_REQUEST) - 2) / 2) + count($_FILES); $i++) { //loop from defined start point through all elements on an article and saves it, if it doesn't exist already
+    $max = access_db("select count(*) from (select * from text where ArticleID = {$_SESSION['aID']} union select * from image where ArticleID = {$_SESSION['aID']}) as t ")->fetch_array()[0];
+
+    for ($i = $start; $i <= $max + count($_FILES) + 1; $i++) { //loop from defined start point through all elements on an article and saves it, if it doesn't exist already
         $position = access_db("SELECT max(Position) FROM 
                          (SELECT * from text where ArticleID = $articleID union SELECT * from image where ArticleID = $articleID) as t")->fetch_array()[0] + 1;
         if (array_key_exists("text_title_$i", $_REQUEST)) {
@@ -40,12 +42,12 @@ function add_text(int $start): void
             }
         } elseif (array_key_exists("image_$i", $_FILES)) {
             $file = $_FILES["image_$i"]['tmp_name'];
-            if ($file != "") { //check if a file was correctly uploaded
+            if ($file != "" and @is_array(getimagesize($file))) { //check if a file was correctly uploaded
                 $image = addslashes(file_get_contents($file));
                 $image_name = addslashes($_FILES["image_$i"]['name']);
 
                 access_db("INSERT INTO image (ArticleID, Name, Image, Position) VALUES ($articleID,'$image_name', '$image',$position)");
-                access_db("INSERT INTO `autor-image hilfstabelle` (ImageID, AuthorID) values ((SELECT (max(ImageID)) from image limit 1), {$_SESSION['authorID']})");
+                access_db("INSERT INTO `autor-image hilfstabelle` (ImageID, AuthorID) values ((SELECT (max(ImageID)) from image limit 1), {$_SESSION['authorId']})");
             }
         }
     }

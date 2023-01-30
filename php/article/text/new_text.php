@@ -27,14 +27,14 @@ function new_text_segment(): void {
             while ($entry = $saved_entries->fetch_assoc()) {
                 if ($entry['Type'] == 'text') {
                     //display text
-                    echo "<div class='text_segment' id='text_{$entry['TextID']}'>";
+                    echo "<div class='text_segment nav_box' id='text_{$entry['TextID']}'>";
                     echo "<p>{$entry['Title']}</p><hr>";
                     echo "<input type='text' name='text_title_$i' class='input_title' placeholder='Text Title' value='{$entry['Title']}' autocomplete='off'><br>";
                     echo "<textarea name='text_text_$i' class='input_text' placeholder='Text'  autocomplete='off'>{$entry['Content']}</textarea>";
 
                 } elseif ($entry['Type'] == 'image') {
                     //display image
-                    echo "<div class='image_segment' id='image_{$entry['TextID']}'>";
+                    echo "<div class='image_segment nav_box' id='image_{$entry['TextID']}'>";
                     echo "<img src='../display.php?id={$entry['TextID']}' alt='Image from database'>";
                 }
                 if ($entry['Position'] != 0) echo "<button class='button' type='submit' name='up' value='{$entry['TextID']}'>up</button>";
@@ -50,15 +50,18 @@ function new_text_segment(): void {
 
     //Display a new input field
     $_SESSION['no_of_texts']++;
-    echo "<div class='text_segment' >";
+    echo "<div class='text_segment nav_box' >";
     echo "<p>New Text</p><hr>";
     echo "<input type='text' name='text_title_" . ($_SESSION['no_of_texts'] - 1) . "' placeholder='Text Title' autocomplete='off'><br>";
-    echo "<textarea name='text_text_" . ($_SESSION['no_of_texts'] - 1) . "' class='input_text' placeholder='Text' autocomplete='off'></textarea><br>";
+    echo "<textarea name='text_text_" . ($_SESSION['no_of_texts'] - 1) . "' class='input_text' placeholder='Text' autocomplete='off'></textarea>";
     echo "</div>";
 
     //display a file upload field
-    echo "<input id='browse_btn' class='file_input' type='file' name='image_{$_SESSION['no_of_texts']}'>";
+    echo "<div class='nav_box'>";
+    echo "<input id='browse_btn' class='file_input' type='file' accept='image/*' name='image_{$_SESSION['no_of_texts']}'>";
+    echo "</div>";
     echo "<br><button class='button' type='submit' name='submit_{$_SESSION['mode']}'>Submit</button><br>";
+
 //    echo "<button type='submit' name='new_segment_{$_SESSION['mode']}'>New Text Segment</button>";
 }
 

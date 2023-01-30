@@ -19,7 +19,7 @@ $_SESSION['no_of_texts'] = 0;
     <title>Wiki</title>
 </head>
 <body id="parchment">
-<div id="header">
+<div id="header" class="nav_box">
     <img src="images/logo.svg" alt="logo" class="logo">
     <div id="text">
         <h1>Wiki</h1>
@@ -47,16 +47,16 @@ $_SESSION['no_of_texts'] = 0;
 
 </div>
 
+<div class="nav_box">
+    <table title="Recent Articles">
+        <tr>
+            <th>Title</th>
+            <th>Creator</th>
+            <th>Edit Date</th>
+        </tr>
 
-<table title="Recent Articles">
-    <tr>
-        <th>Title</th>
-        <th>Creator</th>
-        <th>Edit Date</th>
-    </tr>
-
-    <?php
-    $articles = access_db("
+        <?php
+        $articles = access_db("
 SELECT a.Title,`Edit Time`, Name, author.AuthorID, t.ArticleID
 From article as a
  INNER JOIN author on a.Creator = author.AuthorID
@@ -72,17 +72,19 @@ where a2.ArticleID > 0
 group by Title
 order by `Edit Time` desc
     ");
-    if ($articles->num_rows > 0) {
-        while ($entry = $articles->fetch_assoc()) {
-            $name = access_db("SELECT Name from author where AuthorID={$entry['AuthorID']}")->fetch_array()[0];
-            echo "<tr>";
-            echo "<td><a href='php/article/show.php?article={$entry['ArticleID']}'  class='table_link'>{$entry['Title']}</a></td>";
-            echo "<td>$name</td>";
-            echo "<td>{$entry['Edit Time']}</td>";
-            echo "</tr>";
+        if ($articles->num_rows > 0) {
+            while ($entry = $articles->fetch_assoc()) {
+                $name = access_db("SELECT Name from author where AuthorID={$entry['AuthorID']}")->fetch_array()[0];
+                echo "<tr>";
+                echo "<td><a href='php/article/show.php?article={$entry['ArticleID']}'  class='table_link'>{$entry['Title']}</a></td>";
+                echo "<td>$name</td>";
+                echo "<td>{$entry['Edit Time']}</td>";
+                echo "</tr>";
+            }
         }
-    }
 
-    ?>
+        ?>
+    </table>
+</div>
 </body>
 </html>

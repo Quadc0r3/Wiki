@@ -8,7 +8,7 @@ form {
 
 input[type="text"],
 textarea {
-    width: 100%;
+    width: 97%;
     margin-bottom: 20px;
     padding: 12px;
     border: 1px solid #ccc;
@@ -43,20 +43,22 @@ button[type="submit"]:hover {
     background-color: var(--button-hover);
 }
 
-div.text_segment {
+.text_segment {
     margin-bottom: 40px;
 }
 
-div.text_segment > p {
+.text_segment > p {
     font-size: 1.5em;
     font-weight: bold;
     margin-bottom: 20px;
 }
 
 img {
-    width: 100%;
-    max-width: 100%;
+    width: 97%;
+    max-width: 97%;
+    min-width: 100px;
     padding: 12px;
+    border-radius: 4px;
 }
 
 hr {
@@ -72,10 +74,10 @@ input[type="file"] {
     border: 1px solid #ccc;
     border-radius: 3px;
     padding: 5px 20px;
-    margin: 12px;
     outline: none;
     cursor: pointer;
     text-align: center;
     text-transform: uppercase;
     font-size: 12px;
+    width: 95%;
 }

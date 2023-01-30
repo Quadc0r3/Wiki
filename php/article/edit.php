@@ -14,10 +14,11 @@ if (!isset($_SESSION['valid']) /*or !$_SESSION['valid']*/) {
 function load_article(): void
 {
     $_SESSION["aID"] = $GLOBALS["aID"];
+//    echo "<div class='nav_box' style='width: 60%'>";
     echo "<form action='save_changes.php' method='post' enctype='multipart/form-data'>";
     echo "<input type='text' name='article' placeholder='{$GLOBALS['article']}' value='{$GLOBALS['article']}' required autocomplete='off'>";
     echo "<button class='button delete_btn' type='submit' name='delete_article' style='background-color: var(--nonexistant)' value='{$_SESSION["aID"]}'>Delete</button>";
-    echo "<hr>";
+//    echo "</div>";
     $_SESSION['no_of_texts'] = access_db("SELECT count(*) FROM text where ArticleID =" . $_SESSION["aID"])->fetch_array()[0];
     include "text/new_text.php";
     new_text_segment();
@@ -37,7 +38,7 @@ function load_article(): void
     <link rel="stylesheet" href="../../css/edit.css">
     <link rel="icon" type="image/svg" href="../../images/logo.svg">
 </head>
-<body>
+<body id="parchment">
 <?php load_article() ?>
 
 </body>

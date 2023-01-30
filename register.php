@@ -10,8 +10,8 @@
     <link rel="icon" type="image/svg" href="images/logo.svg">
     <title>Wiki</title>
 </head>
-<body>
-<div id="login-screen">
+<body id="parchment">
+<div id="login-screen" class="nav_box">
     <p>Register to the Wiki</p>
     <form action="php/account/user_handeling.php" method='post'>
         <label>
@@ -20,8 +20,8 @@
         <label>
             <input type="password" placeholder="Password" maxlength="32" name="password" autocomplete='off'>
         </label><br>
-        <button type="submit" name="register">Register</button>
-        <button type="submit" name="back">Back</button>
+        <button class="button" type="submit" name="register">Register</button>
+        <button class="button" type="submit" name="back">Back</button>
     </form>
 </div>
 </body>

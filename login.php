@@ -10,8 +10,8 @@
     <link rel="icon" type="image/svg" href="images/logo.svg">
     <title>Wiki</title>
 </head>
-<body>
-<div id="login-screen">
+<body id="parchment">
+<div id="login-screen" class="nav_box">
     <p>Login to the Wiki</p>
     <form action="php/account/user_handeling.php" method='post'>
         <label>

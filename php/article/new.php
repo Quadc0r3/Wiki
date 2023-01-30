@@ -14,7 +14,7 @@ $_SESSION['mode'] = 'new' ?>
     <link rel="icon" type="image/svg" href="../../images/logo.svg">
     <title>New Article</title>
 </head>
-<body>
+<body id="parchment">
 <form action='create_article.php' method='post' enctype="multipart/form-data">
     <label>
         <?php
