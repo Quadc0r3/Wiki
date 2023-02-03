@@ -32,7 +32,7 @@ $_SESSION['no_of_texts'] = 0;
                 echo "<a href='php/account/user.php' class='button'>My Profile</a></br>";
                 echo "<a href='php/article/new.php' class='button'>New Article</a>";
             } else {                                                //user isn't logged in
-                echo "<a href='register.php' class='button'>Sign Up</a><br><a href='login.php'  class='button'>Sign In</a>";
+                echo "<a href='php/account/register.php' class='button'>Sign Up</a><br><a href='php/account/login.php'  class='button'>Sign In</a>";
             }
             ?>
         </div>

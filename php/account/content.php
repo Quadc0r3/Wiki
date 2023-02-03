@@ -1,4 +1,4 @@
-
+<body id="parchment">
 <div class="nav_box">
     <table title="My Articles">
         <tr>
@@ -27,3 +27,4 @@
         ?>
     </table>
 </div>
+</body>

@@ -88,7 +88,7 @@ function show_cites(): void
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/article.css">
     <link rel="icon" type="image/svg" href="../../images/logo.svg">
-    <title>Wiki | <?php echo $aTitle ?></title>
+    <title><?php echo $aTitle ?> | Wiki</title>
 </head>
 <body id="parchment">
 <?php show_article() ?>

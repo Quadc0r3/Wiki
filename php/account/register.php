@@ -5,15 +5,15 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/login.css">
-    <link rel="icon" type="image/svg" href="images/logo.svg">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/login.css">
+    <link rel="icon" type="image/svg" href="../../images/logo.svg">
     <title>Wiki</title>
 </head>
 <body id="parchment">
 <div id="login-screen" class="nav_box">
     <p>Register to the Wiki</p>
-    <form action="php/account/user_handeling.php" method='post'>
+    <form action="user_handeling.php" method='post'>
         <label>
             <input type="text" placeholder="Name" maxlength="10" name="name" autocomplete='off' autofocus>
         </label><br>
