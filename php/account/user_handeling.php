@@ -1,6 +1,6 @@
 <?php
 if (!isset($_SESSION)) session_start();
-function check_input(string $name, string $pwd, string $access): bool {
+function check_input(string $name, string $pwd, string $rep_pwd = null, string $access): bool {
     include_once "../connect_to_db.php";
     $answer = True;
     $inputStates[0] = (strlen($name) <= 0 ? 'Username is missing' : '');
@@ -10,10 +10,11 @@ function check_input(string $name, string $pwd, string $access): bool {
         $inputStates[2] = $users >= 1 ? '' : 'Username not registered';
 
         $pwd_db = access_db("SELECT password from author where name = '$name'")->fetch_array()[0];
-        $inputStates[3] = $pwd_db == $pwd ? '' : 'Wrong password';
+        $inputStates[3] = password_verify($pwd, $pwd_db) ? '' : 'Wrong password';
         $pwd_db = -1;
     } elseif ($access == 'register') {
         $inputStates[2] = $users >= 1 ? 'Username already taken' : '';
+        $inputStates[3] = $pwd != $rep_pwd ? 'Password not identical' : '';
     }
 
     foreach ($inputStates as $state) {
@@ -33,11 +34,14 @@ function login_register(string $access): void
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $name = $_REQUEST['name'];
         $pwd = $_REQUEST['password'];
-
-        $answer = check_input($name, $pwd, $access);
+        $rep_pwd = $_REQUEST['password-rep'] ?? null;
+        $answer = check_input($name, $pwd,$rep_pwd, $access);
 
         if ($answer) {
-            if ($access == 'register') access_db("INSERT INTO author (Name, Password) VALUES ('$name','$pwd')");
+            if ($access == 'register'){
+                $pwd = password_hash($pwd, PASSWORD_DEFAULT);
+                access_db("INSERT INTO author (Name, Password) VALUES ('$name','$pwd')");
+            }
             $_SESSION['valid'] = true;
             $_SESSION['timeout'] = time() + 1200;
             $_SESSION['username'] = $name;

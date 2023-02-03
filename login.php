@@ -15,7 +15,7 @@
     <p>Login to the Wiki</p>
     <form action="php/account/user_handeling.php" method='post'>
         <label>
-            <input type="text" maxlength="10" placeholder="Name" name="name" autocomplete='off'>
+            <input type="text" maxlength="10" placeholder="Name" name="name" autocomplete='off' autofocus>
         </label>
         <label>
             <input type="password" placeholder="Password" maxlength="32" name="password" autocomplete='off'>

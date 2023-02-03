@@ -15,10 +15,13 @@
     <p>Register to the Wiki</p>
     <form action="php/account/user_handeling.php" method='post'>
         <label>
-            <input type="text" placeholder="Name" maxlength="10" name="name" autocomplete='off'>
+            <input type="text" placeholder="Name" maxlength="10" name="name" autocomplete='off' autofocus>
         </label><br>
         <label>
             <input type="password" placeholder="Password" maxlength="32" name="password" autocomplete='off'>
+        </label><br>
+        <label>
+            <input type="password" placeholder="repeat password" maxlength="32" name="password-rep" autocomplete='off'>
         </label><br>
         <button class="button" type="submit" name="register">Register</button>
         <button class="button" type="submit" name="back">Back</button>
