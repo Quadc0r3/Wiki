@@ -31,12 +31,6 @@ input:focus {
 }
 
 /*--Page--*/
-.parchment {
-    background-color: var(--background);
-    background-image: url("https://www.transparenttextures.com/patterns/cartographer.png");
-    background-blend-mode: difference;
-}
-
 #header {
     display: flex;
     align-content: center;

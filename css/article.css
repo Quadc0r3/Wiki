@@ -1,4 +1,4 @@
-h1 {
+#title {
     font-size: 3em;
     margin: 0;
     padding: 1em;
@@ -7,12 +7,12 @@ h1 {
     text-decoration: underline 3px var(--text-color);
 }
 
-a {
+.existant {
     color: var(--existant);
     text-decoration: none;
 }
 
-a.non-existant {
+.non-existant {
     color: var(--nonexistant);
 }
 
@@ -27,6 +27,12 @@ a.non-existant {
 
 .edit {
     float: right;
+}
+
+/*tables*/
+#article_table {
+    border: rgb(64,64,64) solid 2px;
+    border-radius: 4px;
 }
 
 hr {

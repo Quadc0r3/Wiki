@@ -35,7 +35,7 @@ function show_text($texts): void
 
 function show_article(): void
 {
-    echo "<div id='content_container'><h1>{$GLOBALS['aTitle']}</h1></div>";
+    echo "<div id='content_container'><h1 id='title'>{$GLOBALS['aTitle']}</h1></div>";
     echo "<hr>";
 
     $texts = access_db("SELECT * FROM text where ArticleID = {$GLOBALS['aID']} UNION SELECT * from image where ArticleID ={$GLOBALS['aID']} order by position");
