@@ -38,7 +38,7 @@ function load_article(): void
     <link rel="stylesheet" href="../../css/edit.css">
     <link rel="icon" type="image/svg" href="../../images/logo.svg">
 </head>
-<body id="parchment">
+<body>
 <?php load_article() ?>
 
 </body>

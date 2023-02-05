@@ -1,6 +1,6 @@
 <?php
 require "header.php"; ?>
-<body id="parchment">
+<body>
 <div class='nav_box'>
     <p> Sure? </p>
     <form method="post" action="user_handeling.php">

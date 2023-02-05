@@ -90,7 +90,7 @@ function show_cites(): void
     <link rel="icon" type="image/svg" href="../../images/logo.svg">
     <title><?php echo $aTitle ?> | Wiki</title>
 </head>
-<body id="parchment">
+<body>
 <?php show_article() ?>
 </body>
 </html>

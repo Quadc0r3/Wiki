@@ -64,8 +64,14 @@ function back(): void{
 //user settings
 function change_author($name):void {
     require "../connect_to_db.php";
-    access_db("UPDATE author set Name = '$name' where AuthorID = ".$_SESSION['authorId']);
-    header("Location: user.php?s");
+    if (access_db("SELECT count(*) from author where Name = '$name'")->fetch_array()[0] > 0) {
+        $_SESSION['error'] = "Username already taken.";
+        header("Location: ../../error.php");
+    } else {
+        access_db("UPDATE author set Name = '$name' where AuthorID = " . $_SESSION['authorId']);
+        $_SESSION["username"] = $name;
+        header("Location: user.php?s");
+    }
 }
 
 function change_password():void {

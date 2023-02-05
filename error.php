@@ -14,7 +14,7 @@ if (!isset($_SESSION)) session_start();
     <link rel="icon" type="image/svg" href="images/logo.svg">
     <title>Error Page</title>
 </head>
-<body id="parchment">
+<body>
 <div id="err_msg_container">
     <div id="err_msg">
         <h1>An Error has occured</h1>

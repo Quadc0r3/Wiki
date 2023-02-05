@@ -1,11 +1,11 @@
-<body id="parchment">
+<body>
 <div class="nav_box">
     <h2>Settings</h2>
     <hr>
     <p><u>Change Details</u></p>
     <form method="post" action="user_handeling.php">
         <label> Username:
-            <input placeholder="Name" name="change_author" value="<?php echo $_SESSION['username'] ?>">
+            <input type="text" placeholder="Name" name="change_author" value="<?php echo $_SESSION['username'] ?>">
         </label>
     </form>
     <form method="post" action="user_handeling.php">
