@@ -13,10 +13,52 @@ function db_to_show(string $text, int $tID): string
     //links (adds the right link if {{}} are to the input string)
     $text = create_insert($text, "link");
 
+    $text = universal_insert($text);
+
     //formatting (missing implementation)
     $text = format($text);
     //line breaks
     $text = str_replace("\r\n", "</br>", $text);
+    return $text;
+}
+
+function universal_insert(string $text): string {
+    $supported_types = [
+        "table" => "insert_table",
+    ];
+
+    preg_match_all("/\{\|\|(.*?)\|\|/s", $text, $matches);
+    foreach ($matches[1] as $match) {
+        $type = $match ?? null;
+        if (!array_key_exists($type, $supported_types)) continue;
+
+        $text = $supported_types[$type]($text);
+    }
+    return $text;
+}
+
+function insert_table(string $text): string {
+    if (!preg_match("/\{\|\|(.*?)\|\|}/s", $text)) return $text;
+    preg_match_all("/\{\|\|(.*?)\|\|}/s", $text, $matches);
+    $to_replace = $matches[0][0];
+    $matches[1][0] =preg_replace("/\|\|\r?\n/", "||", $matches[1][0]);
+    $rows = explode('||', $matches[1][0]);
+    unset($rows[0]);
+
+    $no_colums = count(explode('|', $rows[1]));
+    $replacement = "<table id='article_table'>";
+    foreach ($rows as $row){
+        $replacement .= "<tr>";
+        $fields = explode('|',$row);
+        for ($i = 0; $i < $no_colums; $i++){
+            $field = $fields[$i] ?? '';
+            if ($row === reset($rows)) $replacement .= "<th>$field</th>";
+            else $replacement .= "<td>$field</td>";
+        }
+        $replacement .= "</tr>";
+    }
+    $replacement .= "</table>";
+    $text = str_replace($to_replace,$replacement,$text);
     return $text;
 }
 
