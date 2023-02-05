@@ -1,3 +1,34 @@
-#header p:first-letter {
+#header {
+    justify-content: space-between;
+}
+
+#user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#user p {
+    margin-left: 12px;
+}
+
+#user p:first-letter {
     text-transform: capitalize;
+}
+
+#user img {
+    width: 45px;
+    height: 45px;
+    border: var(--border-light) solid 2px;
+    border-radius: 50%;
+    background-color: var(--text-color);
+    object-fit: cover;
+}
+
+#controls {
+    display: block;
+}
+
+#controls a{
+    display: inline-block;
 }

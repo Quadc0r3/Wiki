@@ -51,7 +51,7 @@ function login_register(string $access): void
     }
 }
 //navigation
-function back(){
+function back(): void{
     $options = [
         "home" => "index.php",
         "user" => "user.php"
@@ -77,14 +77,26 @@ function change_password():void {
         }
         header("Location: user.php");
     } else require "newPwd.php";
-
 }
 
+function delete_account(): void {
+    if ($_POST['delete_account'] == 'yes') {
+        include_once "../connect_to_db.php";
+        access_db("UPDATE `autor-image hilfstabelle` set AuthorID = 0 where AuthorID = {$_SESSION['authorId']}");
+        access_db("UPDATE `autor-text hilfstabelle` set AuthorID = 0 where AuthorID = {$_SESSION['authorId']}");
+        access_db("UPDATE article set Creator = 0 where Creator = {$_SESSION['authorId']}");
+        access_db("DELETE FROM author WHERE AuthorID= {$_SESSION['authorId']}");
+        require "logout.php";
+    } elseif($_POST['delete_account'] == 'no') header("Location: user.php");
+    else require "delete_account.php";
+
+}
 if (array_key_exists('login', $_POST)) login_register('login');
 elseif (array_key_exists('register', $_POST)) login_register('register');
 elseif (array_key_exists('back', $_POST)) back();
 elseif (array_key_exists('change_author', $_POST)) change_author($_POST['change_author']);
-elseif (array_key_exists('change_password', $_POST))change_password();
+elseif (array_key_exists('change_password', $_POST)) change_password();
+elseif (array_key_exists('delete_account', $_POST)) delete_account();
 
 
 

@@ -1,21 +1,14 @@
 <?php
-require "header.php";
-if (isset($_GET['s'])) {
-        $menu = '';
-        $name = 'Content';
-} else {
-    $menu = '?s';
-    $name = 'Settings';
+session_start();
+if (!$_SESSION['valid']) {
+    $_SESSION['error'] = "You aren't logged in and have therefore no permission to a user page";
+    header("Location: ../../error.php");;
 }
-$_GET = [];
-echo "<div id='header' class='nav_box'>
-    <a class='button' href='../../index.php'>Back</a>
-    <p>{$_SESSION["username"]}</p>
-    <a class='button' href='user.php$menu'>$name</a>
-</div>";
+$name = '';
+require "header.php";
 
- if ($name != 'Settings') include "settings.php";
- else include "content.php";?>
+if ($name != 'Settings') include "settings.php";
+else include "content.php";?>
 </html>
 
 

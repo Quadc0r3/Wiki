@@ -14,6 +14,10 @@
         </label>
     </form>
     <hr>
-    <a style="display: block; width: min-content" class="button delete_btn" href="user_handeling.php" >Delete account</a>
+    <form method="post" action="user_handeling.php">
+        <label>
+            <input type="submit" class="button delete_btn" name="delete_account"  value="Delete account">
+        </label>
+    </form>
 </div>
 </body>
