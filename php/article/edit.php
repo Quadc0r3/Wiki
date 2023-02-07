@@ -2,14 +2,22 @@
 session_start();
 include "../connect_to_db.php";
 $aID = (array_key_exists("article", $_GET)) ? (int)$_GET['article'] : 0;
-$article = access_db("SELECT Title FROM article WHERE ArticleID =" . $aID)->fetch_array();
-$_SESSION['mode'] = 'edit';
-if ($article != null) $article = $article[0];
 
+$is_editable = access_db("SELECT is_editable FROM article where ArticleID = $aID")->fetch_array()[0];
+if (!$is_editable AND $_SESSION['authorId'] != 12){
+    $_SESSION['error'] = "This article isn't editable.";
+    header("Location: ../../error.php");
+}
 if (!isset($_SESSION['valid']) /*or !$_SESSION['valid']*/) {
     $_SESSION['error'] = "You are curently not logged in and can therefore not edit an article.";
     header("Location: ../../error.php");
 }
+
+$article = access_db("SELECT Title FROM article WHERE ArticleID =" . $aID)->fetch_array();
+$_SESSION['mode'] = 'edit';
+if ($article != null) $article = $article[0];
+
+
 
 function load_article(): void
 {
