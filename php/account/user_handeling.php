@@ -40,12 +40,16 @@ function login_register(string $access): void
         if ($answer) {
             if ($access == 'register'){
                 $pwd = password_hash($pwd, PASSWORD_DEFAULT);
-                access_db("INSERT INTO author (Name, Password) VALUES ('$name','$pwd')");
+                access_db("INSERT INTO author (Name, Password, Role) VALUES ('$name','$pwd',4)");
             }
             $_SESSION['valid'] = true;
             $_SESSION['timeout'] = time() + 1200;
             $_SESSION['username'] = $name;
             $_SESSION['authorId'] = access_db("Select AuthorID from author where Name = '$name'")->fetch_array()[0];
+            $_SESSION['permissions'] = access_db("Select r.can_create, r.can_delete, r.can_edit, r.can_view
+                                                        from author as a
+                                                        JOIN roles r on r.Role_ID = a.Role
+                                                        where a.AuthorID = ".$_SESSION['authorId'])->fetch_assoc();
             header("Location: ../../index.php");
         }
     }

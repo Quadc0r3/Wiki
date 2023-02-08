@@ -51,7 +51,8 @@ function show_article(): void
     $is_editable = $article['is_editable'];
     $accessed = $article['accessed'] + 1;
     access_db("UPDATE article SET accessed = $accessed WHERE ArticleID = " . $GLOBALS['aID']);
-    if (($is_editable OR $_SESSION['authorId'] == 12) && isset($_SESSION['valid'])) echo "<a href='edit.php?article={$GLOBALS['aID']}' class='edit button'>Edit</a>";
+    if (($is_editable OR $_SESSION['authorId'] == 12) && (isset($_SESSION['valid']) and $_SESSION['permissions']['can_edit']))
+        echo "<a href='edit.php?article={$GLOBALS['aID']}' class='edit button'>Edit</a>";
 }
 
 function show_cites(): void
@@ -91,7 +92,12 @@ function show_cites(): void
     <title><?php echo $aTitle ?> | Wiki</title>
 </head>
 <body>
-<?php show_article() ?>
+<?php
+if (!$_SESSION['permissions']['can_view']) {
+    $_SESSION['error'] = "You have no permission to view this.";
+    header("Location: ../../error.php");
+}
+show_article() ?>
 </body>
 </html>
 

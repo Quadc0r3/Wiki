@@ -4,11 +4,11 @@ include "../connect_to_db.php";
 $aID = (array_key_exists("article", $_GET)) ? (int)$_GET['article'] : 0;
 
 $is_editable = access_db("SELECT is_editable FROM article where ArticleID = $aID")->fetch_array()[0];
-if (!$is_editable AND $_SESSION['authorId'] != 12){
+if (!$is_editable AND $_SESSION['permissions']['is_admin']){
     $_SESSION['error'] = "This article isn't editable.";
     header("Location: ../../error.php");
 }
-if (!isset($_SESSION['valid']) /*or !$_SESSION['valid']*/) {
+if (!isset($_SESSION['valid']) or !$_SESSION['permissions']['can_edit']) {
     $_SESSION['error'] = "You are curently not logged in and can therefore not edit an article.";
     header("Location: ../../error.php");
 }
@@ -25,7 +25,7 @@ function load_article(): void
 //    echo "<div class='nav_box' style='width: 60%'>";
     echo "<form action='save_changes.php' method='post' enctype='multipart/form-data'>";
     echo "<input type='text' name='article' placeholder='{$GLOBALS['article']}' value='{$GLOBALS['article']}' required autocomplete='off'>";
-    echo "<button class='button delete_btn' type='submit' name='delete_article' style='background-color: var(--nonexistant)' value='{$_SESSION["aID"]}'>Delete</button>";
+    if ($_SESSION['permissions']['can_delete']) echo "<button class='button delete_btn' type='submit' name='delete_article' style='background-color: var(--nonexistant)' value='{$_SESSION["aID"]}'>Delete</button>";
 //    echo "</div>";
     $_SESSION['no_of_texts'] = access_db("SELECT count(*) FROM text where ArticleID =" . $_SESSION["aID"])->fetch_array()[0];
     include "text/new_text.php";

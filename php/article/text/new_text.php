@@ -39,7 +39,7 @@ function new_text_segment(): void {
                 }
                 if ($entry['Position'] != 0) echo "<button class='button' type='submit' name='up' value='{$entry['TextID']}'>up</button>";
                 if ($entry['Position'] != $no_of_entries) echo "<button class='button' type='submit' name='down' value='{$entry['TextID']}'>down</button>";
-                if ($_SESSION['mode'] = 'edit') echo "<button class='button delete_btn' type='submit' name='{$entry['Type']}_delete' value='{$entry['TextID']}' style='background-color: var(--nonexistant)'>Delete</button>";
+                if ($_SESSION['mode'] = 'edit' AND $_SESSION['permissions']['can_delete']) echo "<button class='button delete_btn' type='submit' name='{$entry['Type']}_delete' value='{$entry['TextID']}' style='background-color: var(--nonexistant)'>Delete</button>";
                 echo "</div>";
 
                 $i++;
@@ -47,19 +47,20 @@ function new_text_segment(): void {
             if ($_SESSION['mode'] = 'edit') $_SESSION['no_of_texts'] = $i;
         }
     }
+    if ($_SESSION['permissions']['can_create']) {
+        //Display a new input field
+        $_SESSION['no_of_texts']++;
+        echo "<div class='text_segment nav_box' >";
+        echo "<p>New Text</p><hr>";
+        echo "<input type='text' name='text_title_" . ($_SESSION['no_of_texts'] - 1) . "' placeholder='Text Title' autocomplete='off'><br>";
+        echo "<textarea name='text_text_" . ($_SESSION['no_of_texts'] - 1) . "' class='input_text' placeholder='Text' autocomplete='off'></textarea>";
+        echo "</div>";
 
-    //Display a new input field
-    $_SESSION['no_of_texts']++;
-    echo "<div class='text_segment nav_box' >";
-    echo "<p>New Text</p><hr>";
-    echo "<input type='text' name='text_title_" . ($_SESSION['no_of_texts'] - 1) . "' placeholder='Text Title' autocomplete='off'><br>";
-    echo "<textarea name='text_text_" . ($_SESSION['no_of_texts'] - 1) . "' class='input_text' placeholder='Text' autocomplete='off'></textarea>";
-    echo "</div>";
-
-    //display a file upload field
-    echo "<div class='nav_box'>";
-    echo "<input id='browse_btn' class='file_input' type='file' accept='image/*' name='image_{$_SESSION['no_of_texts']}'>";
-    echo "</div>";
+        //display a file upload field
+        echo "<div class='nav_box'>";
+        echo "<input id='browse_btn' class='file_input' type='file' accept='image/*' name='image_{$_SESSION['no_of_texts']}'>";
+        echo "</div>";
+    }
     echo "<br><button class='button' type='submit' name='submit_{$_SESSION['mode']}'>Submit</button><br>";
 
 //    echo "<button type='submit' name='new_segment_{$_SESSION['mode']}'>New Text Segment</button>";

@@ -18,6 +18,10 @@ $_SESSION['mode'] = 'new' ?>
 <form action='create_article.php' method='post' enctype="multipart/form-data">
     <label>
         <?php
+        if (!$_SESSION['permissions']['can_create']) {
+            $_SESSION['error'] = "You have no permission to create this.";
+            header("Location: ../../error.php");
+        }
         $_SESSION['no_of_texts'] = isset($_SESSION['no_of_texts']) ? max(0, $_SESSION['no_of_texts']) : 0;
         $_SESSION['start_of_save'] = $_SESSION['start_of_save'] ?? '';
         $value = array_key_exists('article', $_SESSION) ? $_SESSION['article'] : '';

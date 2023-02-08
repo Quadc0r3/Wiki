@@ -30,7 +30,7 @@ $_SESSION['no_of_texts'] = 0;
             if (isset($_SESSION['valid']) and $_SESSION['valid']) {     //user is logged in
                 echo "<a href='php/account/logout.php'  class='button'>Log Out</a></br>";
                 echo "<a href='php/account/user.php' class='button'>My Profile</a></br>";
-                echo "<a href='php/article/new.php' class='button'>New Article</a>";
+                if ($_SESSION['permissions']['can_create']) echo "<a href='php/article/new.php' class='button'>New Article</a>";
             } else {                                                //user isn't logged in
                 echo "<a href='php/account/register.php' class='button'>Sign Up</a><br><a href='php/account/login.php'  class='button'>Sign In</a>";
             }
