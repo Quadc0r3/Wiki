@@ -3,6 +3,8 @@ session_start();
 include "php/connect_to_db.php";
 include "php/account/user_handeling.php";
 
+if (!isset($_SESSION['permissions'])) $_SESSION['permissions'] = access_db("SELECT can_view, can_edit, can_create, can_delete, is_admin FROM roles where Role_ID = 4")->fetch_assoc();
+
 $_SESSION['no_of_texts'] = 0;
 ?>
 

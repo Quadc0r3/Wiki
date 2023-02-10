@@ -32,7 +32,7 @@ ORDER BY Position");
             //update text
             //TODO: on text changed, redefine cites with delete_cite();
             access_db("UPDATE text SET Content = '$text', Title = '$title', Position = '$i' WHERE ArticleID = $articleID and TextID = " . $element['TextID']);
-            access_db("UPDATE `autor-text hilfstabelle` SET AuthorID = $authorID WHERE TextID = " . $element['TextID']);
+//            access_db("UPDATE `autor-text hilfstabelle` SET AuthorID = $authorID WHERE TextID = " . $element['TextID']);
 
             $i++;
         }

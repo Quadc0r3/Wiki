@@ -1,6 +1,7 @@
 <?php
 if (!isset($_SESSION)) session_start();
-function check_input(string $name, string $pwd, string $access,string $rep_pwd = null,): bool {
+function check_input(string $name, string $pwd, string $access, string $rep_pwd = null,): bool
+{
     include_once "../connect_to_db.php";
     $answer = True;
     $inputStates[0] = (strlen($name) <= 0 ? 'Username is missing' : '');
@@ -38,7 +39,7 @@ function login_register(string $access): void
         $answer = check_input($name, $pwd, $access, $rep_pwd);
 
         if ($answer) {
-            if ($access == 'register'){
+            if ($access == 'register') {
                 $pwd = password_hash($pwd, PASSWORD_DEFAULT);
                 access_db("INSERT INTO author (Name, Password, Role) VALUES ('$name','$pwd',4)");
             }
@@ -49,24 +50,27 @@ function login_register(string $access): void
             $_SESSION['permissions'] = access_db("Select r.can_create, r.can_delete, r.can_edit, r.can_view
                                                         from author as a
                                                         JOIN roles r on r.Role_ID = a.Role
-                                                        where a.AuthorID = ".$_SESSION['authorId'])->fetch_assoc();
+                                                        where a.AuthorID = " . $_SESSION['authorId'])->fetch_assoc();
             header("Location: ../../index.php");
         }
     }
 }
+
 //navigation
-function back(): void{
+function back(): void
+{
     $options = [
         "home" => "index.php",
         "user" => "user.php"
     ];
 
-    if (array_key_exists($_POST['back'],$options)) header("Location: ".$options[$_POST['back']]);
+    if (array_key_exists($_POST['back'], $options)) header("Location: " . $options[$_POST['back']]);
     else  header("Location: ../../index.php");
 }
 
 //user settings
-function change_author($name):void {
+function change_author($name): void
+{
     require "../connect_to_db.php";
     if (access_db("SELECT count(*) from author where Name = '$name'")->fetch_array()[0] > 0) {
         $_SESSION['error'] = "Username already taken.";
@@ -78,29 +82,36 @@ function change_author($name):void {
     }
 }
 
-function change_password():void {
-    if (array_key_exists('password-old',$_POST)){
-        check_input($_SESSION['username'],$_POST['password-old'],'change');
+function change_password(): void
+{
+    if (array_key_exists('password-old', $_POST)) {
+        check_input($_SESSION['username'], $_POST['password-old'], 'change');
         if ($_POST['password-new'] == $_POST['password-rep']) {
             $pwd = password_hash($_POST['password-new'], PASSWORD_DEFAULT);
-            access_db("UPDATE author SET Password = '$pwd' WHERE AuthorID = ".$_SESSION['authorId']);
+            access_db("UPDATE author SET Password = '$pwd' WHERE AuthorID = " . $_SESSION['authorId']);
         }
         header("Location: user.php");
     } else require "newPwd.php";
 }
 
-function delete_account(): void {
+function delete_account(): void
+{
     if ($_POST['delete_account'] == 'yes') {
         include_once "../connect_to_db.php";
-        access_db("UPDATE `autor-image hilfstabelle` set AuthorID = 0 where AuthorID = {$_SESSION['authorId']}");
-        access_db("UPDATE `autor-text hilfstabelle` set AuthorID = 0 where AuthorID = {$_SESSION['authorId']}");
-        access_db("UPDATE article set Creator = 0 where Creator = {$_SESSION['authorId']}");
-        access_db("DELETE FROM author WHERE AuthorID= {$_SESSION['authorId']}");
-        require "logout.php";
-    } elseif($_POST['delete_account'] == 'no') header("Location: user.php");
-    else require "delete_account.php";
+        $pwd = access_db("SELECT Password FROM author WHERE AuthorID = " . $_SESSION['authorId'])->fetch_array()[0];
+        if (password_verify($_POST['confirm_pwd'],$pwd)) {
+            include_once "../connect_to_db.php";
+            access_db("UPDATE `autor-image hilfstabelle` set AuthorID = 0 where AuthorID = {$_SESSION['authorId']}");
+            access_db("UPDATE `autor-text hilfstabelle` set AuthorID = 0 where AuthorID = {$_SESSION['authorId']}");
+            access_db("UPDATE article set Creator = 0 where Creator = {$_SESSION['authorId']}");
+            access_db("DELETE FROM author WHERE AuthorID= {$_SESSION['authorId']}");
+            require "logout.php";
+        }
+    } elseif ($_POST['delete_account'] == 'no') header("Location: user.php");
+    require "delete_account.php";
 
 }
+
 if (array_key_exists('login', $_POST)) login_register('login');
 elseif (array_key_exists('register', $_POST)) login_register('register');
 elseif (array_key_exists('back', $_POST)) back();

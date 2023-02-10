@@ -51,8 +51,11 @@ function show_article(): void
     $is_editable = $article['is_editable'];
     $accessed = $article['accessed'] + 1;
     access_db("UPDATE article SET accessed = $accessed WHERE ArticleID = " . $GLOBALS['aID']);
-    if (($is_editable OR $_SESSION['authorId'] == 12) && (isset($_SESSION['valid']) and $_SESSION['permissions']['can_edit']))
-        echo "<a href='edit.php?article={$GLOBALS['aID']}' class='edit button'>Edit</a>";
+    if(isset($_SESSION['valid'])){
+        if (($is_editable AND $_SESSION['permissions']['can_edit']) OR $_SESSION['authorId'] == 12){
+            echo "<a href='edit.php?article={$GLOBALS['aID']}' class='edit button'>Edit</a>";
+        }
+    }
 }
 
 function show_cites(): void
