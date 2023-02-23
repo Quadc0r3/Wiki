@@ -46,7 +46,15 @@ function show_article(): void
     echo "</div>";
 
     echo "<hr>";
+    //back button
+    echo "<div id='footer'>";
     echo "<a href='../../index.php' class='back button'>Back</a>";
+    echo "<div id='footer-info'>";
+    $keystr = getKeywords($GLOBALS["aID"]);
+    $Words = explode(';',$keystr);
+    foreach ($Words as $Word) if (strlen(ltrim($Word)) > 0) echo "<div class='Keyword'>".ltrim($Word)."</div>";
+    echo "</div>";
+    //edit Button
     $article = access_db("SELECT is_editable, accessed FROM article WHERE ArticleID = " . $GLOBALS['aID'])->fetch_assoc();
     $is_editable = $article['is_editable'];
     $accessed = $article['accessed'] + 1;
@@ -56,6 +64,7 @@ function show_article(): void
             echo "<a href='edit.php?article={$GLOBALS['aID']}' class='edit button'>Edit</a>";
         }
     }
+    echo "</div>";
 }
 
 function show_cites(): void

@@ -21,13 +21,13 @@
 }
 
 /*Buttons*/
-.back {
-    float: left;
-}
+/*.back {*/
+/*    float: left;*/
+/*}*/
 
-.edit {
-    float: right;
-}
+/*.edit {*/
+/*    float: right;*/
+/*}*/
 
 /*tables*/
 #article_table {
@@ -70,4 +70,17 @@ p {
 
 img {
     border-radius: 5px;
+}
+
+#footer{
+    display: flex;
+    justify-content: space-between;
+}
+
+#footer-info{
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }

@@ -53,6 +53,15 @@ input[type=search]:focus {
     height: 45px;
 }
 
+#categories{
+
+}
+
+#categories form{
+    display: flex;
+    flex-direction: row;
+}
+
 /*--Contents--*/
 #text {
     /*margin-left: 2em;*/

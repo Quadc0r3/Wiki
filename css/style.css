@@ -134,3 +134,26 @@ img {
     filter: invert();
 }
 
+/*Keywords*/
+.Keyword{
+    border: var(--existant) 1px solid;
+    border-radius: 5px;
+    height: fit-content;
+    width: fit-content;
+    margin-left: 6px;
+    margin-right: 6px;
+    background-color: #00000000;
+    padding: 3px;
+    transition: color 200ms, background-color 200ms, box-shadow 400ms;
+}
+
+.Keyword:hover {
+    cursor: pointer;
+    background-color: var(--button-hover);
+    box-shadow: 2px 2px black;
+    color: white;
+}
+.pressed {
+    background-color: var(--button);
+}
+

@@ -2,10 +2,36 @@
 session_start();
 include "php/connect_to_db.php";
 include "php/account/user_handeling.php";
-$_SESSION['keywords'] = array();
+global $articles;
+
 if (!isset($_SESSION['permissions'])) $_SESSION['permissions'] = access_db("SELECT can_view, can_edit, can_create, can_delete, is_admin FROM roles where Role_ID = 4")->fetch_assoc();
 
-$_SESSION['no_of_texts'] = 0;
+function show_keyword_result(mysqli_result $articles):void{
+    if ($articles->num_rows > 0) {
+        while ($entry = $articles->fetch_assoc()) {
+//            $name = access_db("SELECT Name from author where AuthorID={$entry['AuthorID']}")->fetch_array()[0];
+            echo "<tr>";
+            echo "<td><a href='php/article/show.php?article={$entry['ArticleID']}'  class='table_link'>{$entry['Title']}</a></td>";
+//            echo "<td>$name</td>";
+            echo "<td>{$entry['Edit Time']}</td>";
+            echo "</tr>";
+        }
+    }
+}
+function get_keyword_articles(string $keyword): mysqli_result
+{
+    if (!array_key_exists($keyword,$_SESSION['keywords'])){
+        $_SESSION['keywords'] += array($keyword => $keyword);
+    } else unset($_SESSION['keywords'][$keyword]);
+//    $search = implode(',',$_SESSION['keywords']) ?? $keyword;
+    $search = "'".implode("','", $_SESSION['keywords'])."'" ?? "'".$keyword."'";
+    $articles =  access_db("SELECT distinct akh.ArticleID, Title, `Edit Time`  FROM article JOIN `article-keyword hilfstabelle` akh on article.ArticleID = akh.ArticleID 
+                                                                             JOIN keywords k on k.KeyID = akh.KeywordID
+                                                                             WHERE Keyword in ($search)");
+    return $articles;
+}
+if (array_key_exists('keyword',$_POST)) $articles = get_keyword_articles($_POST['keyword']);
+
 ?>
 
 <!doctype html>
@@ -22,7 +48,7 @@ $_SESSION['no_of_texts'] = 0;
 </head>
 <body>
 <div id="header" class="nav_box">
-    <img src="images/logo.svg" alt="logo" class="logo">
+    <a href="index.php"><img src="images/logo.svg" alt="logo" class="logo"></a>
     <div id="text">
         <h1>Wiki</h1>
     </div>
@@ -50,56 +76,27 @@ $_SESSION['no_of_texts'] = 0;
 </div>
 
 <div class="nav_box" id="categories">
-    <form method="post" action="results.php">
+    <form method="post" action="">
         <?php
         $keystr = getKeywords();
         $Words = explode(';', $keystr);
         foreach ($Words as $Word) if (strlen(ltrim($Word)) > 0){
             $Word = ltrim($Word);
-            echo "<button type='submit' class='Keyword' name='keyword' value='$Word'>$Word</button>";
+            $cass = array_key_exists($Word, $_SESSION['keywords']) ? 'pressed' : '';
+            echo "<button type='submit' class='Keyword $cass' name='keyword' value='$Word'>$Word</button>";
         }
         ?>
     </form>
 </div>
-
-<div class="nav_box">
-    <table title="Recent Articles">
-        <tr>
-            <th>Title</th>
-            <th>Creator</th>
-            <th>Edit Date</th>
-        </tr>
-
-        <?php
-        $articles = access_db("
-SELECT a.Title,`Edit Time`, Name, author.AuthorID, t.ArticleID
-From article as a
- INNER JOIN author on a.Creator = author.AuthorID
-INNER JOIN text t on a.ArticleID = t.ArticleID
-union
-SELECT a2.Title,`Edit Time`, author.Name,author.AuthorID, i.ArticleID
-FROM article as a2
-         INNER JOIN author on a2.Creator = author.AuthorID
-         INNER JOIN image i on a2.ArticleID = i.ArticleID
-
-where a2.ArticleID > 0
-
-group by Title
-order by `Edit Time` desc
-    ");
-        if ($articles->num_rows > 0) {
-            while ($entry = $articles->fetch_assoc()) {
-                $name = access_db("SELECT Name from author where AuthorID={$entry['AuthorID']}")->fetch_array()[0];
-                echo "<tr>";
-                echo "<td><a href='php/article/show.php?article={$entry['ArticleID']}'  class='table_link'>{$entry['Title']}</a></td>";
-                echo "<td>$name</td>";
-                echo "<td>{$entry['Edit Time']}</td>";
-                echo "</tr>";
-            }
-        }
-
-        ?>
-    </table>
-</div>
-</body>
-</html>
+    <div class="nav_box">
+        <table title="Recent Articles">
+            <tr>
+                <th>Title</th>
+<!--                <th>Creator</th>-->
+                <th>Edit Date</th>
+            </tr>
+<?php
+show_keyword_result($articles);
+?>
+        </table>
+    </div>

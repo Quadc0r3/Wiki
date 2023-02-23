@@ -11,7 +11,7 @@ function update_table(): void //method to add the changes from editing to the da
     From (SELECT * FROM text WHERE ArticleID = $articleID UNION SELECT * FROM image WHERE ArticleID = $articleID) AS t
 ORDER BY Position");
     $i = 0;
-
+    //Update Texts
     if ($articleElements->num_rows > 0) {
         while ($element = $articleElements->fetch_assoc()) {
             if (!array_key_exists('text_text_' . $i, $_POST)) {
@@ -36,6 +36,8 @@ ORDER BY Position");
 
             $i++;
         }
+        //Update Article
+        update_keywords($articleID);
         access_db("UPDATE article SET `Edit Time` = '" . date("Y-m-d H:i:s") . "', Title = '" . addslashes($_POST['article']) . "'  WHERE ArticleID = $articleID");
     }
     //add new text to db
@@ -43,6 +45,22 @@ ORDER BY Position");
     add_text($i);
 
     header("Location: show.php?article=$articleID");
+}
+
+function update_keywords(int $articleID): void
+{
+    access_db("DELETE FROM `article-keyword hilfstabelle` where ArticleID = $articleID");
+    $Keywords = explode(';',$_POST['keywords']);
+    foreach ($Keywords as $Word){
+        $Word = addslashes(ltrim($Word));
+        if (strlen($Word) > 0) {
+            if (access_db("Select count(*) from keywords where Keyword = '$Word'")->fetch_array()[0] < 1) {
+                access_db("Insert into keywords (Keyword) values ('$Word')");
+            }
+            $KiD = access_db("SELECT KeyID FROM keywords where Keyword = '$Word'")->fetch_array()[0];
+            access_db("INSERT INTO `article-keyword hilfstabelle` (ArticleID, KeywordID) VALUES ($articleID, $KiD)");
+        }
+    }
 }
 
 function delete_txt_segment(): void

@@ -46,3 +46,17 @@ function sanitizeInput($input, $allowHtml = false, $allowUrl = false): string
 
     return $input;
 }
+
+function getKeywords(int $aID = null): string
+{
+    $query = "SELECT distinct Keyword From keywords INNER JOIN `article-keyword hilfstabelle` as akh on keywords.KeyID = akh.KeywordID";
+    if ($aID != null)  $query .= " WHERE ArticleID = $aID";
+    $query .= " ORDER BY Keyword asc";
+    $Keywords = access_db($query);
+    $keystr = "";
+    for ($i = 0; $i < $Keywords->num_rows; $i++) {
+        $Word = $Keywords->fetch_array()[0];
+        $keystr .= $Word . '; ';
+    }
+    return $keystr;
+}
