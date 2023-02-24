@@ -23,15 +23,20 @@ function get_keyword_articles(string $keyword): mysqli_result
     if (!array_key_exists($keyword,$_SESSION['keywords'])){
         $_SESSION['keywords'] += array($keyword => $keyword);
     } else unset($_SESSION['keywords'][$keyword]);
-//    $search = implode(',',$_SESSION['keywords']) ?? $keyword;
-    $search = "'".implode("','", $_SESSION['keywords'])."'" ?? "'".$keyword."'";
-    $articles =  access_db("SELECT distinct akh.ArticleID, Title, `Edit Time`  FROM article JOIN `article-keyword hilfstabelle` akh on article.ArticleID = akh.ArticleID 
-                                                                             JOIN keywords k on k.KeyID = akh.KeywordID
-                                                                             WHERE Keyword in ($search)");
-    return $articles;
+
+    $search = "'".implode("' or Keyword = '", $_SESSION['keywords'])."'" ?? "'".$keyword."'";
+    //build querry (no tag, one tag ond many tags differenciating)
+    $query = "SELECT article.ArticleID, Title, `Edit Time`  FROM article ";
+    if ($search == "''") $query .= "where Is_editable = 1;";
+    else $query .= "JOIN `article-keyword hilfstabelle` akh on article.ArticleID = akh.ArticleID
+                            JOIN keywords k on k.KeyID = akh.KeywordID
+                            WHERE Keyword = $search
+                            GROUP BY akh.ArticleID ";
+    if (str_contains($search," or Keyword = ")) $query .= "having count(*) > 1";
+
+    return access_db($query);
 }
 if (array_key_exists('keyword',$_POST)) $articles = get_keyword_articles($_POST['keyword']);
-
 ?>
 
 <!doctype html>
