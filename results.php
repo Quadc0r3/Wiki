@@ -1,39 +1,51 @@
 <?php
-ini_set('session.cache_limiter','public');
+ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
 include_once "php/connect_to_db.php";
 include_once "php/account/user_handeling.php";
 global $articles;
 
-function show_keyword_result(mysqli_result $articles):void{
+function show_tag_result(mysqli_result $articles): void
+{
     if ($articles->num_rows > 0) {
+        echo "<table title='Recent Articles'>
+            <tr>
+                <th>Title</th>
+                <th>Edit Date</th>
+            </tr>";
         while ($entry = $articles->fetch_assoc()) {
             echo "<tr>";
             echo "<td><a href='php/article/show.php?article={$entry['ArticleID']}'  class='table_link'>{$entry['Title']}</a></td>";
             echo "<td>{$entry['Edit Time']}</td>";
             echo "</tr>";
         }
+        echo "</table>";
+    } else {
+        echo "<h2>No Article found having these tags</h2>";
     }
 }
-function get_keyword_articles(string $keyword): mysqli_result
-{
-    if (!array_key_exists($keyword,$_SESSION['keywords'])){
-        $_SESSION['keywords'] += array($keyword => $keyword);
-    } else unset($_SESSION['keywords'][$keyword]);
 
-    $search = "'".implode("','", $_SESSION['keywords'])."'" ?? "'".$keyword."'";
+function get_tag_articles(string $tag): mysqli_result
+{
+    if (!array_key_exists($tag, $_SESSION['tags'])) {
+        $_SESSION['tags'] += array($tag => $tag);
+    } else unset($_SESSION['tags'][$tag]);
+
+    $search = "'" . implode("','", $_SESSION['tags']) . "'" ?? "'" . $tag . "'";
     //build querry (no tag, one tag ond many tags differenciating)
     $query = "SELECT article.ArticleID, Title, `Edit Time`  FROM article ";
-    if ($search == "''") $query .= "where Is_editable = 1;";
-    else $query .= "JOIN `article-keyword hilfstabelle` akh on article.ArticleID = akh.ArticleID
-                            JOIN keywords k on k.KeyID = akh.KeywordID
-                            WHERE Keyword in ($search)
-                            GROUP BY akh.ArticleID ";
-    if (str_contains($search,"','")) $query .= "having count(*) > 1";
+    if ($search == "''") $query .= "where Is_editable = 1";
+    else $query .= "JOIN `article-tag hilfstabelle` ath on article.ArticleID = ath.ArticleID
+                            JOIN tags t on t.TagID = ath.TagID
+                            WHERE TagName in ($search)
+                            GROUP BY ath.ArticleID ";
+    if (str_contains($search, "','")) $query .= "having count(*) >" . substr_count($search, ",");
+    $query .= " order by Title";
 
     return access_db($query);
 }
-if (array_key_exists('keyword',$_POST)) $articles = get_keyword_articles($_POST['keyword']);
+
+if (array_key_exists('tag', $_POST)) $articles = get_tag_articles($_POST['tag']);
 ?>
 
 <!doctype html>
@@ -79,26 +91,20 @@ if (array_key_exists('keyword',$_POST)) $articles = get_keyword_articles($_POST[
 <div class="nav_box" id="categories">
     <form method="post" action="">
         <?php
-        $keystr = getKeywords();
-        $Words = explode(';', $keystr);
-        foreach ($Words as $Word) if (strlen(ltrim($Word)) > 0){
-            $Word = ltrim($Word);
-            $cass = array_key_exists($Word, $_SESSION['keywords']) ? 'pressed' : '';
-            echo "<button type='submit' class='Keyword $cass' name='keyword' value='$Word'>$Word</button>";
+        $tag_str = getTags();
+        $tags = explode(';', $tag_str);
+        foreach ($tags as $tag) if (strlen(ltrim($tag)) > 0) {
+            $tag = ltrim($tag);
+            $cass = array_key_exists($tag, $_SESSION['tags']) ? 'pressed' : '';
+            echo "<button type='submit' class='Tag $cass' name='tag' value='$tag'>$tag</button>";
         }
         ?>
     </form>
 </div>
-    <div class="nav_box">
-        <table title="Recent Articles">
-            <tr>
-                <th>Title</th>
-                <th>Edit Date</th>
-            </tr>
-<?php
-show_keyword_result($articles);
-?>
-        </table>
-    </div>
+<div class="nav_box">
+    <?php
+    show_tag_result($articles);
+    ?>
+</div>
 </body>
 </html>

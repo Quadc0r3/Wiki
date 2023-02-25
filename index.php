@@ -2,7 +2,7 @@
 session_start();
 include "php/connect_to_db.php";
 include "php/account/user_handeling.php";
-$_SESSION['keywords'] = array();
+$_SESSION['tags'] = array();
 if (!isset($_SESSION['permissions'])) $_SESSION['permissions'] = access_db("SELECT can_view, can_edit, can_create, can_delete, is_admin FROM roles where Role_ID = 4")->fetch_assoc();
 
 $_SESSION['no_of_texts'] = 0;
@@ -52,11 +52,11 @@ $_SESSION['no_of_texts'] = 0;
 <div class="nav_box" id="categories">
     <form method="post" action="results.php">
         <?php
-        $keystr = getKeywords();
+        $keystr = getTags();
         $Words = explode(';', $keystr);
         foreach ($Words as $Word) if (strlen(ltrim($Word)) > 0){
             $Word = ltrim($Word);
-            echo "<button type='submit' class='Keyword' name='keyword' value='$Word'>$Word</button>";
+            echo "<button type='submit' class='Tag' name='tag' value='$Word'>$Word</button>";
         }
         ?>
     </form>

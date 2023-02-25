@@ -134,8 +134,8 @@ img {
     filter: invert();
 }
 
-/*Keywords*/
-.Keyword{
+/*Tags*/
+.Tag{
     border: var(--existant) 1px solid;
     border-radius: 5px;
     height: fit-content;
@@ -147,7 +147,7 @@ img {
     transition: color 200ms, background-color 200ms, box-shadow 400ms;
 }
 
-.Keyword:hover {
+.Tag:hover {
     cursor: pointer;
     background-color: var(--button-hover);
     box-shadow: 2px 2px black;

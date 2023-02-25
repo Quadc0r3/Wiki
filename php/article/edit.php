@@ -22,15 +22,13 @@ if ($article != null) $article = $article[0];
 function load_article(): void
 {
     $_SESSION["aID"] = $GLOBALS["aID"];
-    $keystr = getKeywords($GLOBALS["aID"]);
+    $tag_str = getTags($GLOBALS["aID"]);
     $GLOBALS['article'] = str_replace("'","&#39",$GLOBALS['article']);
-//    echo "<div class='nav_box' style='width: 60%'>";
     echo "<form action='save_changes.php' method='post' enctype='multipart/form-data'>";
     echo "<input type='text' name='article' placeholder='{$GLOBALS['article']}' value='{$GLOBALS['article']}' required autocomplete='off'>";
-//    echo "<input type='text' name='article' value='Pantheon &#39 s Summit' required autocomplete='off'>";
-    echo "<input type='text' name='keywords' placeholder='Keywords' value='$keystr' autocomplete='off'>";
+    echo "<input type='text' name='tags' placeholder='Tags' value='$tag_str' autocomplete='off'>";
     if ($_SESSION['permissions']['can_delete']) echo "<button class='button delete_btn' type='submit' name='delete_article' style='background-color: var(--nonexistant)' value='{$_SESSION["aID"]}'>Delete</button>";
-//    echo "</div>";
+
     $_SESSION['no_of_texts'] = access_db("SELECT count(*) FROM text where ArticleID =" . $_SESSION["aID"])->fetch_array()[0];
     include "text/new_text.php";
     new_text_segment();

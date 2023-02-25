@@ -50,9 +50,9 @@ function show_article(): void
     echo "<div id='footer'>";
     echo "<a href='../../index.php' class='back button'>Back</a>";
     echo "<div id='footer-info'>";
-    $keystr = getKeywords($GLOBALS["aID"]);
+    $keystr = getTags($GLOBALS["aID"]);
     $Words = explode(';',$keystr);
-    foreach ($Words as $Word) if (strlen(ltrim($Word)) > 0) echo "<div class='Keyword'>".ltrim($Word)."</div>";
+    foreach ($Words as $Word) if (strlen(ltrim($Word)) > 0) echo "<div class='Tag'>".ltrim($Word)."</div>";
     echo "</div>";
     //edit Button
     $article = access_db("SELECT is_editable, accessed FROM article WHERE ArticleID = " . $GLOBALS['aID'])->fetch_assoc();

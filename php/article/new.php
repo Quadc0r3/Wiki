@@ -26,6 +26,7 @@ $_SESSION['mode'] = 'new' ?>
         $_SESSION['start_of_save'] = $_SESSION['start_of_save'] ?? '';
         $value = array_key_exists('article', $_SESSION) ? $_SESSION['article'] : '';
         echo "<input type='text' name='article' value='$value' placeholder='Title' required autocomplete='off'>";
+        echo "<input type='text' name='tags' placeholder='Tags' autocomplete='off'>";
         ?>
     </label>
 

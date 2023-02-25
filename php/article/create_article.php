@@ -3,12 +3,17 @@ if (!isset($_SESSION)) session_start();
 include_once "../connect_to_db.php";
 function add_article(): void
 {
-    access_db("INSERT INTO article (Title,Creator, Keywords) VALUES ('{$_POST['article']}',{$_SESSION['authorId']}, 'comming')"); //addslashes, for ultra basic sql-injection protection and support for ' and " in input
+    access_db("INSERT INTO article (Title,Creator) VALUES ('{$_POST['article']}',{$_SESSION['authorId']})"); //addslashes, for ultra basic sql-injection protection and support for ' and " in input
     add_text(0);
+
+    $articleID = access_db("SELECT max(ArticleID) from article")->fetch_array()[0];
+
+    include_once "save_changes.php";
+    update_tags($articleID);
 
     $_SESSION['no_of_texts'] = 0;
     $_SESSION['article'] = null;
-    header("Location: show.php?article=" . access_db("SELECT max(ArticleID) from article")->fetch_array()[0]);
+    header("Location: show.php?article=" . $articleID);
 }
 
 function add_text(int $start): void

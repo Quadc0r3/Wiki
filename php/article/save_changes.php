@@ -37,7 +37,7 @@ ORDER BY Position");
             $i++;
         }
         //Update Article
-        update_keywords($articleID);
+        update_tags($articleID);
         access_db("UPDATE article SET `Edit Time` = '" . date("Y-m-d H:i:s") . "', Title = '" . addslashes($_POST['article']) . "'  WHERE ArticleID = $articleID");
     }
     //add new text to db
@@ -47,18 +47,18 @@ ORDER BY Position");
     header("Location: show.php?article=$articleID");
 }
 
-function update_keywords(int $articleID): void
+function update_tags(int $articleID): void
 {
-    access_db("DELETE FROM `article-keyword hilfstabelle` where ArticleID = $articleID");
-    $Keywords = explode(';',$_POST['keywords']);
-    foreach ($Keywords as $Word){
-        $Word = addslashes(ltrim($Word));
-        if (strlen($Word) > 0) {
-            if (access_db("Select count(*) from keywords where Keyword = '$Word'")->fetch_array()[0] < 1) {
-                access_db("Insert into keywords (Keyword) values ('$Word')");
+    access_db("DELETE FROM `article-tag hilfstabelle` where ArticleID = $articleID");
+    $tags = explode(';',ucfirst($_POST['tags']));
+    foreach ($tags as $tag){
+        $tag = addslashes(ltrim($tag));
+        if (strlen($tag) > 0) {
+            if (access_db("Select count(*) from tags where TagName = '$tag'")->fetch_array()[0] < 1) {
+                access_db("Insert into tags (TagName) values ('$tag')");
             }
-            $KiD = access_db("SELECT KeyID FROM keywords where Keyword = '$Word'")->fetch_array()[0];
-            access_db("INSERT INTO `article-keyword hilfstabelle` (ArticleID, KeywordID) VALUES ($articleID, $KiD)");
+            $KiD = access_db("SELECT TagID FROM tags where TagName = '$tag'")->fetch_array()[0];
+            access_db("INSERT INTO `article-tag hilfstabelle` (ArticleID, TagID) VALUES ($articleID, $KiD)");
         }
     }
 }

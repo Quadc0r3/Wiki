@@ -47,16 +47,16 @@ function sanitizeInput($input, $allowHtml = false, $allowUrl = false): string
     return $input;
 }
 
-function getKeywords(int $aID = null): string
+function getTags(int $aID = null): string
 {
-    $query = "SELECT distinct Keyword From keywords INNER JOIN `article-keyword hilfstabelle` as akh on keywords.KeyID = akh.KeywordID";
+    $query = "SELECT distinct TagName From tags INNER JOIN `article-tag hilfstabelle` as ath on tags.TagID = ath.TagID";
     if ($aID != null)  $query .= " WHERE ArticleID = $aID";
-    $query .= " ORDER BY Keyword asc";
-    $Keywords = access_db($query);
-    $keystr = "";
-    for ($i = 0; $i < $Keywords->num_rows; $i++) {
-        $Word = $Keywords->fetch_array()[0];
-        $keystr .= $Word . '; ';
+    $query .= " ORDER BY TagName asc";
+    $article_tags = access_db($query);
+    $tag_str = "";
+    for ($i = 0; $i < $article_tags->num_rows; $i++) {
+        $tag = $article_tags->fetch_array()[0];
+        $tag_str .= $tag . '; ';
     }
-    return $keystr;
+    return $tag_str;
 }
