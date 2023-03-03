@@ -7,11 +7,8 @@ body {
 
 #login-screen {
     text-align: center;
-    background-color: var(--text-box);
-    padding: 20px;
-    border-radius: 15px;
-    width: 40%;
-    box-shadow: #00000008;
+    min-width: min-content;
+    width: 30%;
 }
 
 p {

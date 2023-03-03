@@ -31,7 +31,7 @@ CREATE TABLE `article-tag hilfstabelle` (
   `AKID` int NOT NULL,
   `ArticleID` int NOT NULL,
   `TagID` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `article-tag hilfstabelle`

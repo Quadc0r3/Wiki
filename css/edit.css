@@ -6,53 +6,6 @@ form {
     flex-direction: column;
 }
 
-input[type="text"],
-textarea {
-    width: 97%;
-    margin-bottom: 20px;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1.25em;
-}
-
-input[type="text"].input_title {
-    font-size: 1.25em;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-textarea.input_text {
-    height: 200px;
-    resize: vertical;
-    background-color: var(--textarea);
-}
-
-button[type="submit"] {
-    background-color: var(--button); /*original: 4CAF50FF*/
-    color: var(--button-text);
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
-}
-
-button[type="submit"]:hover {
-    background-color: var(--button-hover);
-}
-
-.text_segment {
-    margin-bottom: 40px;
-}
-
-.text_segment > p {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
 img {
     width: 97%;
     max-width: 97%;
@@ -79,5 +32,21 @@ input[type="file"] {
     text-align: center;
     text-transform: uppercase;
     font-size: 12px;
-    width: 95%;
+    width: max-content;
+}
+
+.delete_article{
+    display: flex;
+    justify-content: right;
+}
+
+.container_flex{
+    display: flex;
+    justify-content: left;
+}
+
+.weird_flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

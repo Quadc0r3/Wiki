@@ -27,6 +27,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `article`
 --
 
+DROP TABLE `article`;
+
 CREATE TABLE `article` (
   `ArticleID` int NOT NULL,
   `Title` tinytext NOT NULL,
@@ -35,7 +37,7 @@ CREATE TABLE `article` (
   `Creator` int NOT NULL,
   `Is_editable` tinyint(1) NOT NULL DEFAULT '1',
   `Accessed` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `article`

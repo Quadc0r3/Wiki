@@ -4,7 +4,7 @@
     padding: 1em;
     text-align: center;
     align-self: center;
-    text-decoration: underline 3px var(--text-color);
+    font-family: "EB Garamond";
 }
 
 .existant {
@@ -47,15 +47,28 @@ hr {
     flex-direction: column;
 }
 
-.text {
-    margin: 1em;
-    padding: 1em;
+.text_box{
+    padding: 12px;
+    background-color: var(--background);
+    box-shadow: rgba(0, 0, 0, 0.2) 5px 10px 10px;
+    min-width: 492px;
     width: 60%;
     align-self: center;
-    background-color: var(--text-box);
-    border-radius: 5px;
-    box-shadow: #00000008 10px 10px 10px 10px;
     font-size: larger;
+}
+
+.text_box:first-child{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.text_box:last-child{
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.text_box:nth-child(even){
+    background-color: var(--background-alternative);
 }
 
 h2 {
@@ -72,15 +85,32 @@ img {
     border-radius: 5px;
 }
 
-#footer{
+#tags{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    margin-top: 5px;
 }
 
-#footer-info{
-    width: auto;
+#tags-info{
+    width: 60%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
+    flex-wrap: wrap;
+}
+
+.article_buttons{
+    display: flex;
+    justify-content: right;
+}
+
+.article_image{
+    display: flex;
+    justify-content: center;
+}
+
+.article_image img{
+    max-height: 69vh;
+    width: auto;
 }

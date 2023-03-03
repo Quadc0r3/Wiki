@@ -11,49 +11,10 @@ else {
 
 function show_text($texts): void
 {
-    include_once "../text_processing.php";
-    if ($texts->num_rows > 0) {
-        $i = 0;
-        while ($entry = $texts->fetch_assoc()) {
-            if ($entry['Type'] == 'text') {
-                $text = db_to_show($entry['Content'], $entry['TextID']);
-                echo "<div id='text_$i' class='text'>";
-                echo "<h2>{$entry['Title']}</h2>";
-                echo "<br>";
-                echo "<p>$text</p>";
-                echo "</div>";
-            } elseif ($entry['Type'] == 'image') {
-                //display image
-                echo "<div class='text' id='image_{$entry['TextID']}'>";
-                echo "<img src='../display.php?id={$entry['TextID']}' alt='Image from database'>";
-                echo "</div>";
-            }
-            $i++;
-        }
-    }
-}
-
-function show_article(): void
-{
-    echo "<div id='content_container'><h1 id='title'>{$GLOBALS['aTitle']}</h1></div>";
-    echo "<hr>";
-
-    $texts = access_db("SELECT * FROM text where ArticleID = {$GLOBALS['aID']} UNION SELECT * from image where ArticleID ={$GLOBALS['aID']} order by position");
-    echo "<div class='content_container'>";
-    show_text($texts);
-    show_cites();
-
-    echo "</div>";
-
-    echo "<hr>";
+    echo "<div class='article_buttons text_box button_alternate'>";
     //back button
-    echo "<div id='footer'>";
     echo "<a href='../../index.php' class='back button'>Back</a>";
-    echo "<div id='footer-info'>";
-    $keystr = getTags($GLOBALS["aID"]);
-    $Words = explode(';',$keystr);
-    foreach ($Words as $Word) if (strlen(ltrim($Word)) > 0) echo "<div class='Tag'>".ltrim($Word)."</div>";
-    echo "</div>";
+
     //edit Button
     $article = access_db("SELECT is_editable, accessed FROM article WHERE ArticleID = " . $GLOBALS['aID'])->fetch_assoc();
     $is_editable = $article['is_editable'];
@@ -65,6 +26,61 @@ function show_article(): void
         }
     }
     echo "</div>";
+    include_once "../text_processing.php";
+    if ($texts->num_rows > 0) {
+        $i = 0;
+        while ($entry = $texts->fetch_assoc()) {
+            if ($entry['Type'] == 'text') {
+                $text = db_to_show($entry['Content'], $entry['TextID']);
+                echo "<div id='text_$i' class='text_box button_alternate'>";
+                echo "<h2>{$entry['Title']}</h2>";
+                echo "<br>";
+                echo "<p>$text</p>";
+                echo "</div>";
+            } elseif ($entry['Type'] == 'image') {
+                //display image
+                echo "<div class='text_box article_image' id='image_{$entry['TextID']}'>";
+                echo "<img src='../display.php?id={$entry['TextID']}' alt='Image from database'>";
+                echo "</div>";
+            }
+            $i++;
+        }
+    }
+    echo "<div class='article_buttons text_box button_alternate'>";
+    //back button
+    echo "<a href='../../index.php' class='back button'>Back</a>";
+
+    //edit Button
+    $article = access_db("SELECT is_editable, accessed FROM article WHERE ArticleID = " . $GLOBALS['aID'])->fetch_assoc();
+    $is_editable = $article['is_editable'];
+    $accessed = $article['accessed'] + 1;
+    access_db("UPDATE article SET accessed = $accessed WHERE ArticleID = " . $GLOBALS['aID']);
+    if(isset($_SESSION['valid'])){
+        if (($is_editable AND $_SESSION['permissions']['can_edit']) OR $_SESSION['authorId'] == 12){
+            echo "<a href='edit.php?article={$GLOBALS['aID']}' class='edit button'>Edit</a>";
+        }
+    }
+    echo "</div>";
+}
+
+function show_article(): void
+{
+    echo "<div id='content_container'><h1 id='title'>{$GLOBALS['aTitle']}</h1></div>";
+
+    $texts = access_db("SELECT * FROM text where ArticleID = {$GLOBALS['aID']} UNION SELECT * from image where ArticleID ={$GLOBALS['aID']} order by position");
+    echo "<div class='content_container'>";
+    show_text($texts);
+    show_cites();
+
+    echo "</div>";
+    //back button
+    echo "<div id='tags'>";
+    echo "<div id='tags-info'>";
+    $keystr = getTags($GLOBALS["aID"]);
+    $Words = explode(';',$keystr);
+    foreach ($Words as $Word) if (strlen(ltrim($Word)) > 0) echo "<div class='Tag'>".ltrim($Word)."</div>";
+    echo "</div>";
+    echo "</div>"; //end of tags
 }
 
 function show_cites(): void
@@ -110,6 +126,23 @@ if (!$_SESSION['permissions']['can_view']) {
     header("Location: ../../error.php");
 }
 show_article() ?>
+
+<div class="scroll flex-center flex-column">
+    <button class="button alt-border scroll_btn" onclick="scrollToTop()">Scroll up</button>
+    <button class="button alt-border scroll_btn" onclick="scrollToBottom()">Scroll down</button>
+</div>
+
+
+<script>
+function scrollToBottom() {
+  window.scrollTo(0, document.body.scrollHeight);
+}
+function scrollToTop() {
+    window.scrollTo(0, 0);
+}
+</script>
+
+
 </body>
 </html>
 

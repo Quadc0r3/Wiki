@@ -11,18 +11,27 @@
     <title>Wiki</title>
 </head>
 <body>
-<div id="login-screen" class="nav_box">
-    <p>Login to the Wiki</p>
-    <form action="user_handeling.php" method='post'>
-        <label>
-            <input type="text" maxlength="10" placeholder="Name" name="name" autocomplete='off' autofocus>
-        </label>
-        <label>
-            <input type="password" placeholder="Password" maxlength="32" name="password" autocomplete='off'>
-        </label>
-        <button class="button" type="submit" name="login">Login</button>
-        <button class="button" type="submit" name="back">Back</button>
-    </form>
+
+<div id="login-screen">
+    <div class="nav_box">
+        <p>Login to the Wiki</p>
+    </div>
+
+    <div class="nav_box">
+
+        <form action="user_handeling.php" method='post'>
+            <label>
+                <input class="input_new_text input_user_handling" type="text" maxlength="10" placeholder="Enter Name" name="name" autocomplete='off' autofocus>
+            </label>
+            <label>
+                <input class="input_new_text input_user_handling" type="password" placeholder="Enter Password" maxlength="32" name="password" autocomplete='off'>
+            </label>
+            <button class="button alt-border" type="submit" name="login">Login</button>
+            <button class="button cancel" type="submit" name="back">Cancel</button>
+        </form>
+    </div>
 </div>
+
+
 </body>
 </html>

@@ -96,7 +96,7 @@ function change_password(): void
 
 function delete_account(): void
 {
-    if ($_POST['delete_account'] == 'yes') {
+    if ($_POST['delete_account'] == 'Delete') {
         include_once "../connect_to_db.php";
         $pwd = access_db("SELECT Password FROM author WHERE AuthorID = " . $_SESSION['authorId'])->fetch_array()[0];
         if (password_verify($_POST['confirm_pwd'],$pwd)) {
@@ -107,7 +107,7 @@ function delete_account(): void
             access_db("DELETE FROM author WHERE AuthorID= {$_SESSION['authorId']}");
             require "logout.php";
         }
-    } elseif ($_POST['delete_account'] == 'no') header("Location: user.php");
+    } elseif ($_POST['delete_account'] == 'Cancel') header("Location: user.php");
     require "delete_account.php";
 
 }
