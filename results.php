@@ -94,6 +94,7 @@ if (array_key_exists('tag', $_POST)) $articles = get_tag_articles($_POST['tag'])
 </div>
 
 <div class="nav_box" id="categories">
+    <p>Filter by Tags:</p>
     <form method="post" action="">
         <?php
         $tag_str = getTags();

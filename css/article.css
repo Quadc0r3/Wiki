@@ -57,6 +57,19 @@ hr {
     font-size: larger;
 }
 
+@media only screen and (max-width: 700) {
+    .text_box{
+        padding: 12px;
+        background-color: var(--background);
+        box-shadow: rgba(0, 0, 0, 0.2) 5px 10px 10px;
+        min-width: 492px;
+        max-width: 100%;
+        width: 100% !important;
+        align-self: center;
+        font-size: larger;
+    }
+  }
+
 .text_box:first-child{
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -111,6 +124,9 @@ img {
 }
 
 .article_image img{
-    max-height: 69vh;
-    width: auto;
+    max-width: 100%;
+    width: 600px;
+    height: min-content;
+    transition: 0.33s ease-in-out;
+    cursor: pointer;
 }

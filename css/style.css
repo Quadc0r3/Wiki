@@ -111,6 +111,9 @@ a{
     text-decoration: none;
     transition: background-color 200ms, color 200ms;
     user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .cancel{ /*cancel button border*/
@@ -265,7 +268,7 @@ img {
     flex-direction: column;
 }
 
-/*text_input*/
+/*input*/
 .input_new_text{
     background: none;
     border: none;
@@ -336,7 +339,6 @@ textarea.input_text {
 }
 
 .scroll_btn{
-    width: 100%;
 }
 
 .button_alternate .button:hover:not(.delete_btn){
@@ -372,3 +374,14 @@ textarea.input_text {
     margin-bottom: 10px;
 }
 
+@media only screen and (max-width: 480px) {
+    .quick_guide_container{
+        display: none;
+    }
+  }
+
+@media only screen and (max-width: 1200px) {
+    .quick_guide_container{
+        display: none;
+    }
+  }
