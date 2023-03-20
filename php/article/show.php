@@ -151,7 +151,6 @@ function enlarge(image_id) {
 }
 </script>
 
-
 </body>
 </html>
 
