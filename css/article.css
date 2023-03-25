@@ -20,6 +20,13 @@
     color: var(--existant);
 }
 
+#article_table tbody tr:not(#article_table tbody tr:first-child):nth-child(even){
+    background: rgba(0, 0, 0,0.05);
+}
+#article_table tbody tr:first-child{
+    background: rgba(255,255,255,0.3);
+}
+
 /*Buttons*/
 /*.back {*/
 /*    float: left;*/
