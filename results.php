@@ -17,7 +17,7 @@ function show_tag_result(mysqli_result $articles): void
             echo "<tr class='hr_tr'> <td colspan='3'><div class='hr_divider' /></td>  </tr>";
             echo "<tr>";
             echo "<td><a href='php/article/show.php?article={$entry['ArticleID']}'  class='table_link'>{$entry['Title']}</a></td>";
-            echo "<td>{$entry['Edit Time']}</td>";
+            echo "<td>".date('d/m/Y',strtotime($entry['Edit Time']))."</td>";
             echo "</tr>";
         }
         echo "</table>";

@@ -103,7 +103,7 @@ $_SESSION['no_of_texts'] = 0;
                     echo "<tr>";
                     echo "<td><a href='php/article/show.php?article={$entry['ArticleID']}'  class='table_link'>{$entry['Title']}</a></td>";
                     echo "<td>$name</td>";
-                    echo "<td>{$entry['Edit Time']}</td>";
+                    echo "<td>".date('d/m/Y',strtotime($entry['Edit Time']))."</td>";
                     echo "</tr>";
                 }
             }
