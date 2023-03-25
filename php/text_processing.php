@@ -89,12 +89,13 @@ function regex_replace(string $start_symbol, string $end_symbol = "", string $st
 {
     $end_symbol = $end_symbol == "" ? $start_symbol : $end_symbol;
     $end_replace = $end_replace == "" ? $start_replace : $end_replace;
+    $pattern = "/".$start_symbol.".*".$end_symbol."/";
 
-    preg_match_all("/$start_symbol.+?.$end_symbol/", $subject, $matches, 2);
+    preg_match_all($pattern, $subject, $matches, 2);
     foreach ($matches as $match) {
         $name = ltrim($match[0], $start_symbol);
         $name = rtrim($name, $end_symbol);
-        $subject = preg_replace("/$start_symbol.+?.$end_symbol/", "$start_replace$name$end_replace", $subject, 1);
+        $subject = preg_replace($pattern, "$start_replace$name$end_replace", $subject, 1);
     }
     return $subject;
 }

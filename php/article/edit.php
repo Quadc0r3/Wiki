@@ -30,7 +30,7 @@ function load_article(): void
     echo "<input type='text' name='article' placeholder='{$GLOBALS['article']}' value='{$GLOBALS['article']}' required autocomplete='off'>";
     echo "<div class='edit_info'>Edit Tags</div>";    
     echo "<input type='text' name='tags' placeholder='Tags' value='$tag_str' autocomplete='off'>";
-    if ($_SESSION['permissions']['can_delete']) echo "<div class='delete_article'><button class='button delete_btn' type='submit' name='delete_article' style='background-color: var(--nonexistant)' value='{$_SESSION["aID"]}'>Delete Article</button></div>";
+    if ($_SESSION['permissions']['can_delete']) echo "<div class='delete_article'><button class='button delete_btn' type='submit' onclick='return confirm(`Are you sure to delete this Article?`);' name='delete_article' style='background-color: var(--nonexistant)' value='{$_SESSION["aID"]}'>Delete Article</button></div>";
     $_SESSION['no_of_texts'] = access_db("SELECT count(*) FROM text where ArticleID =" . $_SESSION["aID"])->fetch_array()[0];
     echo "</div>";
     
