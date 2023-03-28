@@ -80,6 +80,12 @@ function format(array|string $text): string {
     //underline
     $text = regex_replace("__", "", "<u>", "</u>", $text);
 
+    //highlight_highscore
+    $text = regex_replace("===", "", "<span class='highlight_highscore'>", "<span>", $text);
+    //highlight_text
+    $text = regex_replace("=_=", "", "<span class='highlight_text'>", "<span>", $text);
+
+
     //bulletpoints: pattern = search for a line breake and an * with any amount of whitespaces in between
     $text = preg_replace("/\\r\\n\s*\*/", "<br> •", $text);
     return $text;
@@ -89,7 +95,7 @@ function regex_replace(string $start_symbol, string $end_symbol = "", string $st
 {
     $end_symbol = $end_symbol == "" ? $start_symbol : $end_symbol;
     $end_replace = $end_replace == "" ? $start_replace : $end_replace;
-    $pattern = "/".$start_symbol.".*".$end_symbol."/";
+    $pattern = "/".$start_symbol.".*?".$end_symbol."/";
 
     preg_match_all($pattern, $subject, $matches, 2);
     foreach ($matches as $match) {

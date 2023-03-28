@@ -20,12 +20,6 @@
     color: var(--existant);
 }
 
-#article_table tbody tr:not(#article_table tbody tr:first-child):nth-child(even){
-    background: rgba(0, 0, 0,0.05);
-}
-#article_table tbody tr:first-child{
-    background: rgba(255,255,255,0.3);
-}
 
 /*Buttons*/
 /*.back {*/
@@ -40,6 +34,41 @@
 #article_table {
     border: rgb(64,64,64) solid 2px;
     border-radius: 4px;
+}
+
+#article_table tbody tr:not(#article_table tbody tr:first-child):nth-child(even){
+    background: rgba(0, 0, 0,0.05);
+}
+#article_table tbody tr:first-child{
+    background: rgba(255,255,255,0.3);
+}
+
+td:not(:first-child){
+    text-align: center;
+}
+
+.highlight_highscore {
+    width: 100%;
+    height: 100%;
+
+    background-clip: padding-box;
+    background: rgb(188, 82, 82);
+    display: inline-block;
+    text-align: center !important;
+
+    padding: 2px;
+}
+
+.highlight_text{
+    width: 100%;
+    height: 100%;
+
+    background-clip: padding-box;
+    background: rgb(155, 106, 106);
+    display: inline-block;
+    text-align: center !important;
+
+    padding: 2px;
 }
 
 hr {
