@@ -20,20 +20,11 @@
     color: var(--existant);
 }
 
-
-/*Buttons*/
-/*.back {*/
-/*    float: left;*/
-/*}*/
-
-/*.edit {*/
-/*    float: right;*/
-/*}*/
-
 /*tables*/
 #article_table {
     border: rgb(64,64,64) solid 2px;
     border-radius: 4px;
+    max-width: 100% !important;
 }
 
 #article_table tbody tr:not(#article_table tbody tr:first-child):nth-child(even){
@@ -43,8 +34,13 @@
     background: rgba(255,255,255,0.3);
 }
 
-td:not(:first-child){
+td:not(:first-child),
+th:not(:first-child){
     text-align: center;
+}
+
+tbody > :first-child{
+    min-width: 100px;
 }
 
 .highlight_highscore {
@@ -87,24 +83,13 @@ hr {
     padding: 12px;
     background-color: var(--background);
     box-shadow: rgba(0, 0, 0, 0.2) 5px 10px 10px;
-    min-width: 492px;
+    /* min-width: 492px; */
     width: 60%;
     align-self: center;
     font-size: larger;
 }
 
-@media only screen and (max-width: 700) {
-    .text_box{
-        padding: 12px;
-        background-color: var(--background);
-        box-shadow: rgba(0, 0, 0, 0.2) 5px 10px 10px;
-        min-width: 492px;
-        max-width: 100%;
-        width: 100% !important;
-        align-self: center;
-        font-size: larger;
-    }
-  }
+
 
 .text_box:first-child{
     border-top-left-radius: 5px;
@@ -166,3 +151,46 @@ img {
     transition: 0.33s ease-in-out;
     cursor: pointer;
 }
+
+@media only screen and (max-width: 750px) {
+    .text_box{
+        width: 75%;
+    }
+
+    .scroll{
+        right: 1%;
+        bottom: 1%;
+    }
+  }
+
+/* Mobile view */
+@media only screen and (max-width: 360px) {
+    .content_container {
+        width: 100%;
+        padding: 0;
+    }
+
+    .scroll {
+        display: none;
+    }
+
+    .text_box{
+        padding: 12px;
+        background-color: var(--background);
+        box-shadow: rgba(0, 0, 0, 0.2) 5px 10px 10px;
+        /* min-width: 492px; */
+        max-width: 100%;
+        width: 100% !important;
+        align-self: center;
+        font-size: larger;
+    }
+
+    #article_table{
+        width: 100%;
+    }
+
+    #tags-info{
+        justify-content: center;
+    }
+  }
+
