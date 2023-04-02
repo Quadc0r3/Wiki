@@ -87,3 +87,19 @@ input[type="password"], input[type="text"]{
 .articles_margin_inline{
     margin-inline: 5%;
 }
+
+
+/*Mobile Portrait*/
+@media only screen and (max-width: 400px) {
+    .nav_box {
+        width: 94%;
+    }
+
+    .flex-center {
+        flex-direction: column;
+    }
+
+    .recent_articles_container{
+        margin: 0;
+    }
+}

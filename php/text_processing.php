@@ -18,7 +18,7 @@ function db_to_show(string $text, int $tID): string
     //formatting (missing implementation)
     $text = format($text);
     //line breaks
-    $text = str_replace("\r\n", "</br>", $text);
+    $text = str_replace("\r\n", "</p><p>", $text);
     return $text;
 }
 

@@ -18,6 +18,9 @@
     --background-lines: #d3c8ba;
     --link: rgb(77, 31, 169);
     --link_visited: rgb(169, 31, 93);
+
+/*    other variables*/
+    --max_device_width: 740px;
 }
 
 html{
@@ -334,9 +337,6 @@ textarea.input_text {
     width: max-content;
 }
 
-.scroll_btn{
-}
-
 .button_alternate .button:hover:not(.delete_btn){
     background-color: var(--button-hover) !important;
 }
@@ -381,3 +381,26 @@ textarea.input_text {
         display: none;
     }
   }
+
+@media only screen and (max-width: 400px){
+    body {
+        margin: 0;
+        padding: 0;
+        background-image: none;
+        background-color: var(--background-lines);
+    }
+
+    .nav_box {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .recent_articles_title{
+        margin: 0;
+        width: fit-content;
+    }
+
+    table{
+        width: 95%;
+    }
+}

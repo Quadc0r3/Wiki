@@ -19,7 +19,6 @@
 #user_function a {
     margin-left: 0;
     margin-right: 10px;
-
 }
 
 #new_page_icon{
@@ -98,5 +97,27 @@ input[type=search]:focus {
 
 #text h1 {
     margin: 0;
+}
+
+/*Mobile Portrait*/
+@media only screen and (max-width: 400px)  {
+    .header_item:not(:last-child){
+        display: none;
+    }
+
+    #header {
+        justify-content: right;
+        width: 95%;
+    }
+
+    #user_function {
+        width: 100%;
+        padding: 3px;
+    }
+
+    input[type=search]:focus {
+        width: calc(100vw/2.3);
+    }
+
 }
 

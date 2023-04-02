@@ -20,8 +20,8 @@
                 while ($entry = $articles->fetch_assoc()) {
                     echo "<tr class='hr_tr'> <td colspan='3'> <div class='hr_divider' /> </td> </tr>"; //Adds horizontal divider between rows. cursed solution
                     echo "<td><a href='../article/show.php?article={$entry['ArticleID']}' class='table_link'>{$entry['Title']}</a></td>";
-                    echo "<td>{$entry['Edit Time']}</td>";
-                    echo "<td>{$entry['Creation Time']}</td>";
+                    echo "<td>".date('d/m/Y',strtotime($entry['Edit Time']))."</td>";
+                    echo "<td>".date('d/m/Y',strtotime($entry['Creation Time']))."</td>";
                     echo "</tr>";
                 }
             }
@@ -49,8 +49,8 @@
                 while ($entry = $articles->fetch_assoc()) {
                     echo "<tr class='hr_tr'> <td colspan='3'> <div class='hr_divider' /> </td> </tr>"; //Adds horizontal divider between rows. cursed solution
                     echo "<td><a href='../article/show.php?article={$entry['ArticleID']}' class='table_link'>{$entry['Title']}</a></td>";
-                    echo "<td>{$entry['Edit Time']}</td>";
-                    echo "<td>{$entry['Creation Time']}</td>";
+                    echo "<td>".date('d/m/Y',strtotime($entry['Edit Time']))."</td>";
+                    echo "<td>".date('d/m/Y',strtotime($entry['Creation Time']))."</td>";
                     echo "</tr>";
                 }
             }
