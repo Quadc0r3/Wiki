@@ -382,12 +382,13 @@ textarea.input_text {
     }
   }
 
-@media only screen and (max-width: 400px){
+@media only screen and (max-width: 600px){
     body {
         margin: 0;
         padding: 0;
         background-image: none;
         background-color: var(--background-lines);
+        overflow: hidden;
     }
 
     .nav_box {

@@ -34,7 +34,7 @@ function load_article(): void
     $_SESSION['no_of_texts'] = access_db("SELECT count(*) FROM text where ArticleID =" . $_SESSION["aID"])->fetch_array()[0];
     echo "</div>";
     
-    include "text/new_text.php";
+    include "text/new_text.php"; //shows all article text in editor
     new_text_segment();
     echo "</form>";
 }
@@ -62,12 +62,19 @@ function load_article(): void
 
 <div class="quick_guide_container">
     <div style="font-size: 1.35em; margin-bottom: 20px">Quick Guide</div>
-    <p>** <span> <b> Bold text works with two asterisks </b> </span> **</p>
-    <p>__ <span> <u> Underscoring with two underscores </u> </span> __</p>
-    <p>-- <span> <s> Strikethrough with two hyphens </s> </span> --</p>
+    <p>**<span> <b>Bold text works with two asterisks</b> </span>**</p>
+    <p>__<span> <u>Underscoring with two underscores</u> </span>__</p>
+    <p>--<span> <s>Strikethrough with two hyphens</s> </span>--</p>
+    <p>~~<span> <i>Italic with two tilde</i> </span>~~</p>
+    <p>^^<span> <sup>Supscript with two carets</sup> </span>^^</p>
     <div>
         <p style="margin-bottom: 0; font-size: 1.15em"> Linking Articles </p>
-        <p style="margin-bottom: 0"> { {Displayed Link Name} Link to Article} </p>
+        <p style="margin-bottom: 0"> {{Displayed Link Name} Link to Article} </p>
+    </div>
+
+    <div>
+        <p style="margin-bottom: 0; font-size: 1.15em"> Creating a table </p>
+        <p style="margin-bottom: 0"> {||table|| Row1 Colum1 | R1C2 || R2C1 | R2C2||} </p>
     </div>
 </div>
 

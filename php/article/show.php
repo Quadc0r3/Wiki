@@ -92,7 +92,7 @@ function show_cites(): void
     where a.ArticleID = {$GLOBALS['aID']}");
     if ($texts->num_rows > 0) {
         $i = 1;
-        echo "<div id='text_references' class='text'>";
+        echo "<p style='height: 10px'><div id='text_references' class='text text_box button_alternate'>";
         echo "<h2>References</h2>";
         echo "<br>";
 
@@ -102,7 +102,6 @@ function show_cites(): void
             $i++;
         }
         echo "</div>";
-        echo "<hr>";
     }
 }
 

@@ -71,15 +71,12 @@ function format(array|string $text): string {
     $text = preg_replace("/\s<=\s/", " ⇐ ", $text);
     $text = preg_replace("/\s<=>\s/", " ⇔ ", $text);
 
-    //bold text
-    $text = regex_replace("\*\*", "", "<b>", "</b>", $text);
-
-    //crossed out
-    $text = regex_replace("--", "", "<del>", "</del>", $text);
-
-    //underline
-    $text = regex_replace("__", "", "<u>", "</u>", $text);
-
+    //text-formatting
+    $text = regex_replace("\*\*", "", "<b>", "</b>", $text);    //bold text
+    $text = regex_replace("--", "", "<del>", "</del>", $text);  //striketrough
+    $text = regex_replace("__", "", "<u>", "</u>", $text);      //underline
+    $text = regex_replace("\^\^", "", "<sup>", "</sup>", $text);      //superscript
+    $text = regex_replace("~~", "", "<i>", "</i>", $text);      //italic
     //highlight_highscore
     $text = regex_replace("===", "", "<span class='highlight_highscore'>", "<span>", $text);
     //highlight_text
@@ -87,7 +84,8 @@ function format(array|string $text): string {
 
 
     //bulletpoints: pattern = search for a line breake and an * with any amount of whitespaces in between
-    $text = preg_replace("/\\r\\n\s*\*/", "<br> •", $text);
+    $text = preg_replace("/^\*/", "•", $text);
+    $text = preg_replace("/\\r\\n\*/", "<br> •", $text);
     return $text;
 }
 
@@ -166,7 +164,7 @@ function create_cite(string $ref): string
     }
     $GLOBALS['mapping'] += [$cite => $number];
 
-    return "<sup>[<a href='#cite_$cite'>$number</a>]</sup>";
+    return "<sup>[<i><a href='#cite_$cite' style='color: #213547'>$number</a></i>]</sup>";
 }
 
 function create_link(string $reference, string $name): string|array

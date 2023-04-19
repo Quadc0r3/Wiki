@@ -171,7 +171,7 @@ img {
   }
 
 /* Mobile view */
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 600px) {
     .content_container {
         width: 100%;
         padding: 0;

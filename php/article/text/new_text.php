@@ -29,6 +29,16 @@ function new_text_segment(): void {
                     //display text
                     echo "<div class='text_segment nav_box button_alternate' id='text_{$entry['TextID']}'>";
                     echo "<input type='text' name='text_title_$i' class='input_new_text' placeholder='Text Title' value='{$entry['Title']}' autocomplete='off'><br>";
+
+                    //change cite text
+                    preg_match_all("/(?<=\[\[)[^\[\]]+(?=]])/", $entry['Content'], $m);
+                    if (count($m[0]) > 0){
+                        foreach ($m as $match) {
+                            $cite_text = access_db("Select Reference from cite WHERE CiteID = $match[0]")->fetch_array()[0];
+                            $entry['Content'] = preg_replace("/\[\[$match[0]]]/", "[[$cite_text]]", $entry['Content']);
+                        }
+                    }
+
                     echo "<textarea name='text_text_$i' class='input_text' placeholder='Text'  autocomplete='off'>{$entry['Content']}</textarea>";
 
                 } elseif ($entry['Type'] == 'image') {
