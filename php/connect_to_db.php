@@ -4,7 +4,7 @@ function connect_to_server()
     $servername = "localhost";
     $username = "root";
     $passwort = "";
-    $db = "wiki";
+    $db = "wiki-test";
 
     $conn = new mysqli($servername, $username, $passwort, $db);
 
@@ -26,7 +26,6 @@ function sanitizeInput($input, $allowHtml = false, $allowUrl = false): string
 {
     // Entferne PHP-Tags
     $input = preg_replace('/<\?php(.*)\?>/Us', '', $input);
-
 
     // Entferne HTML-Tags, wenn erlaubt
     if (!$allowHtml) {

@@ -72,15 +72,15 @@ function format(array|string $text): string {
     $text = preg_replace("/\s<=>\s/", " ⇔ ", $text);
 
     //text-formatting
-    $text = regex_replace("\*\*", "", "<b>", "</b>", $text);    //bold text
-    $text = regex_replace("--", "", "<del>", "</del>", $text);  //striketrough
-    $text = regex_replace("__", "", "<u>", "</u>", $text);      //underline
-    $text = regex_replace("\^\^", "", "<sup>", "</sup>", $text);      //superscript
-    $text = regex_replace("~~", "", "<i>", "</i>", $text);      //italic
+    $text = regex_replace($text, "\*\*", "<b>", "", "</b>");    //bold text
+    $text = regex_replace($text, "--", "<del>", "", "</del>");  //striketrough
+    $text = regex_replace($text, "__", "<u>", "", "</u>");      //underline
+    $text = regex_replace($text, "\^\^", "<sup>", "", "</sup>");      //superscript
+    $text = regex_replace($text, "~~", "<i>", "", "</i>");      //italic
     //highlight_highscore
-    $text = regex_replace("===", "", "<span class='highlight_highscore'>", "<span>", $text);
+    $text = regex_replace($text, "===", "<span class='highlight_highscore'>", "", "<span>");
     //highlight_text
-    $text = regex_replace("=_=", "", "<span class='highlight_text'>", "<span>", $text);
+    $text = regex_replace($text, "=_=", "<span class='highlight_text'>", "", "<span>");
 
 
     //bulletpoints: pattern = search for a line breake and an * with any amount of whitespaces in between
@@ -89,7 +89,7 @@ function format(array|string $text): string {
     return $text;
 }
 
-function regex_replace(string $start_symbol, string $end_symbol = "", string $start_replace, string $end_replace = "", string $subject): string
+function regex_replace(string $subject, string $start_symbol, string $start_replace, string $end_symbol = "", string $end_replace = ""): string
 {
     $end_symbol = $end_symbol == "" ? $start_symbol : $end_symbol;
     $end_replace = $end_replace == "" ? $start_replace : $end_replace;
@@ -167,15 +167,48 @@ function create_cite(string $ref): string
     return "<sup>[<i><a href='#cite_$cite' style='color: #213547'>$number</a></i>]</sup>";
 }
 
-function create_link(string $reference, string $name): string|array
+/**
+ * Creates a link with optional section reference.
+ *
+ * @param string $reference The reference string for the link.
+ * @param string $name The name or text of the link.
+ * @return string The HTML link element.
+ */
+function create_link(string $reference, string $name): string
 {
-    if ((int)$reference == 0) $aID = access_db("SELECT ArticleID FROM article WHERE Title = ltrim('" . addslashes($reference) . "')")->fetch_array();
-    else $aID = access_db("SELECT ArticleID FROM article where ArticleID = '" . addslashes($reference) . "'")->fetch_array(); //wenn die CiteID angegeben wurde
+    $separation_key = '#';
+    $articleName = $reference;
+    $sectionName = '';
 
-    $aID = isset($aID) ? $aID[0] : 0;           //wurde Artikel gefunden?
-    $exist = min(1, $aID) == 0 ? "non-existant" : "existant";
+    if (str_contains($reference, $separation_key)) {
+        [$articleName, $sectionName] = explode($separation_key, $reference, 2);
+    }
+
+    $aID = ((int)$reference == 0) ?
+        access_db("SELECT ArticleID FROM article WHERE Title = ltrim('" . addslashes($articleName) . "')")->fetch_array() :
+        access_db("SELECT ArticleID FROM article WHERE ArticleID = '" . addslashes($articleName) . "'")->fetch_array();
+
+    $aID = isset($aID) ? $aID[0] : 0;
+    $exist = ($aID > 0) ? 'existant' : 'non-existant';
+    $href = '';
+
+    if ($aID > 0) {
+        $href = "show.php?article=$aID";
+
+        if (!empty($sectionName)) {
+            $section = access_db("SELECT Position FROM text WHERE ArticleID = $aID AND Title LIKE '$sectionName'")->fetch_array();
+            if ($section != null){
+                $sectionNo = $section[0];
+                $href .= "#text_$sectionNo";
+            }
+        }
+
+        $href = "href='$href'";
+    }
 
     $insert = "<a class='$exist link'";
-    $insert = min(1, $aID) == 0 ? $insert : $insert . "href='show.php?article=$aID'";
+
+    if ($aID > 0) $insert .= $href;
+
     return $insert . ">$name</a>";
 }

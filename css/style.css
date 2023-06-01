@@ -370,6 +370,22 @@ textarea.input_text {
     margin-bottom: 10px;
 }
 
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.blink {
+    animation: blink 1s infinite;
+}
+
 @media only screen and (max-width: 480px) {
     .quick_guide_container{
         display: none;
