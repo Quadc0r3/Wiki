@@ -121,3 +121,31 @@ input[type=search]:focus {
 
 }
 
+/*Page buttons*/
+.pagination_button {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 4px;
+    /*background-color: #e6e6e6;*/
+    color: var(--text-color);
+    /*border: 1px solid #ccc;*/
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination_button:hover {
+    background-color: #ccc;
+}
+
+.pagination_button.active {
+    background-color: var(--background-alternative);
+}
+
+.pagination_container {
+    display: flex;
+    text-align: center;
+    margin-top: 10px;
+    justify-content: center;
+    width: 100%;
+}
