@@ -48,9 +48,26 @@ function sanitizeInput($input, $allowHtml = false, $allowUrl = false): string
 
 function getTags(int $aID = null): string
 {
-    $query = "SELECT distinct TagName From tags INNER JOIN `article-tag hilfstabelle` as ath on tags.TagID = ath.TagID";
-    if ($aID != null)  $query .= " WHERE ArticleID = $aID";
-    $query .= " ORDER BY TagName asc";
+    $tags = $_SESSION['tags'];
+    if (empty($_SESSION['tags'])) {
+        $query = "SELECT distinct TagName From tags INNER JOIN `article-tag hilfstabelle` as ath on tags.TagID = ath.TagID";
+        if ($aID != null)  $query .= " WHERE ArticleID = $aID";
+        $query .= " ORDER BY TagName ASC";
+    } else {
+        $tagNames = implode("', '", $tags);
+        $query = "SELECT DISTINCT t.TagName 
+          FROM Tags AS t 
+          JOIN `Article-Tag Hilfstabelle` AS ata ON t.tagID = ata.tagID 
+          JOIN article AS a ON ata.articleID = a.articleID 
+          WHERE a.articleID IN (
+              SELECT ath.articleID
+              FROM `Article-Tag hilfstabelle` AS ath
+              JOIN Tags AS t2 ON ath.tagID = t2.tagID
+              WHERE t2.tagName IN ('$tagNames')
+              GROUP BY ath.articleID
+              HAVING COUNT(DISTINCT ath.tagID) = ".count($tags).")
+              ORDER BY t.tagName;";
+    }
     $article_tags = access_db($query);
     $tag_str = "";
     for ($i = 0; $i < $article_tags->num_rows; $i++) {
